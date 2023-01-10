@@ -1,0 +1,11 @@
+html-notes-python.iml
+**/notes
+**/config.js
+**/.DS_Store
+**/.htaccess
+**/.htpasswd
+.idea
+.gitignore
+.well-known
+vcs.xml
+venv
