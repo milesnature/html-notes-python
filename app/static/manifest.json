@@ -1,0 +1,21 @@
+{
+  "name": "HTML Notes",
+  "short_name": "notes",
+  "lang": "en-US",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "static/img/pencil-192.png",
+      "sizes": "192X192",
+      "type": "image/png"
+    },
+    {
+      "src": "static/img/pencil-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
