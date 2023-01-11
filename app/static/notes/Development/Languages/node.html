@@ -1,0 +1,29 @@
+<section class="bkm__section">
+  <ul>
+    <li><a href="https://nodejs.org/en/" target="_blank" rel="noreferrer">Node</a></li>
+  </ul>
+</section>
+<section class="note__section">
+  <h3>Node</h3>
+  <ul>
+    <li><button class="code">npm start</button></li>
+    <li><button class="code">node server.js</button></li>
+  </ul>
+</section>
+<section class="note__section note--quadruple-wide">
+  <label for="nodeTextarea">Node</label>
+  <textarea id="nodeTextarea">const http = require('http');
+
+const hostname = '127.0.0.1';
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World');
+});
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});</textarea>
+</section>
