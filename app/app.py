@@ -1,40 +1,12 @@
 import os
-from app import app
 from flask import Flask, request, render_template, send_from_directory
-# from flask_httpauth import HTTPBasicAuth
-# from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# basicAuth = HTTPBasicAuth()
-
-# users = {
-#     "maitaipan": generate_password_hash("Repaint!Gigahertz!Crook")
-# }
-
-# @basicAuth.verify_password
-# def verify_password(username, password):
-#     if username in users and \
-#             check_password_hash(users.get(username), password):
-#         return username
-
-
-# def verify_password(username, password):
-#     if username in users:
-#         return check_password_hash(users.get(username), password)
-#     return False
-
 
 @app.route('/')
-# @basicAuth.login_required
 def notes_document():
     return render_template('index.html')
-
-#
-# @app.route('/static/notes/<path:subpath>')
-# @basicAuth.login_required
-# def protect_notes(subpath=None):
-#     return send_file(request.path)
 
 
 @app.route('/service-worker.js', methods=['GET'])
@@ -59,7 +31,6 @@ def apple_touch_icon():
 
 
 @app.route('/save-note', methods=['POST'])
-# @basicAuth.login_required
 def save_note():
     if request.method == 'POST':
         url = request.form.get('url')
