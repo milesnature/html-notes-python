@@ -1,12 +1,11 @@
-import os
-from flask import Flask, request, render_template, send_from_directory
+from flask import Flask, request
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def notes_document():
-    return render_template('index.html')
+    return app.send_static_file('index.html')
 
 
 @app.route('/service-worker.js', methods=['GET'])
@@ -21,8 +20,7 @@ def manifest():
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return app.send_static_file('favicon.ico')
 
 
 @app.route('/apple-touch-icon.png', methods=['GET'])
@@ -42,5 +40,5 @@ def save_note():
 
 
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = False
     app.run()
