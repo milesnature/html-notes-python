@@ -112,11 +112,12 @@
     --scrollbar-thumb-textarea-background-color : hsla(223, 53%, 18%, .9);
     --scrollbar-thumb-textarea-border           : 1px solid var(--color-palette-white);
 
-    --progress-accent        : var(--color-palette-light);
-    --progress-background    : var(--color-palette-light-highlight);
+    --progress-accent        : var(--color-palette-medium);
+    --progress-background    : var(--color-lightness-90_2);
     --progress-border-radius : 3px;
-    --progress-transition    : width 0.3s ease-in;
-
+    --progress-transition    : width 0.05s ease-in;
+    --progress-width         : 233px;
+    --progress-height        : 13px;
 }
 
 /* END VARIABLES */
@@ -313,7 +314,7 @@ progress {
     -webkit-appearance : none;
     background-color   : var(--progress-background);
     accent-color       : var(--progress-accent);
-    height             : 9px;
+    height             : var(--progress-height);
     border-radius      : var(--progress-border-radius);
 }
 progress::-webkit-progress-bar {
@@ -323,12 +324,12 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
     background-color : var(--progress-accent);
     border-radius    : var(--progress-border-radius);
-    transition       : var(--progress-transition);
+    /*transition       : var(--progress-transition);*/
 }
 progress::moz-progress-bar {
     background-color : var(--progress-accent);
     border-radius    : var(--progress-border-radius);
-    transition       : var(--progress-transition);
+    /*transition       : var(--progress-transition);*/
 }
 .color-accent {
     color: var(--color-palette-accent-dark);
@@ -740,8 +741,7 @@ html.hidden .nav__ctrl {
 /* START MODAL */
 
 .modal__shadowbox-edit,
-.modal__shadowbox-passphrase,
-.modal__shadowbox-progress {
+.modal__shadowbox-passphrase {
     position         : fixed;
     top              : 0;
     right            : 0;
@@ -884,8 +884,7 @@ html.hidden .nav__ctrl {
     font-weight      : var(--font-weight-normal);
     min-width        : 44px;
 }
-.modal__passphrase,
-.modal__progress {
+.modal__passphrase {
     width      : clamp(300px, 400px, 500px);
     height     : clamp(200px, 250px, 300px);
     top        : 21vh;
@@ -894,10 +893,6 @@ html.hidden .nav__ctrl {
 .modal__passphrase-nav {
     grid-template-columns : 1fr;
     height                : 56px;
-}
-.modal__progress-nav {
-    grid-template-columns : 1fr;
-    height                : 44px;
 }
 .modal__passphrase-nav-button {
     margin     : 0 auto;
@@ -912,27 +907,21 @@ html.hidden .nav__ctrl {
     place-items        : start;
     place-content      : center;
 }
-.modal__progress-div {
-    display            : grid;
-    height             : calc( 100% - 88px );
-    grid-template-rows : 1rem 32px;
-    grid-gap           : 0;
-    place-items        : center;
-    place-content      : center;
-    font-weight        : var(--font-weight-bold);
+.progress_bar {
+    display    : grid;
+    grid-gap   : 10px;
+    width      : var(--progress-width);
+    margin     : calc( 100vh * .333 - 32px ) auto 0 auto;
+    text-align : center;
 }
-.modal__progress-div label {
-    display     : block;
-    width       : clamp(150px, 200px, 300px);
-    min-height  : 0;
-    line-height : 1rem;
-    font-weight : var(--font-weight-bold);
-    padding     : 0 0 0 .25rem;
-    margin      : 0;
+.progress_bar label {
+    margin : 0;
 }
-.modal__progress-div progress {
-    width         : clamp(150px, 200px, 300px);
+.progress_bar progress {
+    width : var(--progress-width);
+    color : var(--color-text-base);
 }
+
 .modal__passphrase-div-label {
     display     : block;
     width       : clamp(150px, 200px, 300px);
@@ -972,15 +961,13 @@ html.hidden .nav__ctrl {
         width  : clamp( 300px, 100vw - 10px, 100vw - 10px );
         height : clamp( 150px, 47vh, 95vh ); /*Full height is an issue because of Safari on iOS.*/
     }
-    .modal__passphrase, .modal__progress {
+    .modal__passphrase {
         top    : 7vh;
         width  : clamp(200px, 340px, 400px);
         height : clamp(200px, 220px, 220px);
     }
     .modal__passphrase-div-label,
-    .modal__passphrase-div-input,
-    .modal__progress-div label,
-    .modal__progress-div progress {
+    .modal__passphrase-div-input {
         width : clamp(200px, 250px, 300px);
     }
 }

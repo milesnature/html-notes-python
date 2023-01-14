@@ -43,6 +43,13 @@
         <template id="templateNoteSections">
             <div class="notes__sections"></div>
         </template>
+        <template id="templateProgressBar">
+          <div class="progress_bar">
+            <label for="progressBar">Loading</label>
+            <progress id="progressBar" max="100" value="0"></progress>
+            <small>0%</small>
+          </div>
+        </template>
         <template id="templateModalEdit">
             <div class="modal__shadowbox-edit" aria-hidden="true"></div>
             <div class="modal__container-edit" role="dialog" aria-labelledby="dialogEditTitle" aria-describedby="dialogEditDesc">
@@ -94,22 +101,6 @@
                     <nav class="modal__nav modal__passphrase-nav">
                         <button id="submitPassphrase" class="modal__nav-button modal__passphrase-nav-button" title="Save" type="button">Submit</button>
                     </nav>
-                </div>
-            </div>
-        </template>
-        <template id="templateModalProgress">
-            <div class="modal__shadowbox-progress" aria-hidden="true"></div>
-            <div class="modal__container-progress" role="dialog" aria-labelledby="dialogProgressTitle" aria-describedby="dialogProgressDesc">
-                <div class="modal modal__progress" aria-modal="true">
-                    <header class="modal__header">
-                        <h2 class="modal__header-h2">Downloading Notes</h2>
-                        <div></div>
-                    </header>
-                    <div class="modal__progress-div">
-                        <label for="files" id="dialogProgressTitle">Progress</label>
-                        <progress id="files" max="100" value="0"></progress>
-                    </div>
-                    <nav class="modal__nav modal__progress-nav">&nbsp;</nav>
                 </div>
             </div>
         </template>

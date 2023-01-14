@@ -118,7 +118,7 @@ const handlePassphrase = ( value ) => {
             decryptAllNotes();
             appendNotesToMain();
         } else {
-            launchProgressModal();
+            insertProgressBar();
         }
     }
 };
@@ -266,17 +266,14 @@ const launchPassphraseModal = () => {
 const closePassphraseModal = () => {
     closeModal( 'passphrase' );
 };
-const launchProgressModal = () => {
-    const modal = document.querySelector( '.modal__container-progress' );
-    if ( !modal ) {
-        const templateModalProgress = document.querySelector('#templateModalProgress');
-        let fragment = templateModalProgress.content.cloneNode( true );
-        document.body.appendChild( fragment );
-        trapFocus( true );
-    }
+const insertProgressBar = () => {
+    const templateProgressBar = document.getElementById('templateProgressBar');
+    const main = document.querySelector('main.notes');
+    const fragment = templateProgressBar.content.cloneNode( true );
+    main.appendChild( fragment );
 };
-const closeProgressModal = () => {
-    closeModal( 'progress' );
+const removeProgressBar = () => {
+    document.querySelector('.progress_bar').remove();
 };
 const section = `
 <section class="note__section">
@@ -575,13 +572,19 @@ const appendNotesToMain = () => {
 };
 const downloadProgress = () => {
     const progressIncrement = 100 / notes.length;
-    const files             = document.getElementById('files');
-    if ( files ) { files.value += progressIncrement; }
+    const progress          = document.getElementById('progressBar');
+    const small             = document.querySelector('.progress_bar small');
+    if ( progress ) {
+        progress.value += progressIncrement;
+        const percent = Math.round(progress.value).toString() + '%';
+        progress.innerHTML = percent;
+        small.innerHTML = percent;
+    }
     downloadTally += 1;
     downloadComplete = ( downloadTally === notes.length );
     if ( downloadComplete ) {
         if ( ( useEncryption && getPassphrase() ) || !useEncryption || isDemo ) {
-            closeProgressModal();
+            removeProgressBar();
             decryptAllNotes();
             appendNotesToMain();
         }
@@ -596,7 +599,7 @@ const importStoreInsertAllNotes = () => {
     if ( useEncryption && !getPassphrase() ) {
         launchPassphraseModal();
     } else {
-        launchProgressModal();
+        insertProgressBar();
     }
     notes.forEach(( note ) => {
         constructDetails( note );
