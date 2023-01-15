@@ -68,78 +68,45 @@ const getStoredNote = ( name ) => {
 // clear();
 
 
-// MODAL
+// DIALOG
 
-const togglePageScroll = ( hide ) => {
-    try {
-        if ( hide === true ) {
-            document.querySelector('html').classList.add('hidden');
-        } else {
-            document.querySelector('html').classList.remove('hidden');
-        }
+const toggleBodyDialog = ( display ) => {
+    if ( display ) {
+        document.body.classList.remove('dialog');
+    } else {
+        document.body.classList.add('dialog');
     }
-    catch (error) { console.error( 'togglePageScroll', { hide, error } ) }
-};
-const trapFocus = ( action ) => {
-    try {
-        const main = document.querySelector('main.notes');
-        const nav  = document.querySelector('nav.nav__ctrl');
-        if ( action ) {
-            main.inert = true;
-            nav.inert  = true;
-            togglePageScroll( action );
-        } else {
-            main.inert = false;
-            nav.inert  = false;
-            togglePageScroll( action );
-        }
-    }
-    catch (error) { console.error( 'trapFocus', { action, error } ) }
-};
-const closeModal = ( type ) => {
-    const containerClass = 'modal__container-' + type;
-    const shadowboxClass = 'modal__shadowbox-' + type;
-    try {
-        const container = document.querySelector(`[class=${CSS.escape(containerClass)}]`);
-        const shadowbox = document.querySelector(`[class=${CSS.escape(shadowboxClass)}]`);
-        if ( container && shadowbox ) {
-            container.remove();
-            shadowbox.remove();
-            trapFocus(false);
-        }
-    }
-    catch(error) { console.error( 'closeModal', { type, error } ) }
-};
+}
 const handlePassphrase = ( value ) => {
     if ( value ) {
         setPassphrase( value );
-        closePassphraseModal();
+        removePassphraseDialog();
         if ( downloadComplete ) {
             decryptAllNotes();
             appendNotesToMain();
         } else {
-            insertProgressBar();
+            insertProgressBarDialog();
         }
     }
 };
-const handleModalEvents = ( e ) => {
+const handleDialogEvents = ( e ) => {
     const
         target = e.target,
         id     = target.id,
         key    = e.key,
         btn    = target.closest('button');
     if ( e.repeat || btn && key && key !== "Escape" ) { return } // Enter key fires click and keyup on buttons. This prevents duplicate processing.
-    if ( ( btn && btn.id === 'close' ) || ( key === "Escape" && !document.querySelector( '.modal__container-passphrase' ) ) ) {
+    if ( ( btn && btn.id === 'close' ) || ( key === "Escape" && !document.querySelector( '#dialogPassphrase' ) ) ) {
         e.preventDefault();
-        closeModal('edit');
+        removeEditDialog();
     } else if ( !key || key === "Enter" || ( btn && !key ) ) {
         switch ( id ) {
             case 'saveNote':
                 e.preventDefault();
                 // Get ID of section to repopulate
-                const refreshId = target.closest('.modal__container-edit').id.substring(1);
+                const refreshId = target.closest('dialog').getAttribute('data');
                 // Show Spinner
-                document.querySelector('.modal').classList.add('processing');
+                document.querySelector('dialog').classList.add('processing');
                 // Get Data. This encrypts the textarea (in the DOM) before getting data for payload.
                 const form                   = document.querySelector('form');
                 let   textareaValue          = form.querySelector('textarea').value;
@@ -161,7 +128,7 @@ const handleModalEvents = ( e ) => {
                         if ( useEncryption ) {
                             document.querySelector('#' + refreshId).classList.remove('not-encrypted');
                         }
-                        closeModal('edit');
+                        removeEditDialog();
                     })
                     .catch( error => { console.error( 'saveNote', { error } ) });
                 break;
@@ -187,7 +154,7 @@ const handleModalEvents = ( e ) => {
                 break;
             case 'submitPassphrase':
                 e.preventDefault();
-                const input = document.querySelector('.modal__passphrase-div-input');
+                const input = document.querySelector('#dialogPassphrase input');
                 if ( input.value ) {
                     handlePassphrase( input.value );
                 } else {
@@ -197,7 +164,7 @@ const handleModalEvents = ( e ) => {
             case 'passphrase':
                 e.preventDefault();
                 if ( key === "Enter" ) {
-                    const input = document.querySelector('.modal__passphrase-div-input');
+                    const input = document.querySelector('#dialogPassphrase input');
                     if ( input.value ) {
                         handlePassphrase( input.value );
                     } else {
@@ -210,70 +177,73 @@ const handleModalEvents = ( e ) => {
         }
     }
 };
-const addModalEventListeners = (modal) => {
+const addDialogEventListeners = (modal) => {
     if ( supportsTouchEvents ) {
         // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-        modal.addEventListener( 'touchend', ( e ) => { handleModalEvents( e ) } );
+        modal.addEventListener( 'touchend', ( e ) => { handleDialogEvents( e ) } );
     }  else {
-        modal.addEventListener( 'click', ( e ) => { handleModalEvents( e ) } );
-        modal.addEventListener( 'keyup', ( e ) => { handleModalEvents( e ) } );
+        modal.addEventListener( 'click', ( e ) => { handleDialogEvents( e ) } );
+        modal.addEventListener( 'keyup', ( e ) => { handleDialogEvents( e ) } );
     }
 }
-const launchEditModal = ( content, dir, id, title, lastModified ) => {
-    let modal = document.querySelector( '.modal__container-edit' );
-    if ( !modal ) {
-        const templateModalEdit = document.querySelector('#templateModalEdit');
-        let fragment = templateModalEdit.content.cloneNode( true );
-        modal = fragment.querySelector( '.modal__container-edit' );
-        modal.setAttribute('id', '_' + id);
-        if ( content ) {
-            let textarea = modal.querySelector( '.modal__form-textarea' );
-            if ( isEncrypted( content ) ) {
-                content = decrypt( content );
+const insertEditDialog = ( content, dir, id, title, lastModified ) => {
+    if ( !document.getElementById('dialogEdit') ) {
+        const templateDialogEdit = document.getElementById('templateDialogEdit');
+        let fragment = templateDialogEdit.content.cloneNode(true);
+        let dialog = fragment.querySelector('dialog');
+        dialog.setAttribute('data', id);
+        if (content) {
+            let textarea = dialog.querySelector('#dialogEditTextArea');
+            if (isEncrypted(content)) {
+                content = decrypt(content);
             }
-            textarea.appendChild( document.createTextNode( content ) );
+            textarea.appendChild(document.createTextNode(content));
         }
-        let h2 = modal.getElementsByTagName('h2')[0];
-        h2.replaceChild( document.createTextNode( title.replace('-', ' ') ), h2.childNodes[0] );
-        let small = modal.getElementsByTagName('small')[0];
-        const lastModifiedDate = ( new Date( lastModified ).toLocaleString() !== 'Invalid Date' ) ? new Date( lastModified ).toLocaleString('en-US',{ dateStyle: 'medium', timeStyle: 'medium' }) : '';
-        small.appendChild( document.createTextNode( lastModifiedDate ) );
-        modal.querySelector('input[name="url"]').value = dir;
-        addModalEventListeners(modal);
-        document.body.appendChild( fragment );
+        let h2 = dialog.querySelector('h2');
+        h2.replaceChild(document.createTextNode(title.replace('-', ' ')), h2.childNodes[0]);
+        let small = dialog.querySelector('small');
+        const lastModifiedDate = (new Date(lastModified).toLocaleString() !== 'Invalid Date') ? new Date(lastModified).toLocaleString('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'medium'
+        }) : '';
+        small.appendChild(document.createTextNode(lastModifiedDate));
+        dialog.querySelector('input[name="url"]').value = dir;
+        addDialogEventListeners(dialog);
+        toggleBodyDialog(false);
+        document.body.prepend(fragment);
+        const eventFocus = new Event('focus');
+        dialog.querySelector('#dialogEdit textarea').focus();
+        dialog.querySelector('#dialogEdit textarea').dispatchEvent(eventFocus);
     }
-    trapFocus( true );
-    const eventFocus = new Event('focus');
-    modal.querySelector('.modal__form-textarea').focus();
-    modal.querySelector('.modal__form-textarea').dispatchEvent(eventFocus);
 };
-const getPassphraseModal = () => {
-    return ( document.querySelector( '.modal__container-passphrase' ) ) ? document.querySelector( '.modal__container-passphrase' ) : '';
+const removeEditDialog = () => {
+    document.getElementById('dialogEdit').remove();
+    toggleBodyDialog(true);
 };
-const launchPassphraseModal = () => {
+const insertPassphraseDialog = () => {
     clearMainNotes();
-    let modal = getPassphraseModal();
-    if ( !modal ) {
-        const templateModalPassphrase = document.querySelector('#templateModalPassphrase');
-        let fragment = templateModalPassphrase.content.cloneNode( true );
-        modal = fragment.querySelector( '.modal__container-passphrase' );
-        addModalEventListeners(modal);
-        document.body.appendChild( fragment );
-        document.querySelector('.modal__passphrase-div-input').focus();
-        trapFocus( true );
-    }
+    const templateDialogPassphrase = document.getElementById('templateDialogPassphrase');
+    const fragment = templateDialogPassphrase.content.cloneNode( true );
+    const dialog = fragment.querySelector( 'dialog' );
+    addDialogEventListeners( dialog );
+    toggleBodyDialog(false);
+    document.body.prepend( fragment );
+    document.querySelector('dialog input').focus();
 };
-const closePassphraseModal = () => {
-    closeModal( 'passphrase' );
+const removePassphraseDialog = () => {
+    document.getElementById('dialogPassphrase').remove();
+    toggleBodyDialog(true);
 };
-const insertProgressBar = () => {
-    const templateProgressBar = document.getElementById('templateProgressBar');
-    const main = document.querySelector('main.notes');
+const insertProgressBarDialog = () => {
+    const templateProgressBar = document.getElementById('templateDialogProgressBar');
     const fragment = templateProgressBar.content.cloneNode( true );
-    main.appendChild( fragment );
+    toggleBodyDialog(false);
+    document.body.prepend( fragment );
+    document.getElementById('dialogProgressBar').open = true;
 };
-const removeProgressBar = () => {
-    document.querySelector('.progress_bar').remove();
+const removeProgressBarDialog = () => {
+    document.getElementById('dialogProgressBar').remove();
+    toggleBodyDialog(true);
 };
 const section = `
 <section class="note__section">
@@ -295,13 +265,13 @@ const listItemBookmark = `<li><a href="" target="_blank" rel="noreferrer"></a></
 const setupMainEvents = () => {
     if ( supportsTouchEvents ) {
         // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-        main.addEventListener('touchend', ( e ) => { handleMainTarget( e ); } );
+        main.addEventListener('touchend', ( e ) => { handleMainEvents( e ); } );
     } else {
-        main.addEventListener('click', ( e ) => { handleMainTarget( e ); });
+        main.addEventListener('click', ( e ) => { handleMainEvents( e ); });
     }
 };
 const main = document.getElementsByTagName('main')[0];
-const handleMainTarget = ( e ) => {
+const handleMainEvents = ( e ) => {
     let
         target = e.target,
         id     = '',
@@ -323,14 +293,14 @@ const handleMainTarget = ( e ) => {
             // Check whether storage or server is newer?
             getNote( dir )
                 .then( data => {
-                    launchEditModal( data.content, dir, id, title, data.lastModified );
+                    insertEditDialog( data.content, dir, id, title, data.lastModified );
                 })
                 .catch( error => {
                     console.error( 'getNote', { error } );
                     // Get from local storage instead.
                     const note    = notes.filter( ( note ) => { return note.id === id } );
                     const content = getStoredNote( id );
-                    launchEditModal( content, note[0].dir, note[0].id, title, '' );
+                    insertEditDialog( content, note[0].dir, note[0].id, title, '' );
                 });
         } else if ( btn && btn.className === 'select-all' ) {
             // Checklist
@@ -559,7 +529,7 @@ const decryptAllNotes = () => {
         });
         if ( decryptionFailed ) {
             clearMainNotes();
-            launchPassphraseModal( 'decryptAllNotes()' );
+            insertPassphraseDialog();
         }
     }
 };
@@ -572,19 +542,19 @@ const appendNotesToMain = () => {
 };
 const downloadProgress = () => {
     const progressIncrement = 100 / notes.length;
-    const progress          = document.getElementById('progressBar');
-    const small             = document.querySelector('.progress_bar small');
+    const progress          = document.querySelector('#dialogProgressBar progress');
+    const small             = document.querySelector('#dialogProgressBar small');
     if ( progress ) {
         progress.value += progressIncrement;
         const percent = Math.round(progress.value).toString() + '%';
         progress.innerHTML = percent;
-        small.innerHTML = percent;
+        small.innerHTML    = percent;
     }
     downloadTally += 1;
     downloadComplete = ( downloadTally === notes.length );
     if ( downloadComplete ) {
         if ( ( useEncryption && getPassphrase() ) || !useEncryption || isDemo ) {
-            removeProgressBar();
+            removeProgressBarDialog();
             decryptAllNotes();
             appendNotesToMain();
         }
@@ -597,9 +567,9 @@ const importStoreInsertAllNotes = () => {
     decryptionFailed = false;
     clearMainNotes();
     if ( useEncryption && !getPassphrase() ) {
-        launchPassphraseModal();
+        insertPassphraseDialog();
     } else {
-        insertProgressBar();
+        insertProgressBarDialog();
     }
     notes.forEach(( note ) => {
         constructDetails( note );

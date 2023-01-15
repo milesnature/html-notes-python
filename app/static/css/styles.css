@@ -116,7 +116,7 @@
     --progress-background    : var(--color-lightness-90_2);
     --progress-border-radius : 3px;
     --progress-transition    : width 0.05s ease-in;
-    --progress-width         : 233px;
+    --progress-width         : auto;
     --progress-height        : 13px;
 }
 
@@ -246,13 +246,14 @@ textarea {
     padding       : 9px;
     margin        : 3px auto 0 auto;
     border        : 0;
-    border-radius : 0;
+    border-radius : var(--border-radius-small);
     overflow      : auto;
     font-family   : monospace;
     font-size     : 1rem;
     white-space   : pre;
     overflow-wrap : normal;
     overflow-x    : scroll;
+
 }
 table {
     border-collapse  : collapse;
@@ -344,6 +345,9 @@ progress::moz-progress-bar {
     clip        : rect(0,0,0,0) !important;
     white-space : nowrap !important;
     border      : 0 !important;
+}
+.display-none {
+    display : none;
 }
 .ellipsis {
     max-width     : max-content;
@@ -738,34 +742,145 @@ html.hidden .nav__ctrl {
 
 /* END CHECKLIST */
 
-/* START MODAL */
+/* START DIALOG */
 
-.modal__shadowbox-edit,
-.modal__shadowbox-passphrase {
-    position         : fixed;
-    top              : 0;
-    right            : 0;
-    bottom           : 0;
-    left             : 0;
-    z-index          : 3;
-    height           : 100%;
-    background-color : hsla( 0, 0.0%, 0.0%, .6 );
+dialog {
+    position         : unset;
+    background-color : var(--color-palette-white);
+    border-width     : 0;
+    border-radius    : var(--border-radius-small);
 }
-.modal__form {
-    position    : relative;
-    display     : grid;
-    height      : calc( 100% - 88px );
-    place-items : center;
+body.dialog {
+    display       : grid;
+    height        : calc(100vh - 18px);
+    place-content : center;
+    place-items   : center;
 }
-.processing .modal__form {
-    display : grid;
+body.dialog .notes,
+body.dialog .nav__ctrl {
+    display : none;
 }
-.processing .modal__form-input,
-.processing .modal__form-textarea {
+#dialogProgressBar {
+    display    : grid;
+    grid-gap   : 10px;
+    margin     : -50% auto 0 auto;
+    padding    : 20px;
+    width      : 269px;
+    text-align : center;
+}
+#dialogProgressBar label {
+    margin : 0;
+}
+#dialogProgressBar progress {
+    width : var(--progress-width);
+    color : var(--color-text-base);
+}
+#dialogPassphrase {
+    display    : grid;
+    grid-gap   : 10px;
+    margin     : -50% auto 0 auto;
+    padding    : 20px;
+    width      : 269px;
+    text-align : center;
+}
+#dialogPassphrase label {
+    margin : 0;
+}
+#dialogPassphrase input {
+    height        : 38px;
+    width         : 100%;
+    padding       : 10px;
+    border        : 1px solid var(--color-text-base);
+    border-radius : var(--border-radius-small);
+}
+#dialogPassphrase button {
+    height           : 38px;
+    width            : 100%;
+    color            : var(--color-palette-white);
+    background-color : var(--color-palette-medium);
+    border-radius    : var(--border-radius-small);
+}
+#dialogEdit {
+    display    : grid;
+    grid-template-rows : 44px auto 54px;
+    margin-top : -5px;
+    padding    : 0;
+    width      : calc( 100vw - 18px );
+    max-width  : 1400px;
+    height     : calc( 100vh - 18px );
+    background-color : var(--background-color-body);
+}
+#dialogEdit header {
+    display: grid;
+    grid-template-columns: 3fr 160px 44px;
+    place-content: center;
+    place-items: center;
+}
+#dialogEdit header h2 {
+    place-self: center start;
+    padding-left: 1rem;
+}
+#dialogEdit small {
+    text-align : center;
+}
+#dialogEdit header button {
+    width               : 44px;
+    height              : 44px;
+    padding             : 13px;
+    background-image    : var( --close-black );
+    background-repeat   : no-repeat;
+    background-position : center;
+    background-color    : transparent;
+    border-radius       : var(--border-radius-small);
+}
+#dialogEdit header button span {
+    display : none;
+}
+#dialogEdit textarea {
+    width         : calc( 100% - 10px );
+    height        : calc( 100% - 10px );
+    border        : 0px solid var(--color-text-base);
+    border-radius : var(--border-radius-small);
+    resize        : none;
+}
+#dialogEdit svg {
+    display : none;
+}
+#dialogEdit nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    grid-gap: 7px;
+    place-content: center;
+    place-items: center;
+    padding: 5px;
+}
+#dialogEdit nav button {
+    height        : 44px;
+    width         : 100%;
+    padding       : 0 10px;
+    background-color : var(--background-color-sections);
+    border-radius : var(--border-radius-small);
+}
+#dialogEdit nav button#saveNote {
+    color            : var(--color-palette-white);
+    background-color : var(--color-palette-medium);
+}
+.processing form {
+    display          : grid;
+    place-content    : center;
+    place-items      : center;
+    width            : calc( 100% - 10px );
+    height           : calc( 100% - 10px );
+    margin           : 0 auto;
+    background-color : var(--color-palette-white);
+    border-radius    : var(--border-radius-small);
+}
+.processing form input,
+.processing form textarea {
     visibility : hidden;
     position   : absolute;
 }
-.modal__svg-loader {
+#pencil-progress {
     display : none;
 }
 @keyframes rotating {
@@ -776,205 +891,27 @@ html.hidden .nav__ctrl {
         transform: rotate(360deg);
     }
 }
-.processing .modal__svg-loader {
+.processing #pencil-progress {
     display   : block;
     animation : rotating 1.2s linear infinite;
 }
-.modal {
-    --background-color-modal : var( --color-lightness-100_0 );
-    position                 : fixed;
-    z-index                  : 4;
-    top                      : 0;
-    right                    : 0;
-    bottom                   : 0;
-    left                     : 0;
-    width                    : clamp(300px, 100vw - 5vh, 100vw - 5vh);
-    height                   : clamp(300px, 95vh, 95vh);
-    margin                   : auto;
-    padding                  : 0;
-    background-color         : var( --background-color-modal );
-    box-shadow               : 0 0 90px var( --color-lightness-9_8 );
-    border-radius            : var(--border-radius-large);
-    display                  : block;
-    text-align               : left;
-    line-height              : 1.3rem;
-    font-size                : 1rem;
-    overflow                 : visible;
-}
-.modal__header {
-    position              : relative;
-    display               : grid;
-    grid-template-columns : 1fr 44px;
-    grid-gap              : 11px;
-    width                 : 100%;
-    align-items           : center;
-    background-color      : var( --background-color-body );
-    height                : 44px;
-    box-shadow            : var( --box-shadow );
-    border-radius         : var( --border-radius-large-top );
-}
-.modal__header-h2 {
-    padding-left : 15px;
-    line-height  : 1.1rem;
-}
-.modal__header-small {
-    display     : inline-block;
-    padding     : 0;
-    line-height : 1rem;
-    text-align  : right;
-}
-.modal__header-button {
-    width               : 44px;
-    height              : 44px;
-    padding             : 13px;
-    background-image    : var( --close-black );
-    background-repeat   : no-repeat;
-    background-position : center;
-    background-color    : transparent;
-    border-radius       : 0 var( --border-radius-large ) 0 0;
-}
-.modal__header-button-span {
-    display: none;
-}
-.modal__container-edit .modal__header {
-    grid-template-columns : 2fr 1fr 44px;
-}
-.modal__form,
-.modal__div {
-    display : contents;
-}
-.modal__form-textarea {
-    width  : calc( 100% - 6px);
-    height : calc( 100% - 95px);
-    resize : none; /* This is key for 100% height */
-}
-.modal__nav {
-    position              : absolute;
-    right                 : 0;
-    bottom                : 0;
-    left                  : 0;
-    display               : grid;
-    grid-template-columns : repeat(5, 1fr);
-    grid-gap              : 1px;
-    align-items           : center;
-    text-align            : center;
-    background-color      : var( --color-lightness-67_5 );
-    box-shadow            : var( --box-shadow );
-    border-radius         : var( --border-radius-large-bottom );
-    border-top            : 1px solid var( --color-lightness-67_5 );
-}
-.modal__nav-button {
-    flex        : 1 1 44px;
-    height      : 44px;
-    line-height : 44px;
-    font-size   : 1.15rem;
-    font-weight : var(--font-weight-bold);
-}
-.modal__nav-button:only-child {
-    border-radius : var( --border-radius-small );
-}
-.modal__nav-button:not(#submitPassphrase):first-child {
-    border-radius : 0 0 0 var(--border-radius-large);
-}
-.modal__nav-button:not(#submitPassphrase):last-child {
-    border-radius : 0 0 var(--border-radius-large) 0;
-}
-.modal__nav-button.copy-to-clipboard {
-    background-color : var( --background-color-body );
-    font-weight      : var(--font-weight-normal);
-    min-width        : 44px;
-}
-.modal__passphrase {
-    width      : clamp(300px, 400px, 500px);
-    height     : clamp(200px, 250px, 300px);
-    top        : 21vh;
-    bottom     : unset;
-}
-.modal__passphrase-nav {
-    grid-template-columns : 1fr;
-    height                : 56px;
-}
-.modal__passphrase-nav-button {
-    margin     : 0 auto;
-    min-width  : 180px;
-    box-shadow : var( --box-shadow );
-}
-.modal__passphrase-div {
-    display            : grid;
-    height             : calc( 100% - 100px );
-    grid-template-rows : 1rem 58px;
-    grid-gap           : 5px;
-    place-items        : start;
-    place-content      : center;
-}
-.progress_bar {
-    display    : grid;
-    grid-gap   : 10px;
-    width      : var(--progress-width);
-    margin     : calc( 100vh * .333 - 32px ) auto 0 auto;
-    text-align : center;
-}
-.progress_bar label {
-    margin : 0;
-}
-.progress_bar progress {
-    width : var(--progress-width);
-    color : var(--color-text-base);
-}
 
-.modal__passphrase-div-label {
-    display     : block;
-    width       : clamp(150px, 200px, 300px);
-    min-height  : 0;
-    line-height : 1rem;
-    font-weight : var(--font-weight-bold);
-    padding     : 0 0 0 .25rem;
-    margin      : 0;
-}
-.modal__passphrase-div-input {
-    width         : clamp(150px, 200px, 300px);
-    height        : 44px;
-    padding       : 10px;
-    border        : 1px solid var( --color-lightness-36_5 );
-    border-radius : var( --border-radius-small );
-    font-size     : 1.15rem;
-}
-@media ( max-width: 600px ) {
-    .modal__form-textarea {
-        font-size: 1rem;
+@media ( max-width: 600px ) and ( pointer: coarse ) {
+    body.dialog {
+        height : 100%;
+        height : -webkit-fill-available; /* iOS Safari Only */
     }
-    .modal__container-edit .modal__header {
-        grid-template-columns: 1fr 92px 44px;
+    #dialogPassphrase input,
+    #dialogPassphrase button {
+        height : 44px;
     }
-    .modal__header-small {
-        font-size  : .8rem;
-        text-align : center;
+    #dialogEdit {
+        height : 100%;
+        height : -webkit-fill-available; /* iOS Safari Only */
     }
-    .modal__nav-button {
-        font-size: 1rem;
-    }
-}
-@media ( max-width: 1000px ) and ( pointer: coarse ) {
-    .modal {
-        top    : 5px;
-        bottom : unset;
-        width  : clamp( 300px, 100vw - 10px, 100vw - 10px );
-        height : clamp( 150px, 47vh, 95vh ); /*Full height is an issue because of Safari on iOS.*/
-    }
-    .modal__passphrase {
-        top    : 7vh;
-        width  : clamp(200px, 340px, 400px);
-        height : clamp(200px, 220px, 220px);
-    }
-    .modal__passphrase-div-label,
-    .modal__passphrase-div-input {
-        width : clamp(200px, 250px, 300px);
-    }
-}
-@media ( hover: hover ) {
-    .modal__nav-button:last-child:hover {
-        background-color: var( --background-color-button-hover );
+    #dialogEdit header {
+        grid-template-columns: 3fr 100px 44px;
     }
 }
 
-/* END MODAL */
+/* END DIALOG */

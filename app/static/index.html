@@ -43,66 +43,52 @@
         <template id="templateNoteSections">
             <div class="notes__sections"></div>
         </template>
-        <template id="templateProgressBar">
-          <div class="progress_bar">
+        <template id="templateDialogProgressBar">
+          <dialog id="dialogProgressBar">
             <label for="progressBar">Loading</label>
             <progress id="progressBar" max="100" value="0"></progress>
             <small>0%</small>
-          </div>
+          </dialog>
         </template>
-        <template id="templateModalEdit">
-            <div class="modal__shadowbox-edit" aria-hidden="true"></div>
-            <div class="modal__container-edit" role="dialog" aria-labelledby="dialogEditTitle" aria-describedby="dialogEditDesc">
-                <div class="modal" aria-modal="true">
-                    <header class="modal__header">
-                        <h2 class="modal__header-h2" id="dialogEditTitle">Edit Note</h2>
-                        <small class="modal__header-small" title="Last Updated"></small>
-                        <button class="modal__header-button" title="Close" id="close" type="button"><span class="modal__header-button-span">Close</span></button>
-                    </header>
-                    <form class="modal__form" name="editNoteForm">
-                        <input class="modal__form-input" type="hidden" name="url" value="">
-                        <label for="dialogEditTextArea" id="dialogEditDesc" class="visually-hidden">Edit file contents</label>
-                        <textarea id="dialogEditTextArea" class="modal__form-textarea" name="content"></textarea>
-                        <svg id="pencil-progress" class="modal__svg-loader" width='36px' height='36px' viewBox='0 0 46 46' xmlns='http://www.w3.org/2000/svg'>
-                            <defs>
-                                <polygon id="pencil-progress-path-1" points="4 0 12 8 0 12"></polygon>
-                                <polygon id="pencil-progress-path-3" points="38 -34 46 -26 14 6 6 -2"></polygon>
-                            </defs>
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <g transform="translate(0.000000, 34.000000)">
-                                    <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-1"></use>
-                                    <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-3"></use>
-                                </g>
-                            </g>
-                        </svg>
-                    </form>
-                    <nav class="modal__nav">
-                        <button id="copyToClipboardSection" class="copy-to-clipboard modal__nav-button" title="Copy section to clipboard" type="button">section</button>
-                        <button id="copyToClipboardListItem" class="copy-to-clipboard modal__nav-button" title="Copy li to clipboard" type="button">li</button>
-                        <button id="copyToClipboardListItemCode" class="copy-to-clipboard modal__nav-button" title="Copy li + code to clipboard" type="button">code</button>
-                        <button id="copyToClipboardListItemBookmark" class="copy-to-clipboard modal__nav-button" title="Copy li + a to clipboard" type="button">a</button>
-                        <button id="saveNote" class="modal__nav-button" title="Save" type="button">Save</button>
-                    </nav>
-                </div>
-            </div>
+        <template id="templateDialogPassphrase">
+          <dialog id="dialogPassphrase">
+              <label for="passphrase" class="" id="dialogPassphraseDesc">Passphrase</label>
+              <input id="passphrase" class="" type="password" required>
+              <button id="submitPassphrase" class="" title="Save" type="button">Submit</button>
+          </dialog>
         </template>
-        <template id="templateModalPassphrase">
-            <div class="modal__shadowbox-passphrase" aria-hidden="true"></div>
-            <div class="modal__container-passphrase" role="dialog" aria-labelledby="dialogPassphraseTitle" aria-describedby="dialogPassphraseDesc">
-                <div class="modal modal__passphrase" aria-modal="true">
-                    <header class="modal__header">
-                        <h2 class="modal__header-h2" id="dialogPassphraseTitle">Encryption</h2>
-                        <div></div>
-                    </header>
-                    <div class="modal__passphrase-div">
-                        <label for="passphrase" class="modal__passphrase-div-label" id="dialogPassphraseDesc" aria-label="Enter your passphrase to enable encryption. This is required.">Passphrase</label>
-                        <input id="passphrase" class="modal__passphrase-div-input" type="password" required>
-                    </div>
-                    <nav class="modal__nav modal__passphrase-nav">
-                        <button id="submitPassphrase" class="modal__nav-button modal__passphrase-nav-button" title="Save" type="button">Submit</button>
-                    </nav>
-                </div>
-            </div>
+        <template id="templateDialogEdit">
+          <dialog id="dialogEdit" >
+            <header>
+              <h2>Edit Note</h2>
+              <small title="Last Updated"></small>
+              <button title="Close" id="close" type="button"><span>Close</span></button>
+            </header>
+            <form>
+              <input type="hidden" name="url" value="">
+              <label for="dialogEditTextArea" id="dialogEditDesc" class="visually-hidden">Edit file contents</label>
+              <textarea id="dialogEditTextArea" name="content"></textarea>
+              <svg id="pencil-progress" width='36px' height='36px' viewBox='0 0 46 46' xmlns='http://www.w3.org/2000/svg'>
+                <defs>
+                  <polygon id="pencil-progress-path-1" points="4 0 12 8 0 12"></polygon>
+                  <polygon id="pencil-progress-path-3" points="38 -34 46 -26 14 6 6 -2"></polygon>
+                </defs>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(0.000000, 34.000000)">
+                    <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-1"></use>
+                    <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-3"></use>
+                  </g>
+                </g>
+              </svg>
+            </form>
+            <nav>
+              <button id="copyToClipboardSection" title="Copy section to clipboard" type="button">section</button>
+              <button id="copyToClipboardListItem" title="Copy li to clipboard" type="button">li</button>
+              <button id="copyToClipboardListItemCode" title="Copy li + code to clipboard" type="button">code</button>
+              <button id="copyToClipboardListItemBookmark" title="Copy li + a to clipboard" type="button">a</button>
+              <button id="saveNote" title="Save" type="button">Save</button>
+            </nav>
+          </dialog>
         </template>
 
         <script src="static/js/crypto.js"></script>

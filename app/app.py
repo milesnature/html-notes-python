@@ -1,7 +1,9 @@
 from flask import Flask, request
+import os
 
 app = Flask(__name__)
 
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 @app.route('/')
 def notes_document():
@@ -34,11 +36,11 @@ def save_note():
         url = request.form.get('url')
         content = request.form.get('content')
         app.logger.info(f"'url: '{url}, 'content: '{content}")
-        with open('app/'+url, "w") as note:
+        with open(os.path.join(basedir, url), "w") as note:
             note.write(content)
             return 'Save note successful.'
 
 
 if __name__ == '__main__':
-    app.debug = False
+    app.debug = True
     app.run()
