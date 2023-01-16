@@ -36,23 +36,27 @@
             </details>
         </template>
         <template id="templateNoteSummaryButton">
-            <button title="" type="button"><span>Edit</span></button>
+            <button class="notes__button" title="" type="button"><span>Edit</span></button>
         </template>
         <template id="templateNoteSections">
             <div class="notes__sections"></div>
         </template>
         <template id="templateDialogProgressBar">
           <dialog id="dialogProgressBar">
-            <label for="progressBar">Loading</label>
-            <progress id="progressBar" max="100" value="0"></progress>
-            <small>0%</small>
+            <div>
+              <label for="progressBar">Loading</label>
+              <progress id="progressBar" max="100" value="0"></progress>
+              <small>0%</small>
+            </div>
           </dialog>
         </template>
         <template id="templateDialogPassphrase">
           <dialog id="dialogPassphrase">
+            <div>
               <label for="passphrase" class="" id="dialogPassphraseDesc">Passphrase</label>
               <input id="passphrase" class="" type="password" required>
               <button id="submitPassphrase" class="" title="Save" type="button">Submit</button>
+            </div>
           </dialog>
         </template>
         <template id="templateDialogEdit">
