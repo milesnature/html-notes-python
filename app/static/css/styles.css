@@ -258,7 +258,9 @@ textarea {
 table {
     border-collapse  : collapse;
     border-spacing   : 0;
+    /*noinspection CssInvalidPropertyValue*/
     width            : fill-available;
+    /*noinspection CssInvalidPropertyValue*/
     width            : -webkit-fill-available;
     margin           : .5rem 0 .5rem 0;
     border           : 1px solid var( --color-lightness-74_9 );
@@ -325,12 +327,10 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
     background-color : var(--progress-accent);
     border-radius    : var(--progress-border-radius);
-    /*transition       : var(--progress-transition);*/
 }
 progress::-moz-progress-bar {
     background-color : var(--progress-accent);
     border-radius    : var(--progress-border-radius);
-    /*transition       : var(--progress-transition);*/
 }
 .color-accent {
     color: var(--color-palette-accent-dark);
@@ -899,6 +899,7 @@ body.dialog .nav__ctrl {
 @media ( max-width: 600px ) and ( pointer: coarse ) {
     body.dialog {
         height : 100%;
+        /*noinspection CssInvalidPropertyValue*/
         height : -webkit-fill-available; /* iOS Safari Only */
     }
     #dialogPassphrase input,
@@ -907,6 +908,7 @@ body.dialog .nav__ctrl {
     }
     #dialogEdit {
         height : 100%;
+        /*noinspection CssInvalidPropertyValue*/
         height : -webkit-fill-available; /* iOS Safari Only */
     }
     #dialogEdit header {

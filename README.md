@@ -1,14 +1,15 @@
 # HTML Notes
 
-HTML Notes is a lightweight design system written in HTML, CSS, Javascript, with a splash of PHP. The primary goal of this system is to neatly organize an entire collection of HTML files (notes) into a single web page. It's designed to be clean, concise, and efficient.
+HTML Notes is a lightweight design system written in HTML, CSS, Javascript, with a splash of Python. The primary goal of this system is to neatly organize an entire collection of HTML files (notes) into a single web page. It's designed to be clean, concise, and efficient.
 
-It favors simple HTML files, self-custody, client-side encryption, and freedom from proprietary programs and formats. Notes taking solutions will come and go but HTML will remain the most ubiquitous, flexible, and simple to maintain.
+It favors simple HTML files, self-custody, client-side encryption, and freedom from proprietary programs and formats.
 
 If you're a meticulous note taker, expending the time and effort to format and "style" your plain text notes — *you may as well be using HTML and CSS to do it!*
 It's more powerful and accessible than Markdown with nearly the same amount of effort.
 
 ## Example
 https://example.html-notes.app/
+* This example is using PHP (an alternative version). However, the code in this repo is intended for a Python Flask app.
 * Encryption disabled for ease of use.
 * Saving notes disabled for security.
 
@@ -19,7 +20,7 @@ https://example.html-notes.app/
 * Prevent duplicates. A single source helps prevent the spread/duplication of files across devices, applications, and directories.
 * Self-custody. No ads, no tracking, no third parties.
 * No database.
-* Super lightweight. Lightening fast load times. No compiling or builds. Minimal PHP script (to edit/write files). It is easily swapped out with another back-end, like Python or Node.
+* Super lightweight. Lightening fast load times. No compiling or builds. Minimal Python script (to edit/write files). It is easily swapped out with another back-end, like Python or Node.
 * Search is instantaneous because all the data is on a single page.
 * Edit notes directly in the browser or in your favorite text editor.
 * Designed for mobile and desktop.
@@ -114,11 +115,15 @@ Some things, like the local storage of notes, are ongoing experiments.
 
 #### Simplicity is divine.
 
+HTML is ubiquitous, flexible, and simple to maintain.
+
 I am toying with the notion of an SFA (Single File Application). A lightweight, highly performant, single purpose variant of the SPA. No frameworks, no dependencies, no bloat.
 
 The latest CSS and JS was leveraged whenever possible because my personal requirements do not include comprehensive backwards compatibility and (to be honest) it's more fun that way.
 
 I am reevaluating the pointer cursor. I had always believed that anything clickable should have a pointer cursor. However, after reading some arguments against it, I've changed my mind. Less is more. The closer to default functionality the better.
+
+I am also reevaluating modals. I've removed all of these ancient, unwieldy relics of the past. They're bad for accessibility, visually disruptive, and no longer relevant. My new strategy is to avoid them whenever possible.
 
 "What about all of these files?", you may ask. They are split out to make life easier (see Basic Anatomy). However, this page could easily be converted into a single, static html file including all the content, CSS, and Javascript (inline).
 
