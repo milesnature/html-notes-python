@@ -327,7 +327,7 @@ progress::-webkit-progress-value {
     border-radius    : var(--progress-border-radius);
     /*transition       : var(--progress-transition);*/
 }
-progress::moz-progress-bar {
+progress::-moz-progress-bar {
     background-color : var(--progress-accent);
     border-radius    : var(--progress-border-radius);
     /*transition       : var(--progress-transition);*/
