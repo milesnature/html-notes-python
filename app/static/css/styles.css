@@ -765,7 +765,6 @@ body.dialog .nav__ctrl {
 #dialogProgressBar div {
     display    : grid;
     grid-gap   : 10px;
-    /*margin     : 50% auto 0 auto;*/
     padding    : 20px;
     width      : 269px;
     text-align : center;
@@ -781,7 +780,6 @@ body.dialog .nav__ctrl {
 #dialogPassphrase div {
     display    : grid;
     grid-gap   : 10px;
-    /*margin     : 50% auto 0 auto;*/
     padding    : 20px;
     width      : 269px;
     text-align : center;
@@ -901,29 +899,16 @@ body.dialog .nav__ctrl {
 }
 
 @media ( max-width: 600px ) and ( pointer: coarse ) {
-    body.dialog {
-        /*height : 100%;*/
-        /*height : -moz-available;*/
-        /*height : -webkit-fill-available; !* iOS Safari Only *!*/
-        /*height : fill-available;*/
-    }
+    body.dialog {}
     #dialogPassphrase input,
     #dialogPassphrase button {
         height : 44px;
     }
     #dialogEdit {
-        /*height : 100%;*/
-        /*height : -moz-available;*/
-        /*height : -webkit-fill-available; !* iOS Safari Only *!*/
-        /*height : fill-available;*/
         height : calc( 100vh - 90px );
     }
-    #dialogPassphrase {
-
-    }
-    #dialogProgress {
-        /*margin-top: 100%;*/
-    }
+    #dialogPassphrase {}
+    #dialogProgress {}
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
     }
