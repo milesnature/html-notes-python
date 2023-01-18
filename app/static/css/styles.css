@@ -126,6 +126,7 @@
 
 html {
     overflow-y               : scroll;
+    height                   : 100%;
     padding                  : 9px 0 9px 9px;
     -webkit-text-size-adjust : 100%; /* Prevent font scaling in landscape mode. */
 }
@@ -746,45 +747,49 @@ html.hidden .nav__ctrl {
 
 dialog {
     position         : unset;
+    display          : block;
     background-color : var(--color-palette-white);
     border-width     : 0;
     border-radius    : var(--border-radius-small);
 }
 body.dialog {
     display       : grid;
-    height        : calc(100vh - 18px);
+    height        : 100%;
     place-content : center;
     place-items   : center;
+}
+body.dialog.edit {
+    align-content: start;
 }
 body.dialog .notes,
 body.dialog .nav__ctrl {
     display : none;
 }
-#dialogProgressBar {
+#dialogProgressBar div {
     display    : grid;
     grid-gap   : 10px;
-    margin     : -50% auto 0 auto;
     padding    : 20px;
     width      : 269px;
     text-align : center;
 }
 #dialogProgressBar label {
-    margin : 0;
+    margin     : 0;
+    text-align : left;
 }
 #dialogProgressBar progress {
     width : var(--progress-width);
     color : var(--color-text-base);
 }
-#dialogPassphrase {
+#dialogPassphrase div {
     display    : grid;
     grid-gap   : 10px;
-    margin     : -50% auto 0 auto;
     padding    : 20px;
     width      : 269px;
     text-align : center;
 }
 #dialogPassphrase label {
-    margin : 0;
+    margin     : 0;
+    text-align : left;
 }
 #dialogPassphrase input {
     height        : 38px;
@@ -803,7 +808,7 @@ body.dialog .nav__ctrl {
 #dialogEdit {
     display    : grid;
     grid-template-rows : 44px auto 54px;
-    margin-top : -5px;
+    margin-top : 0;
     padding    : 0;
     width      : calc( 100vw - 18px );
     max-width  : 1400px;
@@ -897,20 +902,15 @@ body.dialog .nav__ctrl {
 }
 
 @media ( max-width: 600px ) and ( pointer: coarse ) {
-    body.dialog {
-        height : 100%;
-        /*noinspection CssInvalidPropertyValue*/
-        height : -webkit-fill-available; /* iOS Safari Only */
-    }
     #dialogPassphrase input,
     #dialogPassphrase button {
         height : 44px;
     }
     #dialogEdit {
-        height : 100%;
-        /*noinspection CssInvalidPropertyValue*/
-        height : -webkit-fill-available; /* iOS Safari Only */
+        height : calc( 100vh - 93px );
     }
+    #dialogPassphrase {}
+    #dialogProgress {}
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
     }
