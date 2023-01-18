@@ -40,6 +40,8 @@ https://example.html-notes.app/
 
 ## Basic Anatomy
 
+This implementation requires the [Flask](https://flask.palletsprojects.com/en/2.2.x/) web application framework.
+
 Each individual note (category) uses the following HTML structure.
 
     <details id="aNote" class="notes__details">
