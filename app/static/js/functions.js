@@ -70,11 +70,13 @@ const getStoredNote = ( name ) => {
 
 // DIALOG
 
-const toggleBodyDialog = ( display ) => {
+const toggleBodyDialog = ( display, type ) => {
     if ( display ) {
         document.body.classList.remove('dialog');
+        if (type) { document.body.classList.remove(type); }
     } else {
         document.body.classList.add('dialog');
+        if (type) { document.body.classList.add(type); }
     }
 }
 const handlePassphrase = ( value ) => {
@@ -209,7 +211,7 @@ const insertEditDialog = ( content, dir, id, title, lastModified ) => {
         small.appendChild(document.createTextNode(lastModifiedDate));
         dialog.querySelector('input[name="url"]').value = dir;
         addDialogEventListeners(dialog);
-        toggleBodyDialog(false);
+        toggleBodyDialog(false, 'edit');
         document.body.prepend(fragment);
         const eventFocus = new Event('focus');
         dialog.querySelector('#dialogEdit textarea').focus();

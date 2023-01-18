@@ -758,6 +758,9 @@ body.dialog {
     place-content : center;
     place-items   : center;
 }
+body.dialog.edit {
+    align-content: start;
+}
 body.dialog .notes,
 body.dialog .nav__ctrl {
     display : none;
@@ -805,7 +808,7 @@ body.dialog .nav__ctrl {
 #dialogEdit {
     display    : grid;
     grid-template-rows : 44px auto 54px;
-    margin-top : -5px;
+    margin-top : 0;
     padding    : 0;
     width      : calc( 100vw - 18px );
     max-width  : 1400px;
@@ -899,13 +902,12 @@ body.dialog .nav__ctrl {
 }
 
 @media ( max-width: 600px ) and ( pointer: coarse ) {
-    body.dialog {}
     #dialogPassphrase input,
     #dialogPassphrase button {
         height : 44px;
     }
     #dialogEdit {
-        height : calc( 100vh - 90px );
+        height : calc( 100vh - 93px );
     }
     #dialogPassphrase {}
     #dialogProgress {}

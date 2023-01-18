@@ -9,9 +9,10 @@ It's more powerful and accessible than Markdown with nearly the same amount of e
 
 ## Example
 https://example.html-notes.app/
-* This example is using PHP (an alternative version). However, the code in this repo is intended for a Python Flask app.
 * Encryption disabled for ease of use.
 * Saving notes disabled for security.
+* This example is deployed with the PHP version of this codebase.
+
 
 ### Pros
 * Private. Client-side encryption (AES) means you can host your files remotely with confidence.
@@ -31,7 +32,7 @@ https://example.html-notes.app/
 * Basic knowledge of HTML, CSS, and JSON is required.
 * A fair amount of traditional front-end web development knowledge is required to set up. Afterwards, the maintenance is trivial and updating notes can be done from the browser.
 * Adding new sections and files is still a manual process.
-* You must completely trust whoever has access to this site! It would be a _security nightmare_ otherwise.
+* You must completely trust anyone with access to this site! It would be a _security nightmare_ otherwise.
 * Using a code editor is the most powerful experience.
 * Once files are encrypted, the only reasonable way to edit them is through the browser.
 * Tailored to the organized, meticulous note taker.
@@ -117,20 +118,21 @@ Some things, like the local storage of notes, are ongoing experiments.
 
 HTML is ubiquitous, flexible, and simple to maintain.
 
-I am toying with the notion of an SFA (Single File Application). A lightweight, highly performant, single purpose variant of the SPA. No frameworks, no dependencies, no bloat.
+I am toying with the notion of an SFA (Single File Application). A lightweight, highly performant, single purpose variant of the SPA. No frameworks, no dependencies, no bloat. "What about all of these files?", you may ask. They are split out to make life easier (see Basic Anatomy). However, this page could easily be converted into a single, static html file including all the content, CSS, and Javascript (inline).
 
 The latest CSS and JS was leveraged whenever possible because my personal requirements do not include comprehensive backwards compatibility and (to be honest) it's more fun that way.
 
-I am reevaluating the pointer cursor. I had always believed that anything clickable should have a pointer cursor. However, after reading some arguments against it, I've changed my mind. Less is more. The closer to default functionality the better.
+I am re-evaluating popular UX conventions:
 
-I am also reevaluating modals. I've removed all of these ancient, unwieldy relics of the past. They're bad for accessibility, visually disruptive, and no longer relevant. My new strategy is to avoid them whenever possible.
+* Does everything clickable need a pointer cursor? I had always felt it did. However, after reading some arguments against it, I'm not so sure. Less is more. The closer to default functionality the better.
+* How effective/helpful are hover effects? Should they be dramatic or subtle? I suspect they are marginally helpful and should be very subtle or left out.
+* Are modals good UX? I've spent years implementing them for companies that believed they were. They are bad for accessibility, visually disruptive, troublesome to implement (style), and awkward in mobile. My new strategy is to avoid them whenever possible.
 
-"What about all of these files?", you may ask. They are split out to make life easier (see Basic Anatomy). However, this page could easily be converted into a single, static html file including all the content, CSS, and Javascript (inline).
 
 
 
 ## The Future
-I wrote this tool for myself which means future development will be limited to my whimsical desires and needs. This could change with increased interest from additional advocates.   
+I wrote this tool for myself which means future development will be limited to my whimsical desires and needs. This could change with increased interest.
 * Make this easier to use for non-technical folks.
   * Enable updates to config from browser.
   * Enable users to create, delete, and rename the notes in their repository from the browser.
@@ -140,7 +142,7 @@ I wrote this tool for myself which means future development will be limited to m
 * Add encryption for images. Probably base-64. Otherwise, linking to external (encrypted) storage is a good solution.
 * Explore the PWA options that enable edits to files on local directories...
 * Scrape the notes directory to dynamically generate `notes` object.
-* Notifications for success and failure.
+* Notifications for success and failure?
 * View passphrase
 * Throttle number of passphrase attempts.
 * Use timestamps to help manage overwriting new files and general sync issues.
