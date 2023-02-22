@@ -87,18 +87,10 @@ Highlighted code blocks will copy to clipboard on click or enter.
     const useEncryption = true;
     const isDemo = false;
     const notesDirectory = "notes/";
-    const notes = [
-        { "id" : "Groceries", "dir" : "Health/Nutrition/groceries.html" },
-        { "id" : "Recipies",  "dir" : "Health/Nutrition/recipies.html" },
-        { "id" : "News",      "dir" : "news.html" },
-        { "id" : "To-Do",     "dir" : "to-do.html" }
-    ];
 
-Notes are asynchronously downloaded and dynamically constructed with javascript, using this `notes` object. The order (of this array) will determine the order on the page.
+A `getDir()` call returns all the html and txt files from the `/notes` directory in alphabetical order. A `notes` array object is generated and used to download and construct all the notes. The order (of this array) determines the order on the page. 
 
-This config defines the containers for each category of notes based on their directory structure.
-
-The id of each category will be used for the name of each respective note category. Hence, the capitalization. The same is true for the directories.
+The id of each category (derived from the file name) will be used for the name of each respective note category. Hence, the capitalization. The same is true for the directories.
 
 Once the index file has loaded, the site will check for a locally stored passphrase. If one is not found, a prompt will persist until one is entered. Javascript will decrypt any encrypted sections and the site will be ready.
 

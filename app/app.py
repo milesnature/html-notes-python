@@ -60,17 +60,20 @@ def save_note():
         try:
             url = request.form.get('url')
             content = request.form.get('content')
-            app.logger.info(f"'url: '{url}, 'content: '{content}")
+            # app.logger.info(f"'url: '{url}, 'content: '{content}")
             if url is not None and content is not None:
-                file = os.path.join(basedir, url)
-                if os.path.exists(file):
-                    with open(file, "w") as note:
-                        note.write(content)
-                        return 'Your note was saved!'
+                if url.endswith('.html') or url.endswith('.txt'):
+                    file = os.path.join(basedir, url)
+                    if os.path.exists(file):
+                        with open(file, "w") as note:
+                            note.write(content)
+                            return 'Your note was saved!'
+                    else:
+                        return {"Error": "File does not exist.", "file": url}, 400
                 else:
-                    return {"Error": "File does not exist.", "file": url}, 400
+                    {"Error": "Only html and txt files are permitted.", "file": url}, 400
             else:
-                return {"Error": "One or more form values are missing.", "url": url, "content": content}, 400
+                return {"Error": "One or more form values are missing .", "url": url, "content": content}, 400
         except Exception as e:
             return {"Error": e}, 500
 
