@@ -3,46 +3,45 @@
 :root {
 
     /* COLORS */
-    --color-lightness-100_0 : hsla(0, 0.0%, 100.0%, 1); /* #ffffff */
-    --color-lightness-98_0  : hsla(0, 0.0%,  98.0%, 1); /* #fafafa */
-    --color-lightness-94_0  : hsla(0, 0.0%,  94.0%, 1); /* #f0f0f0 */
-    --color-lightness-92_9  : hsla(0, 0.0%,  92.9%, 1); /* #ededed */
-    --color-lightness-90_2  : hsla(0, 0.0%,  90.2%, 1); /* #e6e6e6 */
-    --color-lightness-88_2  : hsla(0, 0.0%,  88.2%, 1); /* #e1e1e1 */
-    --color-lightness-86_7  : hsla(0, 0.0%,  86.7%, 1); /* #dddddd */
-    --color-lightness-82_7  : hsla(0, 0.0%,  82.7%, 1); /* #d3d3d3 */
-    --color-lightness-80_4  : hsla(0, 0.0%,  80.4%, 1); /* #d4d4d4 */
-    --color-lightness-78_8  : hsla(0, 0.0%,  78.8%, 1); /* #c9c9c9 */
-    --color-lightness-74_9  : hsla(0, 0.0%,  74.9%, 1); /* #bfbfbf */
-    --color-lightness-71_0  : hsla(0, 0.0%,  71.0%, 1); /* #b5b5b5 */
-    --color-lightness-67_5  : hsla(0, 0.0%,  67.5%, 1); /* #acacac */
-    --color-lightness-63_5  : hsla(0, 0.0%,  63.5%, 1); /* #a2a2a2 */
-    --color-lightness-48_2  : hsla(0, 0.0%,  48.2%, 1); /* #7b7b7b */
-    --color-lightness-44_3  : hsla(0, 0.0%,  44.3%, 1); /* #717171 */
-    --color-lightness-40_4  : hsla(0, 0.0%,  40.4%, 1); /* #676767 */
-    --color-lightness-36_5  : hsla(0, 0.0%,  36.5%, 1); /* #5d5d5d */
-    --color-lightness-32_9  : hsla(0, 0.0%,  32.9%, 1); /* #545454 */
-    --color-lightness-29_0  : hsla(0, 0.0%,  29.0%, 1); /* #4a4a4a */
-    --color-lightness-25_1  : hsla(0, 0.0%,  25.1%, 1); /* #404040 */
-    --color-lightness-21_2  : hsla(0, 0.0%,  21.2%, 1); /* #363636 */
-    --color-lightness-17_3  : hsla(0, 0.0%,  17.3%, 1); /* #2c2c2c */
-    --color-lightness-13_7  : hsla(0, 0.0%,  13.7%, 1); /* #232323 */
-    --color-lightness-9_8   : hsla(0, 0.0%,   9.8%, 1); /* #191919 */
-    --color-lightness-5_9   : hsla(0, 0.0%,   5.9%, 1); /* #0f0f0f */
-    --color-lightness-0_0   : hsla(0, 0.0%,   0.0%, 1); /* #000000 */
+    --color-gs-lt-100 : hsl(0, 0.0%, 100.0%); /* #ffffff */
+    --color-gs-lt-98  : hsl(0, 0.0%,  98.0%); /* #fafafa */
+    --color-gs-lt-94  : hsl(0, 0.0%,  94.0%); /* #f0f0f0 */
+    --color-gs-lt-93  : hsl(0, 0.0%,  92.9%); /* #ededed */
+    --color-gs-lt-90  : hsl(0, 0.0%,  90.2%); /* #e6e6e6 */
+    --color-gs-lt-88  : hsl(0, 0.0%,  88.2%); /* #e1e1e1 */
+    --color-gs-lt-87  : hsl(0, 0.0%,  86.7%); /* #dddddd */
+    --color-gs-lt-83  : hsl(0, 0.0%,  82.7%); /* #d3d3d3 */
+    --color-gs-lt-80  : hsl(0, 0.0%,  80.4%); /* #d4d4d4 */
+    --color-gs-lt-79  : hsl(0, 0.0%,  78.8%); /* #c9c9c9 */
+    --color-gs-lt-75  : hsl(0, 0.0%,  74.9%); /* #bfbfbf */
+    --color-gs-lt-71  : hsl(0, 0.0%,  71.0%); /* #b5b5b5 */
+    --color-gs-lt-68  : hsl(0, 0.0%,  67.5%); /* #acacac */
+    --color-gs-lt-64  : hsl(0, 0.0%,  63.5%); /* #a2a2a2 */
+    --color-gs-lt-48  : hsl(0, 0.0%,  48.2%); /* #7b7b7b */
+    --color-gs-lt-44  : hsl(0, 0.0%,  44.3%); /* #717171 */
+    --color-gs-lt-40  : hsl(0, 0.0%,  40.4%); /* #676767 */
+    --color-gs-lt-37  : hsl(0, 0.0%,  36.5%); /* #5d5d5d */
+    --color-gs-lt-33  : hsl(0, 0.0%,  32.9%); /* #545454 */
+    --color-gs-lt-29  : hsl(0, 0.0%,  29.0%); /* #4a4a4a */
+    --color-gs-lt-25  : hsl(0, 0.0%,  25.1%); /* #404040 */
+    --color-gs-lt-21  : hsl(0, 0.0%,  21.2%); /* #363636 */
+    --color-gs-lt-17  : hsl(0, 0.0%,  17.3%); /* #2c2c2c */
+    --color-gs-lt-13  : hsl(0, 0.0%,  13.7%); /* #232323 */
+    --color-gs-lt-10  : hsl(0, 0.0%,   9.8%); /* #191919 */
+    --color-gs-lt-6   : hsl(0, 0.0%,   5.9%); /* #0f0f0f */
+    --color-gs-lt-0   : hsl(0, 0.0%,   0.0%); /* #000000 */
 
     /* COLOR PALETTE */
-    --color-palette-white              : var(--color-lightness-100_0);
-    --color-palette-black              : var(--color-lightness-0_0);
     /* PREVIOUS : #1B1B2F, #162447, #1F4068, #E43F5A, #F875AA */
-    --color-palette-dark               : hsla(240, 27%, 15%, 1);
-    --color-palette-medium             : hsla(223, 53%, 18%, 1);
-    /*--color-palette-medium             : var(--Blue-10);*/
-    --color-palette-light              : hsla(213, 54%, 26%, 1);
-    --color-palette-light-highlight    : hsla(213, 54%, 82%, 1);
-    --color-palette-accent             : hsla(350, 75%, 57%, 1);
-    --color-palette-accent-dark        : hsla(350, 75%, 37%, 1);
-    --color-palette-accent-highlight   : hsla(350, 75%, 57%, .15);
+    --color-plt-white              : var(--color-gs-lt-100);
+    --color-plt-black              : var(--color-gs-lt-0);
+    --color-plt-dark               : hsl(240, 27%, 15%);
+    --color-plt-medium             : hsl(223, 53%, 18%);
+    --color-plt-light              : hsl(213, 54%, 26%);
+    --color-plt-light-highlight    : hsl(213, 54%, 82%);
+    --color-plt-accent             : hsl(350, 75%, 57%);
+    --color-plt-accent-dark        : hsl(350, 75%, 37%);
+    --color-plt-accent-highlight   : hsla(350, 75%, 57%, .15);
 
 }
 
@@ -53,18 +52,18 @@
 :root {
 
     /* FONT FAMILIES & STYLES */
-    --color-text-base    : var(--color-lightness-5_9);
+    --color-text-base    : var(--color-gs-lt-6);
     --font-family        : Helvetica, Arial, sans-serif;
     --font-weight-bold   : bold;
     --font-weight-normal : normal;
-    --font-weight-light  : light;
+    --font-weight-gs-lt  : light;
 
     /* MISC */
-    --background-color-body     : var(--color-lightness-78_8);
-    --color-link                : var(--color-palette-light);
+    --background-color-body     : var(--color-gs-lt-79);
+    --color-link                : var(--color-plt-light);
     --color-link-hover          : hsla(213, 54%, 50%, 1);
-    --color-code-highlight      : var(--color-palette-light-highlight);
-    --background-color-sections : var(--color-lightness-92_9);
+    --color-code-highlight      : var(--color-plt-light-highlight);
+    --background-color-sections : var(--color-gs-lt-93);
 
     /* BOX SHADOWS */
     --box-shadow : none;
@@ -82,17 +81,17 @@
     --border-radius-large-right  : 0 var(--border-radius-large) var(--border-radius-large) 0;
 
     /* HOVER */
-    --background-color-button       : var(--color-palette-white);
-    --background-color-button-hover : var(--color-lightness-98_0);
+    --background-color-button       : var(--color-plt-white);
+    --background-color-button-hover : var(--color-gs-lt-98);
 
     /* OUTLINE */
-    --outline-color-base            : var(--color-palette-accent);
-    --outline-box-shadow-color-base : var(--color-lightness-40_4);
+    --outline-color-base            : var(--color-plt-accent);
+    --outline-box-shadow-color-base : var(--color-gs-lt-40);
 
     /* FORMS */
     --background-image-form-select         : url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='25' height='34' viewBox='0 0 25 34'><g fill-rule='evenodd' stroke='none'><rect width='25' height='34' fill='hsla(0,0.0%,88.2%,1)' /><polygon fill='hsla(0,0.0%,9.8%,1)' points='12.5 14 19 20 6 20' transform='matrix(1 0 0 -1 0 34)'/></g></svg>");
     --background-image-form-checkbox       : url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='9' viewBox='0 0 8 7'><polyline fill='none' stroke='hsla(0,0.0%,9.8%,1)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' points='1 4 3 6 7 1'/></svg>");
-    --background-color-form-input-checkbox : var(--color-palette-white);
+    --background-color-form-input-checkbox : var(--color-plt-white);
 
     /* ICONS */
     --pencil-black      : url("data:image/svg+xml,%3Csvg width='49px' height='49px' viewBox='0 0 46 46' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(0.000000  0.000000)' fill='%23000000' fill-rule='nonzero'%3E%3Cpath d='M4 34 L12 42 L0 46 L4 34 Z M38 0 L46 8 L14 40 L6 32 L38 0 Z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -106,14 +105,14 @@
     --close-black       : url("data:image/svg+xml,%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd' stroke-linecap='round'%3E%3Cg transform='translate(1.666667  1.666667)' fill-rule='nonzero' stroke='%230F0F0F' stroke-width='2'%3E%3Cline x1='0' y1='0' x2='14.6666667' y2='14.6666667'%3E%3C/line%3E%3Cline x1='14.6666667' y1='0' x2='0' y2='14.6666667'%3E%3C/line%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     --close-white       : url("data:image/svg+xml,%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd' stroke-linecap='round'%3E%3Cg transform='translate(1.666667  1.666667)' fill-rule='nonzero' stroke='%23FFFFFF' stroke-width='2'%3E%3Cline x1='0' y1='0' x2='14.6666667' y2='14.6666667'%3E%3C/line%3E%3Cline x1='14.6666667' y1='0' x2='0' y2='14.6666667'%3E%3C/line%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 
-    --scrollbar-thumb-background-color : var(--color-palette-medium);
+    --scrollbar-thumb-background-color : var(--color-plt-medium);
     --scrollbar-thumb-border           : 1px solid var(--background-color-body);
 
     --scrollbar-thumb-textarea-background-color : hsla(223, 53%, 18%, .9);
-    --scrollbar-thumb-textarea-border           : 1px solid var(--color-palette-white);
+    --scrollbar-thumb-textarea-border           : 1px solid var(--color-plt-white);
 
-    --progress-accent        : var(--color-palette-medium);
-    --progress-background    : var(--color-lightness-90_2);
+    --progress-accent        : var(--color-plt-medium);
+    --progress-background    : var(--color-gs-lt-90);
     --progress-border-radius : 3px;
     --progress-transition    : width 0.05s ease-in;
     --progress-width         : auto;
@@ -222,7 +221,7 @@ label {
     font-weight   : var(--font-weight-bold);
 }
 input[type='password']::placeholder {
-    color : var( --color-lightness-67_5 );
+    color : var( --color-gs-lt-68 );
 }
 input[type='checkbox'] {
     appearance       : none;
@@ -230,7 +229,7 @@ input[type='checkbox'] {
     width            : 14px;
     height           : 14px;
     border-radius    : 2px;
-    border           : 1px solid var( --color-lightness-86_7 );
+    border           : 1px solid var( --color-gs-lt-87 );
     background-color : var( --background-color-form-input-checkbox );
     margin-top       : 2px;
 }
@@ -264,31 +263,31 @@ table {
     /*noinspection CssInvalidPropertyValue*/
     width            : -webkit-fill-available;
     margin           : .5rem 0 .5rem 0;
-    border           : 1px solid var( --color-lightness-74_9 );
-    background-color : var( --color-lightness-98_0 );
+    border           : 1px solid var( --color-gs-lt-75 );
+    background-color : var( --color-gs-lt-98 );
     word-break       : initial;
 }
 th {
     font-weight  : var(--font-weight-bold);
     text-align   : left;
     padding      : 5px;
-    border-right : 1px solid var( --color-lightness-74_9 );
+    border-right : 1px solid var( --color-gs-lt-75 );
 }
 tr {
-    border-bottom : 1px solid var( --color-lightness-74_9 );
+    border-bottom : 1px solid var( --color-gs-lt-75 );
 }
 tr:last-child {
     border : none;
 }
 td {
     padding      : 5px;
-    border-right : 1px solid var( --color-lightness-74_9 );
+    border-right : 1px solid var( --color-gs-lt-75 );
 }
 td:last-child {
     border : none;
 }
 tr {
-    border-bottom: 1px solid var(--color-lightness-74_9);
+    border-bottom: 1px solid var(--color-gs-lt-75);
 }
 .not-encrypted {
     background-color : hsla( 350, 75%, 57%, .3 ) !important;
@@ -334,7 +333,7 @@ progress::-moz-progress-bar {
     border-radius    : var(--progress-border-radius);
 }
 .color-accent {
-    color: var(--color-palette-accent-dark);
+    color: var(--color-plt-accent-dark);
 }
 .visually-hidden {
     position    : absolute !important;
@@ -364,6 +363,14 @@ progress::-moz-progress-bar {
     vertical-align   : inherit;
     word-break       : break-word;
     line-height      : 1rem;
+}
+@keyframes rotating {
+    from {
+        rotate : 0deg;
+    }
+    to {
+        rotate : 360deg;
+    }
 }
 @media ( pointer: coarse ) {
     html {
@@ -401,8 +408,8 @@ progress::-moz-progress-bar {
     margin : 0;
 }
 details {
-    --color-background-details-summary      : var( --color-palette-white );
-    --color-background-details-summary-open : var( --color-palette-medium );
+    --color-background-details-summary      : var( --color-plt-white );
+    --color-background-details-summary-open : var( --color-plt-medium );
     --padding-details-summary               : 0 0 0 10px;
     margin                                  : 5px;
     background-color                        : transparent;
@@ -459,27 +466,41 @@ details[open] > summary {
     top              : 0;
     z-index          : 2;
     background-color : var( --color-background-details-summary-open );
-    color            : var( --color-palette-white );
+    color            : var( --color-plt-white );
     border-radius    : var( --border-radius-small-top );
 }
 summary button {
     width               : 38px;
     height              : 38px;
     flex                : 0 0 38px;
-    padding             : 5px;
+    background-color    : transparent;
+    border-radius       : var( --border-radius-small-right );
+    animation           : none;
+}
+summary button i {
+    display             : block;
+    width               : 38px;
+    height              : 38px;
     background-image    : var( --pencil-black );
     background-color    : transparent;
     background-size     : 16px 16px;
     background-position : center;
     background-repeat   : no-repeat;
-    border-radius       : var( --border-radius-small-right );
+    animation           : none;
 }
 summary button span {
     display: none;
 }
 details[open] > summary button {
-    background-image : var( --pencil-white );
     border-radius    : 0 var( --border-radius-small ) 0 0;
+}
+details[open] > summary button i {
+    background-image : var( --pencil-white );
+}
+details > summary button.selected i,
+details[open] > summary button.selected i {
+    background-image : var( --pencil-accent );
+    animation        : rotating 1.2s linear 0s infinite;
 }
 @media ( max-width: 800px ) {
     details {
@@ -501,6 +522,10 @@ details[open] > summary button {
         height : 44px;
         flex   : 0 0 44px;
     }
+    summary button i {
+        width  : 44px;
+        height : 44px;
+    }
     .notes__sections {
         grid-template-columns : 1fr;
     }
@@ -512,7 +537,7 @@ details[open] > summary button {
     details[open] > summary:hover {
         background-color: var( --color-background-details-summary-open );
     }
-    details > summary button:hover {
+    details > summary button:hover i {
         background-image: var( --pencil-accent );
     }
 }
@@ -558,7 +583,7 @@ details[open] > summary button {
 
 /* START NAVIGATION CONTROLLER */
 
-.nav__ctrl {
+.controller {
     position        : fixed;
     right           : 5px;
     bottom          : 12px;
@@ -566,32 +591,32 @@ details[open] > summary button {
     display         : flex;
     -moz-margin-end : 9px;
 }
-html.hidden .nav__ctrl {
+html.hidden .controller {
     right           : 14px;
     -moz-margin-end : 0;
 }
-.nav__ctrl-button {
+.controller-button {
     min-width         : 44px;
     height            : 44px;
-    box-shadow        : 0 0 7px -2px var(--color-lightness-13_7);
+    box-shadow        : 0 0 7px -2px var(--color-gs-lt-13);
     border-radius     : 50%;
     background-repeat : no-repeat;
 }
-.nav__ctrl-button.expand {
+.controller-button.expand {
     background-image    : var(--arrow-down-white);
     background-position : center 17px;
-    background-color    : var(--color-palette-medium);
+    background-color    : var(--color-plt-medium);
 }
-.nav__ctrl-button.collapse {
+.controller-button.collapse {
     background-image    : var(--arrow-right);
     background-position : 18px center;
-    background-color    : var(--color-palette-white);
+    background-color    : var(--color-plt-white);
 }
-.nav__ctrl-button-span {
+.controller-button-span {
     display: none;
 }
 @media ( pointer: coarse ), ( max-width: 800px ) {
-    html.hidden .nav__ctrl, .nav__ctrl {
+    html.hidden .controller, .controller {
         right           : 12px;
         -moz-margin-end : 0px;
     }
@@ -603,7 +628,7 @@ html.hidden .nav__ctrl {
 
 .bkm__section {
     --padding-bookmark          : 0 15px;
-    --background-color-bookmark : var(--color-lightness-100_0);
+    --background-color-bookmark : var(--color-gs-lt-100);
     --color-bookmark            : var(--color-text-base);
     padding                     : 0;
     background-color            : transparent;
@@ -619,7 +644,7 @@ html.hidden .nav__ctrl {
 .bkm__section li {
     margin  : 0;
     padding : 0;
-    background-color : var( --color-palette-white );
+    background-color : var( --color-plt-white );
 }
 .bkm__section li:first-child {
     border-radius : var( --border-radius-small-top );
@@ -692,7 +717,7 @@ html.hidden .nav__ctrl {
     padding          : 0;
     display          : grid;
     place-content    : center;
-    background-color : var(--color-lightness-100_0);
+    background-color : var(--color-gs-lt-100);
     border-radius    : var( --border-radius-small );
 }
 .cl__section header input {
@@ -716,7 +741,7 @@ html.hidden .nav__ctrl {
     display          : flex;
     align-items      : center;
     min-height       : 30px;
-    background-color : var(--color-lightness-100_0);
+    background-color : var(--color-gs-lt-100);
     margin-bottom    : 1px;
     font-size        : 1rem;
     font-weight      : var(--font-weight-normal);
@@ -743,12 +768,40 @@ html.hidden .nav__ctrl {
 
 /* END CHECKLIST */
 
+/* START FOOTER */
+
+footer {
+    padding    : 0 5px;
+    margin     : 0 auto;
+    width      : clamp(250px, 100%, 1400px);
+    text-align : center;
+}
+footer button {
+    width               : 44px;
+    height              : 44px;
+    padding             : 5px;
+    background-color    : var(--color-gs-lt-83);
+    background-image    : var( --pencil-black );
+    background-size     : 16px 16px;
+    background-position : center;
+    background-repeat   : no-repeat;
+    font-size           : 1em;
+    border-radius       : var(--border-radius-small);
+}
+@media ( hover: hover ) {
+    footer button:hover {
+        background-image: var( --pencil-accent );
+    }
+}
+
+/* END FOOTER */
+
 /* START DIALOG */
 
 dialog {
     position         : unset;
     display          : block;
-    background-color : var(--color-palette-white);
+    background-color : var(--color-plt-white);
     border-width     : 0;
     border-radius    : var(--border-radius-small);
 }
@@ -758,11 +811,13 @@ body.dialog {
     place-content : center;
     place-items   : center;
 }
-body.dialog.edit {
+body.dialog.edit,
+body.dialog.setup {
     align-content: start;
 }
 body.dialog .notes,
-body.dialog .nav__ctrl {
+body.dialog .controller,
+body.dialog footer {
     display : none;
 }
 #dialogProgressBar div {
@@ -801,34 +856,39 @@ body.dialog .nav__ctrl {
 #dialogPassphrase button {
     height           : 38px;
     width            : 100%;
-    color            : var(--color-palette-white);
-    background-color : var(--color-palette-medium);
+    color            : var(--color-plt-white);
+    background-color : var(--color-plt-medium);
     border-radius    : var(--border-radius-small);
 }
-#dialogEdit {
+#dialogEdit,
+#dialogSetup {
     display    : grid;
     grid-template-rows : 44px auto 54px;
-    margin-top : 0;
+    margin-top : -5px;
     padding    : 0;
     width      : calc( 100vw - 18px );
     max-width  : 1400px;
     height     : calc( 100vh - 18px );
     background-color : var(--background-color-body);
 }
-#dialogEdit header {
+#dialogEdit header,
+#dialogSetup header {
     display: grid;
     grid-template-columns: 3fr 160px 44px;
     place-content: center;
     place-items: center;
 }
-#dialogEdit header h2 {
+#dialogEdit header h2,
+#dialogSetup header h2 {
     place-self: center start;
     padding-left: 1rem;
 }
-#dialogEdit small {
+#dialogEdit small,
+#dialogSetup small {
     text-align : center;
 }
-#dialogEdit header button {
+#dialogEdit header button,
+#dialogSetup header button {
     width               : 44px;
     height              : 44px;
     padding             : 13px;
@@ -838,18 +898,26 @@ body.dialog .nav__ctrl {
     background-color    : transparent;
     border-radius       : var(--border-radius-small);
 }
-#dialogEdit header button span {
+#dialogEdit header button span,
+#dialogSetup header button span {
     display : none;
+}
+#dialogEdit form {
+    border-radius : var(--border-radius-small);
 }
 #dialogEdit textarea {
     width         : calc( 100% - 10px );
     height        : calc( 100% - 10px );
-    border        : 0px solid var(--color-text-base);
     border-radius : var(--border-radius-small);
     resize        : none;
 }
-#dialogEdit svg {
-    display : none;
+#dialogSetup form {
+    width            : calc( 100% - 10px );
+    height           : calc( 100% - 10px );
+    padding          : 9px;
+    margin           : 3px auto 0 auto;
+    border-radius    : var(--border-radius-small);
+    background-color : var(--color-plt-white);
 }
 #dialogEdit nav {
     display: grid;
@@ -859,16 +927,29 @@ body.dialog .nav__ctrl {
     place-items: center;
     padding: 5px;
 }
-#dialogEdit nav button {
+#dialogSetup nav {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-gap: 7px;
+    place-content: center;
+    place-items: center;
+    padding: 5px;
+}
+#dialogEdit nav button,
+#dialogSetup nav button {
     height        : 44px;
     width         : 100%;
     padding       : 0 10px;
     background-color : var(--background-color-sections);
     border-radius : var(--border-radius-small);
 }
-#dialogEdit nav button#saveNote {
-    color            : var(--color-palette-white);
-    background-color : var(--color-palette-medium);
+#dialogEdit nav button#saveNote,
+#dialogSetup nav button#saveSetup {
+    color            : var(--color-plt-white);
+    background-color : var(--color-plt-medium);
+}
+dialog form svg.pencil-progress {
+    display : none;
 }
 .processing form {
     display          : grid;
@@ -877,7 +958,7 @@ body.dialog .nav__ctrl {
     width            : calc( 100% - 10px );
     height           : calc( 100% - 10px );
     margin           : 0 auto;
-    background-color : var(--color-palette-white);
+    background-color : var(--color-plt-white);
     border-radius    : var(--border-radius-small);
 }
 .processing form input,
@@ -885,20 +966,14 @@ body.dialog .nav__ctrl {
     visibility : hidden;
     position   : absolute;
 }
-#pencil-progress {
+.pencil-progress {
     display : none;
+    width   : 36px;
+    height  : 36px;
 }
-@keyframes rotating {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-.processing #pencil-progress {
+dialog.processing svg.pencil-progress {
     display   : block;
-    animation : rotating 1.2s linear infinite;
+    animation : rotating 1.2s linear 0s infinite;
 }
 
 @media ( max-width: 600px ) and ( pointer: coarse ) {
@@ -906,8 +981,9 @@ body.dialog .nav__ctrl {
     #dialogPassphrase button {
         height : 44px;
     }
-    #dialogEdit {
-        height : calc( 100vh - 93px );
+    #dialogEdit,
+    #dialogSetup {
+        height : calc( 100vh - 90px );
     }
     #dialogPassphrase {}
     #dialogProgress {}

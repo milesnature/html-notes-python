@@ -9,9 +9,9 @@
         <meta name="robots" content="noindex, nofollow">
         <meta name="description" content="A website for notes.">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" />
-        <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+<!--        <link rel="manifest" href="manifest.json" crossorigin="use-credentials">-->
         <meta name="application-name" content="HTML Notes">
-        <meta name="msapplication-starturl" content="/index.php">
+<!--        <meta name="msapplication-starturl" content="/index.php">-->
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="HTML Notes">
@@ -23,23 +23,27 @@
 
     <body class="">
 
-        <nav class="nav__ctrl"></nav>
+        <nav class="controller"></nav>
         <h1 class="visually-hidden">HTML Notes</h1>
         <main class="notes"></main>
+        <footer></footer>
 
         <template id="templateNavController">
-            <button title="Expand All" class="nav__ctrl-button expand" type="button"><span class="nav__ctrl-button-span">Expand All</span></button>
+          <button title="Expand All" class="controller-button expand" type="button"><span class="controller-button-span">Expand All</span></button>
+        </template>
+        <template id="templateFooter">
+          <button class="setup" title="Setup"><span class="visually-hidden">Setup</span></button>
         </template>
         <template id="templateNoteDetails">
-            <details id="" class="notes__details">
-                <summary><strong></strong></summary>
-            </details>
+          <details id="" class="notes__details">
+            <summary><strong></strong></summary>
+          </details>
         </template>
         <template id="templateNoteSummaryButton">
-            <button class="notes__button" title="" type="button"><span>Edit</span></button>
+          <button class="notes__button" title="" type="button"><i></i><span>Edit</span></button>
         </template>
         <template id="templateNoteSections">
-            <div class="notes__sections"></div>
+          <div class="notes__sections"></div>
         </template>
         <template id="templateDialogProgressBar">
           <dialog id="dialogProgressBar">
@@ -64,24 +68,13 @@
             <header>
               <h2>Edit Note</h2>
               <small title="Last Updated"></small>
-              <button title="Close" id="close" type="button"><span>Close</span></button>
+              <button title="Close" class="close" type="button"><span>Close</span></button>
             </header>
             <form>
               <input type="hidden" name="url" value="">
               <label for="dialogEditTextArea" id="dialogEditDesc" class="visually-hidden">Edit file contents</label>
               <textarea id="dialogEditTextArea" name="content"></textarea>
-              <svg id="pencil-progress" width='36px' height='36px' viewBox='0 0 46 46' xmlns='http://www.w3.org/2000/svg'>
-                <defs>
-                  <polygon id="pencil-progress-path-1" points="4 0 12 8 0 12"></polygon>
-                  <polygon id="pencil-progress-path-3" points="38 -34 46 -26 14 6 6 -2"></polygon>
-                </defs>
-                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <g transform="translate(0.000000, 34.000000)">
-                    <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-1"></use>
-                    <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-3"></use>
-                  </g>
-                </g>
-              </svg>
+              <svg class="pencil-progress"><use href="#pencil-progress"></use></svg>
             </form>
             <nav>
               <button id="copyToClipboardSection" title="Copy section to clipboard" type="button">section</button>
@@ -92,10 +85,41 @@
             </nav>
           </dialog>
         </template>
+        <template id="templateDialogSetup">
+          <dialog id="dialogSetup">
+            <header>
+              <h2>Setup</h2>
+              <small title="Last Updated"></small>
+              <button title="Close" class="close" type="button"><span>Close</span></button>
+            </header>
+            <form>
+              <svg class="pencil-progress"><use href="#pencil-progress"></use></svg>
+            </form>
+            <nav>
+              <div></div>
+              <button id="saveSetup" title="Save" type="button">Save</button>
+            </nav>
+          </dialog>
+        </template>
 
         <script src="static/js/crypto.js"></script>
         <script src="static/js/config.js"></script>
         <script src="static/js/functions.js"></script>
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+          <symbol id="pencil-progress" width='36px' height='36px' viewBox='0 0 46 46' xmlns='http://www.w3.org/2000/svg'>
+            <defs>
+              <polygon id="pencil-progress-path-1" points="4 0 12 8 0 12"></polygon>
+              <polygon id="pencil-progress-path-3" points="38 -34 46 -26 14 6 6 -2"></polygon>
+            </defs>
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g transform="translate(0.000000, 34.000000)">
+                <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-1"></use>
+                <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-3"></use>
+              </g>
+            </g>
+          </symbol>
+        </svg>
 
     </body>
 
