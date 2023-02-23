@@ -921,7 +921,7 @@ body.dialog footer {
 }
 #dialogEdit nav {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr;
     grid-gap: 7px;
     place-content: center;
     place-items: center;

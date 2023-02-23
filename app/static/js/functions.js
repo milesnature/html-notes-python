@@ -70,14 +70,17 @@ const getStoredNote = ( name ) => {
 
 // DIALOG
 
-const toggleBodyDialog = ( display, type, scrollId ) => {
+const toggleBodyDialog = ( display, type, id ) => {
     if ( display ) {
-        document.body.classList.remove( 'dialog' );
-        if ( type ) { document.body.classList.remove( type ); }
-        if ( scrollId ) ( document.getElementById( scrollId ).scrollIntoView( true ) );
-    } else {
         document.body.classList.add( 'dialog' );
         if ( type ) { document.body.classList.add( type ); }
+    } else {
+        document.body.classList.remove( 'dialog' );
+        if ( type ) { document.body.classList.remove( type ); }
+        if ( id ) {
+            document.getElementById( id ).scrollIntoView( true );
+            document.querySelector( '#' + id + ' summary' ).focus();
+        };
     }
 };
 const removeDialog = () => {
@@ -173,6 +176,10 @@ const handleDialogEvents = ( e ) => {
                 e.stopPropagation();
                 copyToClipboard( listItemBookmark );
                 break;
+            case 'copyToClipboardTimeStamp':
+                e.preventDefault();
+                e.stopPropagation();
+                copyToClipboard( timeStamp );
             case 'submitPassphrase':
                 e.preventDefault();
                 const input = document.querySelector('#dialogPassphrase input');
@@ -231,7 +238,7 @@ const insertEditDialog = ( content, dir, id, title, lastModified ) => {
         small.appendChild(document.createTextNode(lastModifiedDate));
         dialog.querySelector('input[name="url"]').value = dir;
         addDialogEventListeners(dialog);
-        toggleBodyDialog(false, 'edit');
+        toggleBodyDialog(true, 'edit');
         document.body.prepend(fragment);
         window.scrollTo(0, 0);
         const eventFocus = new Event('focus');
@@ -239,10 +246,10 @@ const insertEditDialog = ( content, dir, id, title, lastModified ) => {
         dialog.querySelector('#dialogEdit textarea').dispatchEvent(eventFocus);
     }
 };
-const removeEditDialog = ( scrollId ) => {
+const removeEditDialog = ( id ) => {
     document.getElementById('dialogEdit').remove();
     removeSelectedClass();
-    toggleBodyDialog(true, 'edit', scrollId);
+    toggleBodyDialog(false, 'edit', id);
 };
 const insertSetupDialog = () => {
     if ( !document.getElementById('dialogEdit') ) {
@@ -250,14 +257,14 @@ const insertSetupDialog = () => {
         let fragment = templateDialogSetup.content.cloneNode(true);
         let dialog = fragment.querySelector('dialog');
         addDialogEventListeners(dialog);
-        toggleBodyDialog(false, 'setup');
+        toggleBodyDialog(true, 'setup');
         document.body.prepend(fragment);
         window.scrollTo(0, 0);
     }
 };
 const removeSetupDialog = () => {
     document.getElementById('dialogSetup').remove();
-    toggleBodyDialog(true, 'setup');
+    toggleBodyDialog(false, 'setup');
 };
 const insertPassphraseDialog = () => {
     clearMainNotes();
@@ -265,24 +272,24 @@ const insertPassphraseDialog = () => {
     const fragment = templateDialogPassphrase.content.cloneNode( true );
     const dialog = fragment.querySelector( 'dialog' );
     addDialogEventListeners( dialog );
-    toggleBodyDialog(false);
+    toggleBodyDialog(true);
     document.body.prepend( fragment );
     document.querySelector('#dialogPassphrase input').focus();
 };
 const removePassphraseDialog = () => {
     document.getElementById('dialogPassphrase').remove();
-    toggleBodyDialog(true);
+    toggleBodyDialog(false);
 };
 const insertProgressBarDialog = () => {
     const templateProgressBar = document.getElementById('templateDialogProgressBar');
     const fragment = templateProgressBar.content.cloneNode( true );
-    toggleBodyDialog(false);
+    toggleBodyDialog(true);
     document.body.prepend( fragment );
     document.getElementById('dialogProgressBar').open = true;
 };
 const removeProgressBarDialog = () => {
     document.getElementById('dialogProgressBar').remove();
-    toggleBodyDialog(true);
+    toggleBodyDialog(false);
 };
 const section = `
 <section class="note__section">
@@ -297,6 +304,7 @@ const section = `
 const listItem         = `<li></li>`;
 const listItemCode     = `<li><button class="code"></button></li>`;
 const listItemBookmark = `<li><a href="" target="_blank" rel="noreferrer"></a></li>`;
+const timeStamp        = `<time>` + new Date().toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }) + `</time>`;
 
 
 // MAIN

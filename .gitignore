@@ -4,6 +4,7 @@ html-notes-python.iml
 **/.DS_Store
 **/.htaccess
 **/.htpasswd
+app/static/notes
 .idea
 .gitignore
 .well-known
