@@ -8,10 +8,9 @@ If you're a meticulous note taker, expending the time and effort to format and "
 It's more powerful and accessible than Markdown with nearly the same amount of effort.
 
 ## Example
-https://example.html-notes.app/
+https://python.html-notes.app/
 * Encryption disabled for ease of use.
 * Saving notes disabled for security.
-* This example is deployed with the PHP version of this codebase.
 
 
 ### Pros

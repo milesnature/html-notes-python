@@ -885,7 +885,8 @@ body.dialog footer {
 }
 #dialogEdit small,
 #dialogSetup small {
-    text-align : center;
+    text-align  : center;
+    line-height : 1.1;
 }
 #dialogEdit header button,
 #dialogSetup header button {
@@ -983,7 +984,8 @@ dialog.processing svg.pencil-progress {
     }
     #dialogEdit,
     #dialogSetup {
-        height : calc( 100vh - 90px );
+        height     : calc( 100vh - 90px );
+        margin-top : -3px;
     }
     #dialogPassphrase {}
     #dialogProgress {}
