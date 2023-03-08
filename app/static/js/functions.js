@@ -59,7 +59,10 @@ const storeNote = ( name, value ) => {
         console.log( 'Name or value is missing.', { name, value } );
     }
 };
-const deleteStoredNote = ( name ) => {
+const getStoredNote = ( name ) => {
+    return localStorage.getItem( 'note-' + name );
+};
+const removeNote = ( name ) => {
     if ( name ) {
         try {
             localStorage.removeItem( 'note-' + name );
@@ -70,9 +73,6 @@ const deleteStoredNote = ( name ) => {
     } else {
         console.log( 'Name was missing.', { name } );
     }
-};
-const getStoredNote = ( name ) => {
-    return localStorage.getItem( 'note-' + name );
 };
 // setItem(key, value);
 // getItem(key);
@@ -125,6 +125,16 @@ const handlePassphrase = ( value ) => {
         }
     }
 };
+const refreshNotes = () => {
+    notes = [];
+    getDir().then( (response) => {
+        const data = JSON.parse(response.content);
+        if (Array.isArray( data )) {
+            constructNotesObj( data );
+            importStoreInsertAllNotes();
+        }
+    } );
+}
 const handleDialogEvents = ( e ) => {
     const target = e.target;
     const id     = target.id;
@@ -192,14 +202,7 @@ const handleDialogEvents = ( e ) => {
                         response = await createNote( data );
                         const code = parseInt(response.code);
                         if ( code === 200 ) {
-                            notes = [];
-                            getDir().then( (response) => {
-                                const data = JSON.parse(response.content);
-                                if (Array.isArray( data )) {
-                                    constructNotesObj( data );
-                                    importStoreInsertAllNotes();
-                                }
-                            } );
+                            refreshNotes();
                             removeSetupDialog();
                         } else if ( code > 200 ) {
                             const error = document.querySelector('#createForm .error');
@@ -227,14 +230,7 @@ const handleDialogEvents = ( e ) => {
                         response = await deleteNote( data );
                         const code = parseInt(response.code);
                         if ( code === 200 ) {
-                            notes = [];
-                            getDir().then( (response) => {
-                                const data = JSON.parse(response.content);
-                                if (Array.isArray( data )) {
-                                    constructNotesObj( data );
-                                    importStoreInsertAllNotes();
-                                }
-                            } );
+                            refreshNotes();
                             removeSetupDialog();
                         } else if ( code > 200 ) {
                             const error = document.querySelector('#deleteForm .error');

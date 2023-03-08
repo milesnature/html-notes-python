@@ -44,14 +44,13 @@ def is_valid_file_type(file):
     return file.endswith('.html') or file.endswith('.txt')
 
 
-ERROR_INVALID_FILE_TYPE = 'Invalid file type. Only html and txt files are permitted.'
-
-
 def is_duplicate(url):
     notes_directories = get_notes_directories()
     duplicate = False
     for note in notes_directories:
-        if sanitize_url(note).split('.')[0] == url.split('.')[0]:
+        n = sanitize_url(note).split('/')[-1].split('.')[0]
+        u = url.split('/')[-1].split('.')[0]
+        if n == u:
             duplicate = True
     return duplicate
 
@@ -60,8 +59,10 @@ def is_missing(data):
     return data is None
 
 
+ERROR_INVALID_FILE_TYPE = 'Invalid file type. Only html and txt files are permitted.'
 ERROR_INPUT_IS_MISSING = 'A form input is missing.'
 UNKNOWN_ERROR = 'Unknown Error.'
+
 
 @app.route('/')
 def notes_document():
