@@ -853,15 +853,23 @@ body.dialog footer {
     border        : 1px solid var(--color-text-base);
     border-radius : var(--border-radius-small);
 }
+#dialogPassphrase .error {
+    display : none;
+    color   : var(--color-plt-accent-dark);
+}
+#dialogPassphrase .error.show {
+    display : block;
+}
 #dialogPassphrase button {
     height           : 38px;
-    width            : 100%;
+    width            : 120px;
+    margin-top       : 3px;
+    justify-self     : center;
     color            : var(--color-plt-white);
     background-color : var(--color-plt-medium);
     border-radius    : var(--border-radius-small);
 }
-#dialogEdit,
-#dialogSetup {
+#dialogEdit {
     display    : grid;
     grid-template-rows : 44px auto 54px;
     margin-top : -5px;
@@ -870,6 +878,18 @@ body.dialog footer {
     max-width  : 1400px;
     height     : calc( 100vh - 18px );
     background-color : var(--background-color-body);
+}
+#dialogSetup {
+    margin-top : -5px;
+    padding    : 0;
+    width      : calc( 100vw - 18px );
+    max-width  : 1400px;
+    height     : calc( 100vh - 18px );
+    background-color : var(--background-color-body);
+}
+#dialogSetup .setup-forms form {
+
+
 }
 #dialogEdit header,
 #dialogSetup header {
@@ -913,12 +933,50 @@ body.dialog footer {
     resize        : none;
 }
 #dialogSetup form {
-    width            : calc( 100% - 10px );
-    height           : calc( 100% - 10px );
-    padding          : 9px;
-    margin           : 3px auto 0 auto;
+    margin           : 0 auto 10px auto;
+    padding          : 0;
+    border-radius    : var(--border-radius-small);
+    background-color : transparent;
+}
+#dialogSetup form fieldset {
+    display          : grid;
+    grid-gap         : 10px;
+    width            : clamp(300px, calc(100vw - 20px), 400px);
+    padding          : 35px;
+    margin           : auto;
+    border           : none;
     border-radius    : var(--border-radius-small);
     background-color : var(--color-plt-white);
+    overflow         : hidden;
+}
+
+#dialogSetup form fieldset label {
+    display : block;
+    margin  : 0;
+}
+#dialogSetup form fieldset input {
+    display       : block;
+    width         : 100%;
+    height        : 38px;
+    padding       : 10px;
+    margin        : 0 auto;
+    border        : 1px solid var(--color-text-base);
+    border-radius : var(--border-radius-small);
+}
+#dialogSetup .error {
+    display : none;
+    color   : var(--color-plt-accent-dark);
+}
+#dialogSetup .error.show {
+    display : block;
+}
+#dialogSetup form fieldset button {
+    display          : block;
+    justify-self     : center;
+    width            : 120px;
+    margin-top       : 3px;
+    color            : var(--color-plt-white);
+    background-color : var(--color-plt-medium);
 }
 #dialogEdit nav {
     display: grid;
@@ -937,7 +995,8 @@ body.dialog footer {
     padding: 5px;
 }
 #dialogEdit nav button,
-#dialogSetup nav button {
+#dialogSetup nav button,
+#dialogSetup button {
     height        : 44px;
     width         : 100%;
     padding       : 0 10px;

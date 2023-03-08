@@ -59,6 +59,7 @@
             <div>
               <label for="passphrase" class="" id="dialogPassphraseDesc">Passphrase</label>
               <input id="passphrase" class="" type="password" required>
+              <small class="error"></small>
               <button id="submitPassphrase" class="" title="Save" type="button">Submit</button>
             </div>
           </dialog>
@@ -93,13 +94,25 @@
               <small title="Last Updated"></small>
               <button title="Close" class="close" type="button"><span>Close</span></button>
             </header>
-            <form>
-              <svg class="pencil-progress"><use href="#pencil-progress"></use></svg>
-            </form>
-            <nav>
-              <div></div>
-              <button id="saveSetup" title="Save" type="button">Save</button>
-            </nav>
+            <section class="setup-forms">
+              <form id="createForm">
+                <fieldset>
+                  <label for="createNoteInput">Create a file.</label>
+                  <input id="createNoteInput" type="text" name="url" value="">
+                  <small class="error"></small>
+                  <button id="createNote" title="Create Note" type="button">Create</button>
+                </fieldset>
+              </form>
+              <form id="deleteForm">
+                <fieldset>
+                  <label for="deleteNoteInput">Delete a file or directory.</label>
+                  <input id="deleteNoteInput" type="text" name="url" value="">
+                  <small class="error"></small>
+                  <button id="deleteNote" title="Delete Note" type="button">Delete</button>
+                </fieldset>
+                <!-- <svg class="pencil-progress"><use href="#pencil-progress"></use></svg> -->
+              </form>
+            </section>
           </dialog>
         </template>
 

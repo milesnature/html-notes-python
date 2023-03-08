@@ -59,6 +59,18 @@ const storeNote = ( name, value ) => {
         console.log( 'Name or value is missing.', { name, value } );
     }
 };
+const deleteStoredNote = ( name ) => {
+    if ( name ) {
+        try {
+            localStorage.removeItem( 'note-' + name );
+        }
+        catch( err ) {
+            console.log( 'There was a problem deleting this note.', { err, name } );
+        }
+    } else {
+        console.log( 'Name was missing.', { name } );
+    }
+};
 const getStoredNote = ( name ) => {
     return localStorage.getItem( 'note-' + name );
 };
@@ -80,7 +92,7 @@ const toggleBodyDialog = ( display, type, id ) => {
         if ( id ) {
             document.getElementById( id ).scrollIntoView( true );
             document.querySelector( '#' + id + ' summary' ).focus();
-        };
+        }
     }
 };
 const removeDialog = () => {
@@ -118,6 +130,9 @@ const handleDialogEvents = ( e ) => {
     const id     = target.id;
     const key    = e.key;
     const btn    = target.closest('button');
+    let refreshId;
+    let form;
+    let data;
     if ( e.repeat || btn && key ) { return } // Enter key fires click and keyup on buttons. This prevents duplicate processing.
     if ( btn && btn.className === 'close' ) {
         e.preventDefault();
@@ -127,34 +142,113 @@ const handleDialogEvents = ( e ) => {
             case 'saveNote':
                 e.preventDefault();
                 // Get ID of section to repopulate
-                const refreshId = target.closest('dialog').getAttribute('data');
+                refreshId = target.closest('dialog').getAttribute('data');
                 // Show Spinner
                 document.querySelector('dialog').classList.add('processing');
                 // Get Data. This encrypts the textarea (in the DOM) before getting data for payload.
-                const form                   = document.querySelector('form');
+                form                         = document.querySelector('form');
                 let   textareaValue          = form.querySelector('textarea').value;
                 let   textareaValueEncrypted = textareaValue;
                 if ( !isEncrypted( textareaValue ) && useEncryption ) {
                     textareaValueEncrypted = encrypt( textareaValue );
                     form.querySelector('textarea').value = textareaValueEncrypted;
                 }
-                const data = new FormData(document.querySelector('form')); // Use Array.from(data) to view FormData which appears empty.
-                saveNote( data )
-                    .then( () => {
-                        storeNote( id, textareaValueEncrypted );
-                        if ( !isDemo && useEncryption ) {
-                            document.querySelector( '#' + refreshId + ' .notes__sections' ).innerHTML = decrypt( getStoredNote( id ) );
-                        } else {
-                            document.querySelector( '#' + refreshId + ' .notes__sections' ).innerHTML = textareaValue;
+                data = new FormData(document.querySelector('form')); // Use Array.from(data) to view FormData which appears empty.
+                ( async () => {
+                    try {
+                        let response = await saveNote( data );
+                        const code = parseInt(response.code);
+                        if ( code === 200 ) {
+                            console.log({response});
+                            storeNote(id, textareaValueEncrypted);
+                            if (!isDemo && useEncryption) {
+                                document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = decrypt(getStoredNote(id));
+                            } else {
+                                document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = textareaValue;
+                            }
+                            const updatedElement = document.getElementById(refreshId);
+                            updatedElement.open = true;
+                            if (useEncryption) {
+                                updatedElement.classList.remove('not-encrypted');
+                            }
+                            removeEditDialog(refreshId);
+                        } else if ( code > 200 ) {
+                            console.error( response );
                         }
-                        const updatedElement = document.getElementById( refreshId );
-                        updatedElement.open = true;
-                        if ( useEncryption ) {
-                            updatedElement.classList.remove('not-encrypted');
+                    } catch ( e ) {
+                        console.error( e );
+                    }
+                })();
+                break;
+            case 'createNote':
+                e.preventDefault();
+                // Show Spinner
+                // document.querySelector('dialog').classList.add('processing');
+                // form = document.getElementById('createForm');
+                data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
+                ( async () => {
+                    let response = {};
+                    try {
+                        response = await createNote( data );
+                        const code = parseInt(response.code);
+                        if ( code === 200 ) {
+                            notes = [];
+                            getDir().then( (response) => {
+                                const data = JSON.parse(response.content);
+                                if (Array.isArray( data )) {
+                                    constructNotesObj( data );
+                                    importStoreInsertAllNotes();
+                                }
+                            } );
+                            removeSetupDialog();
+                        } else if ( code > 200 ) {
+                            const error = document.querySelector('#createForm .error');
+                            error.innerHTML = response.message;
+                            error.classList.add('show');
+                            console.error( response );
                         }
-                        removeEditDialog(refreshId);
-                    })
-                    .catch( error => { console.error( 'saveNote', { error } ) });
+                    } catch ( e ) {
+                        const error = document.querySelector('#createForm .error');
+                        error.innerHTML = e;
+                        error.classList.add('show');
+                        console.error( e );
+                    }
+                } )();
+                break;
+            case 'deleteNote':
+                e.preventDefault();
+                // Show Spinner
+                // document.querySelector('dialog').classList.add('processing');
+                // form = document.getElementById('deleteForm');
+                data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
+                ( async () => {
+                    let response = {};
+                    try {
+                        response = await deleteNote( data );
+                        const code = parseInt(response.code);
+                        if ( code === 200 ) {
+                            notes = [];
+                            getDir().then( (response) => {
+                                const data = JSON.parse(response.content);
+                                if (Array.isArray( data )) {
+                                    constructNotesObj( data );
+                                    importStoreInsertAllNotes();
+                                }
+                            } );
+                            removeSetupDialog();
+                        } else if ( code > 200 ) {
+                            const error = document.querySelector('#deleteForm .error');
+                            error.innerHTML = response.message;
+                            error.classList.add('show');
+                            console.error( response );
+                        }
+                    } catch ( e ) {
+                        const error = document.querySelector('#deleteForm .error');
+                        error.innerHTML = e;
+                        error.classList.add('show');
+                        console.error( response );
+                    }
+                } )();
                 break;
             case 'copyToClipboardSection':
                 e.preventDefault();
@@ -180,12 +274,16 @@ const handleDialogEvents = ( e ) => {
                 e.preventDefault();
                 e.stopPropagation();
                 copyToClipboard( timeStamp );
+                break;
             case 'submitPassphrase':
                 e.preventDefault();
                 const input = document.querySelector('#dialogPassphrase input');
                 if ( input.value ) {
                     handlePassphrase( input.value );
                 } else {
+                    const error = document.querySelector('#dialogPassphrase .error');
+                    error.innerHTML = 'Please renter your passphrase.';
+                    error.classList.add('show');
                     input.focus();
                 }
                 break;
@@ -196,6 +294,9 @@ const handleDialogEvents = ( e ) => {
                     if ( input.value ) {
                         handlePassphrase( input.value );
                     } else {
+                        const error = document.querySelector('#dialogPassphrase .error');
+                        error.innerHTML = 'Please renter your passphrase.';
+                        error.classList.add('show');
                         input.focus();
                     }
                 }
@@ -490,9 +591,14 @@ async function getNote( dir ) {
     return { content, lastModified };
 }
 async function saveNote( data ) {
-    return await fetch('save-note', { method: 'POST', body: data });
+    return (await fetch('save-note', { method: 'POST', body: data })).json();
 }
-
+async function createNote( data ) {
+    return (await fetch('create-note', { method: 'POST', body: data })).json();
+}
+async function deleteNote( data ) {
+    return (await fetch('delete-note', { method: 'POST', body: data })).json();
+}
 
 // ENCRYPTION
 
@@ -618,7 +724,7 @@ const appendNotesToMain = () => {
     if ( ( useEncryption && !decryptionFailed ) || !useEncryption ) {
         mainNotes.appendChild(fragmentNotes);
         document.querySelector('.controller').appendChild(templateNavController.content.cloneNode(true));
-        document.querySelector('footer').appendChild(templateFooter.content.cloneNode(true));
+        if ( !isDemo ) { document.querySelector('footer').appendChild(templateFooter.content.cloneNode(true)); }
         initChecklist('Groceries');
     }
 };
@@ -765,7 +871,7 @@ const constructNotesObj = (scanDirNotes) => {
     scanDirNotes.forEach(( note ) => {
         note = note.substring(1);
         const a = note.split('/');
-        const id = a[a.length - 1].replace('.html', '');
+        const id = a[a.length - 1].split('.')[0];
         const dir = ( a.length === 1 ) ? a[0] : note;
         notes.push( { 'id' : id, 'dir' : dir } );
     });
