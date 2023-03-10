@@ -44,15 +44,39 @@ def is_valid_file_type(file):
     return file.endswith('.html') or file.endswith('.txt')
 
 
-def is_duplicate(url):
-    notes_directories = get_notes_directories()
-    duplicate = False
-    for note in notes_directories:
-        n = sanitize_url(note).split('/')[-1].split('.')[0]
-        u = url.split('/')[-1].split('.')[0]
-        if n == u:
-            duplicate = True
-    return duplicate
+def has_duplicate(url, directory_only):
+
+    notes = get_notes_directories()
+    user_file = url.split('.')[0].split('/')[-1]
+    user_directory = url.split('.')[0].split('/') if not os.path.exists(directory_only) else []
+
+    # Files are always checked against all current directory and file names.
+    for note in notes:
+        note = sanitize_url(note)
+        note_components = note.split('.')[0].split('/')
+        for note_component in note_components:
+            app.logger.info(note_component + ' | ' + user_file)
+            if note_component == user_file:
+                return True
+
+    # Check for duplicate directories.
+    if len(user_directory) > 1:
+        new_user_directory = user_directory[0:-1]
+        placeholder = get_absolute_url('')[0:-1]
+        # Incrementally reconstruct the url, starting from the base, from left to right.
+        for directory in new_user_directory:
+            placeholder = placeholder + '/' + directory
+            # Test the existence of each directory.
+            if not os.path.exists(placeholder):
+                # New directories are checked against all directory and file names.
+                for note in notes:
+                    note = sanitize_url(note)
+                    note_components = note.split('.')[0].split('/')
+                    for note_component in note_components:
+                        if note_component == directory:
+                            return True
+
+    return False
 
 
 def is_missing(data):
@@ -137,8 +161,8 @@ def create_note():
             directory_only = get_directory_only(url)
             if not is_valid_file_type(url):
                 return get_response('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
-            if is_duplicate(url):
-                return get_response('error', '400', 'Duplicate file names are not permitted.', str(url)), 400
+            if has_duplicate(url, directory_only):
+                return get_response('error', '400', 'Duplicate Directory or file names are not permitted.', str(url)), 400
             if not os.path.exists(directory_only):
                 os.makedirs(directory_only)
             if not os.path.exists(absolute_url):
@@ -164,7 +188,7 @@ def delete_note():
                 os.remove(absolute_url)
                 return get_response('success', '200', 'Your note was deleted.'), 200
             else:
-                return get_response('error', '400', 'Invalid directory, file, or file extension.', f'{url}, {absolute_url}'), 415
+                return get_response('error', '400', 'The file or directory does not exist.', f'{url}, {absolute_url}'), 415
         except Exception as e:
             message = ERROR_INPUT_IS_MISSING if str(e) == 'string index out of range' else UNKNOWN_ERROR
             return get_response('error', '500', message, str(e)), 500

@@ -557,6 +557,9 @@ details[open] > summary button.selected i {
 .note__section details summary {
     border-radius : var( --border-radius-small-bottom );
 }
+.note__section h4:first-child {
+    margin-top: 0;
+}
 .note--double-wide {
     grid-column : auto / span 2;
 }
