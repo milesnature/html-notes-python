@@ -127,6 +127,7 @@ const handlePassphrase = ( value ) => {
 };
 const refreshNotes = () => {
     notes = [];
+    clearMainNotes();
     getDir().then( (response) => {
         const data = JSON.parse(response.content);
         if (Array.isArray( data )) {
@@ -135,7 +136,7 @@ const refreshNotes = () => {
         }
     } );
 }
-handleDialogEventsPassphrase = () => {
+const handleDialogEventsPassphrase = () => {
     const input = document.querySelector('#dialogPassphrase input');
     const error = document.querySelector('#dialogPassphrase .error');
     if (input.value) {
@@ -148,7 +149,7 @@ handleDialogEventsPassphrase = () => {
         input.focus();
     }
 }
-handleDialogEventsCreate = () => {
+const handleDialogEventsCreate = () => {
     const data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
     const createFormInput = document.querySelector('#createForm input');
     const createFormError = document.querySelector('#createForm .error');
@@ -175,9 +176,8 @@ handleDialogEventsCreate = () => {
             console.error( e );
         }
     } )();
-
 }
-handleDialogEventsDelete = () => {
+const handleDialogEventsDelete = () => {
     const data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
     const deleteFormInput = document.querySelector('#deleteForm input');
     const deleteFormError = document.querySelector('#deleteForm .error');
@@ -204,7 +204,6 @@ handleDialogEventsDelete = () => {
             console.error( response );
         }
     } )();
-
 }
 const handleDialogEvents = ( e ) => {
     const target = e.target;
@@ -337,6 +336,7 @@ const addDialogEventListeners = (modal) => {
         modal.addEventListener( 'click', ( e ) => { handleDialogEvents( e ) } );
         modal.addEventListener( 'keyup', ( e ) => { handleDialogEvents( e ) } );
     }
+    modal.addEventListener( 'submit', ( e ) => { e.preventDefault(); } );
     setupDocumentEvents();
 };
 const insertEditDialog = ( content, dir, id, title, lastModified ) => {
