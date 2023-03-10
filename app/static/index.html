@@ -95,7 +95,7 @@
               <button title="Close" class="close" type="button"><span>Close</span></button>
             </header>
             <section class="setup-forms">
-              <form id="createForm">
+              <form id="createForm" onsubmit="return false;">
                 <fieldset>
                   <label for="createNoteInput">Create a file.</label>
                   <input id="createNoteInput" type="text" name="url" value="">
@@ -103,7 +103,7 @@
                   <button id="createNote" title="Create Note" type="button">Create</button>
                 </fieldset>
               </form>
-              <form id="deleteForm">
+              <form id="deleteForm" onsubmit="return false;">
                 <fieldset>
                   <label for="deleteNoteInput">Delete a file or directory.</label>
                   <input id="deleteNoteInput" type="text" name="url" value="">

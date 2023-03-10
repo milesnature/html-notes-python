@@ -135,6 +135,77 @@ const refreshNotes = () => {
         }
     } );
 }
+handleDialogEventsPassphrase = () => {
+    const input = document.querySelector('#dialogPassphrase input');
+    const error = document.querySelector('#dialogPassphrase .error');
+    if (input.value) {
+        error.innerHTML = '';
+        error.classList.remove('show');
+        handlePassphrase(input.value);
+    } else {
+        error.innerHTML = 'Please renter your passphrase.';
+        error.classList.add('show');
+        input.focus();
+    }
+}
+handleDialogEventsCreate = () => {
+    const data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
+    const createFormInput = document.querySelector('#createForm input');
+    const createFormError = document.querySelector('#createForm .error');
+    ( async () => {
+        let response = {};
+        try {
+            createFormError.innerHTML = '';
+            createFormError.classList.remove('show');
+            response = await createNote( data );
+            const code = parseInt(response.code);
+            if ( code === 200 ) {
+                refreshNotes();
+                removeSetupDialog();
+            } else if ( code > 200 ) {
+                createFormError.innerHTML = response.message;
+                createFormError.classList.add('show');
+                createFormInput.focus();
+                console.error( response );
+            }
+        } catch ( e ) {
+            createFormError.innerHTML = e;
+            createFormError.classList.add('show');
+            createFormInput.focus();
+            console.error( e );
+        }
+    } )();
+
+}
+handleDialogEventsDelete = () => {
+    const data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
+    const deleteFormInput = document.querySelector('#deleteForm input');
+    const deleteFormError = document.querySelector('#deleteForm .error');
+    ( async () => {
+        let response = {};
+        try {
+            deleteFormError.innerHTML = '';
+            deleteFormError.classList.remove('show');
+            response = await deleteNote( data );
+            const code = parseInt(response.code);
+            if ( code === 200 ) {
+                refreshNotes();
+                removeSetupDialog();
+            } else if ( code > 200 ) {
+                deleteFormError.innerHTML = response.message;
+                deleteFormError.classList.add('show');
+                deleteFormInput.focus();
+                console.error( response );
+            }
+        } catch ( e ) {
+            deleteFormError.innerHTML = e;
+            deleteFormError.classList.add('show');
+            deleteFormInput.focus();
+            console.error( response );
+        }
+    } )();
+
+}
 const handleDialogEvents = ( e ) => {
     const target = e.target;
     const id     = target.id;
@@ -151,6 +222,7 @@ const handleDialogEvents = ( e ) => {
         switch ( id ) {
             case 'saveNote':
                 e.preventDefault();
+                e.stopPropagation();
                 // Get ID of section to repopulate
                 refreshId = target.closest('dialog').getAttribute('data');
                 // Show Spinner
@@ -192,59 +264,27 @@ const handleDialogEvents = ( e ) => {
                 break;
             case 'createNote':
                 e.preventDefault();
-                // Show Spinner
-                // document.querySelector('dialog').classList.add('processing');
-                // form = document.getElementById('createForm');
-                data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
-                ( async () => {
-                    let response = {};
-                    try {
-                        response = await createNote( data );
-                        const code = parseInt(response.code);
-                        if ( code === 200 ) {
-                            refreshNotes();
-                            removeSetupDialog();
-                        } else if ( code > 200 ) {
-                            const error = document.querySelector('#createForm .error');
-                            error.innerHTML = response.message;
-                            error.classList.add('show');
-                            console.error( response );
-                        }
-                    } catch ( e ) {
-                        const error = document.querySelector('#createForm .error');
-                        error.innerHTML = e;
-                        error.classList.add('show');
-                        console.error( e );
-                    }
-                } )();
+                e.stopPropagation();
+                handleDialogEventsCreate();
+                break;
+            case 'createNoteInput':
+                e.preventDefault();
+                e.stopPropagation();
+                if ( key === "Enter" ) {
+                    handleDialogEventsCreate();
+                }
                 break;
             case 'deleteNote':
                 e.preventDefault();
-                // Show Spinner
-                // document.querySelector('dialog').classList.add('processing');
-                // form = document.getElementById('deleteForm');
-                data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
-                ( async () => {
-                    let response = {};
-                    try {
-                        response = await deleteNote( data );
-                        const code = parseInt(response.code);
-                        if ( code === 200 ) {
-                            refreshNotes();
-                            removeSetupDialog();
-                        } else if ( code > 200 ) {
-                            const error = document.querySelector('#deleteForm .error');
-                            error.innerHTML = response.message;
-                            error.classList.add('show');
-                            console.error( response );
-                        }
-                    } catch ( e ) {
-                        const error = document.querySelector('#deleteForm .error');
-                        error.innerHTML = e;
-                        error.classList.add('show');
-                        console.error( response );
-                    }
-                } )();
+                e.stopPropagation();
+                handleDialogEventsDelete();
+                break;
+            case 'deleteNoteInput':
+                e.preventDefault();
+                e.stopPropagation();
+                if ( key === "Enter" ) {
+                    handleDialogEventsDelete();
+                }
                 break;
             case 'copyToClipboardSection':
                 e.preventDefault();
@@ -273,28 +313,15 @@ const handleDialogEvents = ( e ) => {
                 break;
             case 'submitPassphrase':
                 e.preventDefault();
-                const input = document.querySelector('#dialogPassphrase input');
-                if ( input.value ) {
-                    handlePassphrase( input.value );
-                } else {
-                    const error = document.querySelector('#dialogPassphrase .error');
-                    error.innerHTML = 'Please renter your passphrase.';
-                    error.classList.add('show');
-                    input.focus();
-                }
+                e.stopPropagation();
+                handleDialogEventsPassphrase();
                 break;
             case 'passphrase':
+                console.log('passphrase', key);
                 e.preventDefault();
+                e.stopPropagation();
                 if ( key === "Enter" ) {
-                    const input = document.querySelector('#dialogPassphrase input');
-                    if ( input.value ) {
-                        handlePassphrase( input.value );
-                    } else {
-                        const error = document.querySelector('#dialogPassphrase .error');
-                        error.innerHTML = 'Please renter your passphrase.';
-                        error.classList.add('show');
-                        input.focus();
-                    }
+                    handleDialogEventsPassphrase();
                 }
                 break;
             default:
@@ -363,7 +390,7 @@ const removeSetupDialog = () => {
     document.getElementById('dialogSetup').remove();
     toggleBodyDialog(false, 'setup');
 };
-const insertPassphraseDialog = () => {
+const insertPassphraseDialog = (err) => {
     clearMainNotes();
     const templateDialogPassphrase = document.getElementById('templateDialogPassphrase');
     const fragment = templateDialogPassphrase.content.cloneNode( true );
@@ -372,6 +399,11 @@ const insertPassphraseDialog = () => {
     toggleBodyDialog(true);
     document.body.prepend( fragment );
     document.querySelector('#dialogPassphrase input').focus();
+    if (err) {
+        const error = document.querySelector('#dialogPassphrase .error');
+        error.innerHTML = 'Please renter your passphrase.';
+        error.classList.add('show');
+    }
 };
 const removePassphraseDialog = () => {
     document.getElementById('dialogPassphrase').remove();
@@ -712,7 +744,7 @@ const decryptAllNotes = () => {
         });
         if ( decryptionFailed ) {
             clearMainNotes();
-            insertPassphraseDialog();
+            insertPassphraseDialog(true);
         }
     }
 };
