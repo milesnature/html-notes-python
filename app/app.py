@@ -84,8 +84,19 @@ def is_missing(data):
 
 
 ERROR_INVALID_FILE_TYPE = 'Invalid file type. Only html and txt files are permitted.'
-ERROR_INPUT_IS_MISSING = 'A form input is missing.'
-UNKNOWN_ERROR = 'Unknown Error.'
+ERROR_INPUT_IS_MISSING = 'Please enter a relative path and file name.'
+ERROR_DELETE_INPUT_IS_MISSING = 'Please enter a relative path to a file or folder.'
+ERROR_NOTES_FOLDER_EMPTY = 'This notes folder is empty or missing.'
+ERROR_FILE_DOES_NOT_EXIST = 'File does not exist.'
+ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST = 'The file or folder does not exist.'
+ERROR_DUPLICATE_FILES_NOT_PERMITTED = 'Duplicate. All file and folder names must be unique.'
+ERROR_STRING_IS_OUT_OF_RANGE = 'string index out of range'
+ERROR_UNKNOWN = 'Unknown error.'
+
+SUCCESS_SAVED = 'Your note was saved.'
+SUCCESS_NOTE_CREATED = 'Your note was created.'
+SUCCESS_NOTE_DELETED = 'Your note was deleted.'
+SUCCESS_DIRECTORY_AND_NOTES_DELETED = 'Your folder and all of its contents were deleted.'
 
 
 @app.route('/')
@@ -122,7 +133,7 @@ def get_dir():
                 notes_directories.sort()
                 return json.dumps(notes_directories)
             else:
-                return get_response('error', '404', 'This notes directories are empty or missing.', str(notes_directories)), 404
+                return get_response('error', '404', ERROR_NOTES_FOLDER_EMPTY, str(notes_directories)), 404
         except Exception as e:
             return get_response('error', '500', 'get_dir', str(e)), 500
 
@@ -139,18 +150,14 @@ def save_note():
             if os.path.exists(file):
                 with open(file, 'w') as note:
                     note.write(content)
-                    return get_response('success', '200', 'Your note was saved.'), 200
+                    return get_response('success', '200', SUCCESS_SAVED), 200
             else:
-                return get_response('error', '400', 'File does not exist.', str(url)), 400
+                return get_response('error', '400', ERROR_FILE_DOES_NOT_EXIST, str(url)), 400
         except Exception as e:
-            message = ERROR_INPUT_IS_MISSING if str(e) == 'string index out of range' else UNKNOWN_ERROR
+            message = ERROR_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
             return get_response('error', '500', message, str(e)), 500
 
 
-# Enforce capitalization? Or change this with CSS? File names too? I'm going to ignore this for now.
-# Add visual tree of directories and files.
-# Avoid url entries. Too messy?
-# Enhance error messaging
 @app.route('/create-note', methods=['POST'])
 def create_note():
     if request.method == 'POST':
@@ -162,15 +169,15 @@ def create_note():
             if not is_valid_file_type(url):
                 return get_response('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
             if has_duplicate(url, directory_only):
-                return get_response('error', '400', 'Duplicate Directory or file names are not permitted.', str(url)), 400
+                return get_response('error', '400', ERROR_DUPLICATE_FILES_NOT_PERMITTED, str(url)), 400
             if not os.path.exists(directory_only):
                 os.makedirs(directory_only)
             if not os.path.exists(absolute_url):
                 with open(absolute_url, 'w') as f:
                     f.write('<section class="bkm__section">\n  <ul>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n  </ul>\n</section>\n<section class="note__section">\n  <h3></h3>\n    <ul>\n      <li></li>\n      <li></li>\n      <li></li>\n    </ul>\n</section>')
-                    return get_response('success', '200', 'Your note was created.'), 200
+                    return get_response('success', '200', SUCCESS_NOTE_CREATED ), 200
         except Exception as e:
-            message = ERROR_INPUT_IS_MISSING if str(e) == 'string index out of range' else UNKNOWN_ERROR
+            message = ERROR_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
             return get_response('error', '500', message, str(e)), 500
 
 
@@ -183,14 +190,14 @@ def delete_note():
             absolute_url = get_absolute_url(url)
             if os.path.exists(absolute_url) and os.path.isdir(absolute_url):
                 shutil.rmtree(absolute_url)
-                return get_response('success', '200', 'Your directory and all of its contents were deleted.'), 200
+                return get_response('success', '200', SUCCESS_DIRECTORY_AND_NOTES_DELETED), 200
             elif os.path.exists(absolute_url) and os.path.isfile(absolute_url) and is_valid_file_type(absolute_url):
                 os.remove(absolute_url)
-                return get_response('success', '200', 'Your note was deleted.'), 200
+                return get_response('success', '200', SUCCESS_NOTE_DELETED), 200
             else:
-                return get_response('error', '400', 'The file or directory does not exist.', f'{url}, {absolute_url}'), 415
+                return get_response('error', '400', ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST, f'{url}, {absolute_url}'), 415
         except Exception as e:
-            message = ERROR_INPUT_IS_MISSING if str(e) == 'string index out of range' else UNKNOWN_ERROR
+            message = ERROR_DELETE_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
             return get_response('error', '500', message, str(e)), 500
 
 

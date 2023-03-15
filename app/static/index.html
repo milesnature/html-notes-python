@@ -9,9 +9,9 @@
         <meta name="robots" content="noindex, nofollow">
         <meta name="description" content="A website for notes.">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" />
-<!--        <link rel="manifest" href="manifest.json" crossorigin="use-credentials">-->
+        <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
         <meta name="application-name" content="HTML Notes">
-<!--        <meta name="msapplication-starturl" content="/index.php">-->
+        <meta name="msapplication-starturl" content="/index.html">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="HTML Notes">
@@ -100,15 +100,15 @@
                   <label for="createNoteInput">Create a file.</label>
                   <input id="createNoteInput" type="text" name="url" value="">
                   <small class="error"></small>
-                  <button id="createNote" title="Create Note" type="button">Create</button>
+                  <button id="createNote" title="Create Note" type="button"><i></i><span>Create</span></button>
                 </fieldset>
               </form>
               <form id="deleteForm" onsubmit="return false;">
                 <fieldset>
-                  <label for="deleteNoteInput">Delete a file or directory.</label>
+                  <label for="deleteNoteInput">Delete a file or folder.</label>
                   <input id="deleteNoteInput" type="text" name="url" value="">
                   <small class="error"></small>
-                  <button id="deleteNote" title="Delete Note" type="button">Delete</button>
+                  <button id="deleteNote" title="Delete Note" type="button"><i></i><span>Delete</span></button>
                 </fieldset>
                 <!-- <svg class="pencil-progress"><use href="#pencil-progress"></use></svg> -->
               </form>

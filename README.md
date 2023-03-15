@@ -89,7 +89,7 @@ Highlighted code blocks will copy to clipboard on click or enter.
 
 A `getDir()` call returns all the html and txt files from the `/notes` directory in alphabetical order. A `notes` array object is generated and used to download and construct all the notes. The order (of this array) determines the order on the page. 
 
-The id of each category (derived from the file name) will be used for the name of each respective note category. Hence, the capitalization. The same is true for the directories.
+The id of each category or note (derived from the directory or file name) will be used for the name of each respective note category. Hence, the capitalization. The same is true for the directories. **No duplicate names are permitted because duplicate ids are invalid html. Enforcing case sensitivity for directories and files could have adverse affects.**
 
 Once the index file has loaded, the site will check for a locally stored passphrase. If one is not found, a prompt will persist until one is entered. Javascript will decrypt any encrypted sections and the site will be ready.
 

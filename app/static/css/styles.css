@@ -952,7 +952,6 @@ body.dialog footer {
     background-color : var(--color-plt-white);
     overflow         : hidden;
 }
-
 #dialogSetup form fieldset label {
     display : block;
     margin  : 0;
@@ -1000,16 +999,34 @@ body.dialog footer {
 #dialogEdit nav button,
 #dialogSetup nav button,
 #dialogSetup button {
-    height        : 44px;
-    width         : 100%;
-    padding       : 0 10px;
+    height           : 44px;
+    width            : 100%;
+    padding          : 0 10px;
     background-color : var(--background-color-sections);
-    border-radius : var(--border-radius-small);
+    border-radius    : var(--border-radius-small);
 }
 #dialogEdit nav button#saveNote,
 #dialogSetup nav button#saveSetup {
     color            : var(--color-plt-white);
     background-color : var(--color-plt-medium);
+}
+#dialogSetup form.processing button {
+    opacity : .5;
+}
+#dialogSetup form.processing button i {
+    display             : block;
+    width               : 38px;
+    height              : 38px;
+    margin              : auto;
+    background-image    : var( --pencil-white );
+    background-color    : transparent;
+    background-size     : 16px 16px;
+    background-position : center;
+    background-repeat   : no-repeat;
+    animation           : rotating 1.2s linear 0s infinite;
+}
+#dialogSetup form.processing button span {
+    display : none;
 }
 dialog form svg.pencil-progress {
     display : none;

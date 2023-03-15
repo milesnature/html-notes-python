@@ -62,18 +62,18 @@ const storeNote = ( name, value ) => {
 const getStoredNote = ( name ) => {
     return localStorage.getItem( 'note-' + name );
 };
-const removeNote = ( name ) => {
-    if ( name ) {
-        try {
-            localStorage.removeItem( 'note-' + name );
-        }
-        catch( err ) {
-            console.log( 'There was a problem deleting this note.', { err, name } );
-        }
-    } else {
-        console.log( 'Name was missing.', { name } );
-    }
-};
+// const removeNote = ( name ) => {
+//     if ( name ) {
+//         try {
+//             localStorage.removeItem( 'note-' + name );
+//         }
+//         catch( err ) {
+//             console.log( 'There was a problem deleting this note.', { err, name } );
+//         }
+//     } else {
+//         console.log( 'Name was missing.', { name } );
+//     }
+// };
 // setItem(key, value);
 // getItem(key);
 // removeItem(key);
@@ -151,65 +151,75 @@ const handleDialogEventsPassphrase = () => {
 }
 const handleDialogEventsCreate = () => {
     const data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
-    const createFormInput = document.querySelector('#createForm input');
-    const createFormError = document.querySelector('#createForm .error');
-    ( async () => {
-        let response = {};
-        try {
-            createFormError.innerHTML = '';
-            createFormError.classList.remove('show');
-            response = await createNote( data );
-            const code = parseInt(response.code);
-            if ( code === 200 ) {
-                refreshNotes();
-                removeSetupDialog();
-            } else if ( code > 200 ) {
-                createFormError.innerHTML = response.message;
+    const createForm      = document.querySelector('#createForm');
+    const createFormInput = createForm.querySelector('#createForm input');
+    const createFormError = createForm.querySelector('#createForm .error');
+    if ( !createForm.classList.contains('processing') ) {
+        (async () => {
+            let response = {};
+            try {
+                createForm.classList.add('processing');
+                createFormError.innerHTML = '';
+                createFormError.classList.remove('show');
+                response = await createNote(data);
+                const code = parseInt(response.code);
+                if (code === 200) {
+                    refreshNotes();
+                    removeSetupDialog();
+                } else if (code > 200) {
+                    createFormError.innerHTML = response.message;
+                    createFormError.classList.add('show');
+                    createFormInput.focus();
+                    createForm.classList.remove('processing');
+                    console.error(response);
+                }
+            } catch (e) {
+                createFormError.innerHTML = e;
                 createFormError.classList.add('show');
                 createFormInput.focus();
-                console.error( response );
+                console.error(e);
             }
-        } catch ( e ) {
-            createFormError.innerHTML = e;
-            createFormError.classList.add('show');
-            createFormInput.focus();
-            console.error( e );
-        }
-    } )();
+        })();
+    }
 }
 const handleDialogEventsDelete = () => {
     const data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
-    const deleteFormInput = document.querySelector('#deleteForm input');
-    const deleteFormError = document.querySelector('#deleteForm .error');
-    ( async () => {
-        let response = {};
-        try {
-            deleteFormError.innerHTML = '';
-            deleteFormError.classList.remove('show');
-            response = await deleteNote( data );
-            const code = parseInt(response.code);
-            if ( code === 200 ) {
-                refreshNotes();
-                removeSetupDialog();
-            } else if ( code > 200 ) {
-                deleteFormError.innerHTML = response.message;
+    const deleteForm      = document.querySelector('#deleteForm');
+    const deleteFormInput = deleteForm.querySelector('#deleteForm input');
+    const deleteFormError = deleteForm.querySelector('#deleteForm .error');
+    if ( !deleteForm.classList.contains('processing') ) {
+        (async () => {
+            let response = {};
+            try {
+                deleteForm.classList.add('processing');
+                deleteFormError.innerHTML = '';
+                deleteFormError.classList.remove('show');
+                response = await deleteNote(data);
+                const code = parseInt(response.code);
+                if (code === 200) {
+                    refreshNotes();
+                    removeSetupDialog();
+                } else if (code > 200) {
+                    deleteFormError.innerHTML = response.message;
+                    deleteFormError.classList.add('show');
+                    deleteFormInput.focus();
+                    deleteForm.classList.remove('processing');
+                    console.error(response);
+                }
+            } catch (e) {
+                deleteFormError.innerHTML = e;
                 deleteFormError.classList.add('show');
                 deleteFormInput.focus();
-                console.error( response );
+                console.error(response);
             }
-        } catch ( e ) {
-            deleteFormError.innerHTML = e;
-            deleteFormError.classList.add('show');
-            deleteFormInput.focus();
-            console.error( response );
-        }
-    } )();
+        })();
+    }
 }
 const handleDialogEvents = ( e ) => {
     const target = e.target;
-    const id     = target.id;
-    const key    = e.key;
     const btn    = target.closest('button');
+    const id     = ( target.id ) ? target.id : btn.id;
+    const key    = e.key;
     let refreshId;
     let form;
     let data;
@@ -918,18 +928,18 @@ setupFooterEvents();
 
 // SERVICE WORKER
 
-// if ('serviceWorker' in navigator) {
-//     // Wait for the 'load' event to not block other work
-//     window.addEventListener('load', async () => {
-//         // Try to register the service worker.
-//         try {
-//             const reg = await navigator.serviceWorker.register('/service-worker.js');
-//             // console.log('Service worker registered! 😎', reg);
-//         } catch (err) {
-//             // console.log('😥 Service worker registration failed: ', err);
-//         }
-//     });
-// }
+if ('serviceWorker' in navigator) {
+    // Wait for the 'load' event to not block other work
+    window.addEventListener('load', async () => {
+        // Try to register the service worker.
+        try {
+            const reg = await navigator.serviceWorker.register('/service-worker.js');
+            // console.log('Service worker registered! 😎', reg);
+        } catch (err) {
+            // console.log('😥 Service worker registration failed: ', err);
+        }
+    });
+}
 
 
 
