@@ -50,6 +50,11 @@ def has_duplicate(url, directory_only):
     user_file = url.split('.')[0].split('/')[-1]
     user_directory = url.split('.')[0].split('/') if not os.path.exists(directory_only) else []
 
+    # Check url against itself
+    duplicates = [name for name in user_directory if user_directory.count(name) > 1]
+    if len(duplicates) > 0:
+        return True
+
     # Files are always checked against all current directory and file names.
     for note in notes:
         note = sanitize_url(note)
