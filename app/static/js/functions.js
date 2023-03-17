@@ -167,10 +167,10 @@ const handleDialogEventsCreate = () => {
                     refreshNotes();
                     removeSetupDialog();
                 } else if (code > 200) {
+                    createForm.classList.remove('processing');
                     createFormError.innerHTML = response.message;
                     createFormError.classList.add('show');
                     createFormInput.focus();
-                    createForm.classList.remove('processing');
                     console.error(response);
                 }
             } catch (e) {
@@ -200,10 +200,10 @@ const handleDialogEventsDelete = () => {
                     refreshNotes();
                     removeSetupDialog();
                 } else if (code > 200) {
+                    deleteForm.classList.remove('processing');
                     deleteFormError.innerHTML = response.message;
                     deleteFormError.classList.add('show');
                     deleteFormInput.focus();
-                    deleteForm.classList.remove('processing');
                     console.error(response);
                 }
             } catch (e) {
