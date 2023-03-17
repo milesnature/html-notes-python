@@ -762,7 +762,7 @@ const appendNotesToMain = () => {
     if ( ( useEncryption && !decryptionFailed ) || !useEncryption ) {
         mainNotes.appendChild(fragmentNotes);
         document.querySelector('.controller').appendChild(templateNavController.content.cloneNode(true));
-        if ( !isDemo ) { document.querySelector('footer').appendChild(templateFooter.content.cloneNode(true)); }
+        document.querySelector('footer').appendChild(templateFooter.content.cloneNode(true));
         initChecklist('Groceries');
     }
 };

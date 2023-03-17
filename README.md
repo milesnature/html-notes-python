@@ -127,11 +127,12 @@ I am re-evaluating popular UX conventions:
 ## The Future
 I wrote this tool for myself which means future development will be limited to my whimsical desires and needs. This could change with increased interest.
 * Make this easier to use for non-technical folks.
-  * Enable updates to config from browser.
-  * Enable users to create, delete, and rename the notes in their repository from the browser.
+  * Enable users to rename the notes in their repository from the browser.
+  * Simplify the creation and deletion of folders and files? Entering paths along with file names are prone to errors. Difficult to sanitize.
   * Export tool
   * Decryption tool
   * File upload
+  * Enable updates to config from browser.
 * Add encryption for images. Probably base-64. Otherwise, linking to external (encrypted) storage is a good solution.
 * Explore the PWA options that enable edits to files on local directories...
 * Scrape the notes directory to dynamically generate `notes` object.
