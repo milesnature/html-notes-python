@@ -914,7 +914,8 @@ html.dialog {
     place-self   : center start;
     padding-left : 14px;
 }
-#dialogEdit small {
+#dialogEdit time {
+    font-size: .8rem;
     text-align  : center;
     line-height : 1.1;
 }
@@ -996,7 +997,7 @@ dialog.processing svg.pencil-progress {
 }
 #dialogSetup header {
     display               : grid;
-    grid-template-columns : 3fr 160px 44px;
+    grid-template-columns : 3fr 44px;
     place-content         : center;
     place-items           : center;
     margin                : 0;
@@ -1053,6 +1054,7 @@ dialog.processing svg.pencil-progress {
     visibility : hidden;
     color      : var(--color-plt-accent-dark);
     margin     : 5px 0 10px 0;
+    text-align : center;
 }
 #dialogSetup .error.show {
     visibility : visible;

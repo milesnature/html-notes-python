@@ -119,16 +119,6 @@ def manifest():
     return app.send_static_file('manifest.json')
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return app.send_static_file('favicon.ico')
-
-
-@app.route('/apple-touch-icon.png', methods=['GET'])
-def apple_touch_icon():
-    return app.send_static_file('apple-touch-icon.png')
-
-
 @app.route('/get-dir', methods=['GET'])
 def get_dir():
     if request.method == 'GET':

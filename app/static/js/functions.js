@@ -364,12 +364,12 @@ const insertEditDialog = ( content, dir, id, title, lastModified ) => {
         }
         let h2 = dialog.querySelector('h2');
         h2.replaceChild(document.createTextNode(title.replace('-', ' ')), h2.childNodes[0]);
-        let small = dialog.querySelector('small');
+        let time = dialog.querySelector('time');
         const lastModifiedDate = (new Date(lastModified).toLocaleString() !== 'Invalid Date') ? new Date(lastModified).toLocaleString('en-US', {
             dateStyle: 'medium',
             timeStyle: 'medium'
         }) : '';
-        small.appendChild(document.createTextNode(lastModifiedDate));
+        time.appendChild(document.createTextNode(lastModifiedDate));
         dialog.querySelector('input[name="url"]').value = dir;
         addDialogEventListeners(dialog);
         toggleBodyDialog(true, 'edit');
