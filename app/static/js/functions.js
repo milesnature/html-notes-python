@@ -84,10 +84,10 @@ const getStoredNote = ( name ) => {
 
 const toggleBodyDialog = ( display, type, id ) => {
     if ( display ) {
-        document.body.classList.add( 'dialog' );
+        document.getElementsByTagName("html")[0].classList.add( 'dialog' );
         if ( type ) { document.body.classList.add( type ); }
     } else {
-        document.body.classList.remove( 'dialog' );
+        document.getElementsByTagName("html")[0].classList.remove( 'dialog' );
         if ( type ) { document.body.classList.remove( type ); }
         if ( id ) {
             document.getElementById( id ).scrollIntoView( true );
@@ -394,6 +394,7 @@ const insertSetupDialog = () => {
         toggleBodyDialog(true, 'setup');
         document.body.prepend(fragment);
         window.scrollTo(0, 0);
+        dialog.querySelector('input').focus();
     }
 };
 const removeSetupDialog = () => {

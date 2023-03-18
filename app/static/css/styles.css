@@ -811,21 +811,27 @@ dialog {
     border-width     : 0;
     border-radius    : var(--border-radius-small);
 }
-body.dialog {
+html.dialog {
+    overflow-y : unset;
+    padding    : 0;
+}
+.dialog body {
     display       : grid;
     height        : 100%;
     place-content : center;
     place-items   : center;
 }
-body.dialog.edit,
-body.dialog.setup {
+.dialog body.edit,
+.dialog body.setup {
     align-content: start;
 }
-body.dialog .notes,
-body.dialog .controller,
-body.dialog footer {
+.dialog body .notes,
+.dialog body .controller,
+.dialog body footer {
     display : none;
 }
+
+
 #dialogProgressBar {
     width : var(--dialog-width-small);
 }
@@ -844,6 +850,11 @@ body.dialog footer {
     width : var(--progress-width);
     color : var(--color-text-base);
 }
+#dialogProgressBar small {
+    margin-top: 5px;
+}
+
+
 #dialogPassphrase div {
     display    : grid;
     grid-gap   : 0px;
@@ -882,41 +893,32 @@ body.dialog footer {
     background-color : var(--color-plt-medium);
     border-radius    : var(--border-radius-small);
 }
+
+
 #dialogEdit {
-    display    : grid;
-    grid-template-rows : 44px auto 54px;
-    margin-top : -5px;
-    width      : calc( 100vw - 18px );
-    max-width  : 1400px;
-    height     : calc( 100vh - 18px );
-    background-color : var(--background-color-body);
+    display            : grid;
+    grid-template-rows : 44px auto 72px;
+    width              : calc( 100vw - 18px );
+    max-width          : 1400px;
+    height             : 100vh;
+    background-color   : var(--background-color-body);
 }
-#dialogSetup {
-    margin-top : -5px;
-    width      : calc( 100vw - 18px );
-    max-width  : 1400px;
-    height     : calc( 100vh - 18px );
-    background-color : var(--background-color-body);
+#dialogEdit header {
+    display               : grid;
+    grid-template-columns : 3fr 160px 44px;
+    place-content         : center;
+    place-items           : center;
+    margin                : 0;
 }
-#dialogEdit header,
-#dialogSetup header {
-    display: grid;
-    grid-template-columns: 3fr 160px 44px;
-    place-content: center;
-    place-items: center;
+#dialogEdit header h2 {
+    place-self   : center start;
+    padding-left : 14px;
 }
-#dialogEdit header h2,
-#dialogSetup header h2 {
-    place-self: center start;
-    padding-left: 1rem;
-}
-#dialogEdit small,
-#dialogSetup small {
+#dialogEdit small {
     text-align  : center;
     line-height : 1.1;
 }
-#dialogEdit header button,
-#dialogSetup header button {
+#dialogEdit header button {
     width               : 44px;
     height              : 44px;
     padding             : 13px;
@@ -926,114 +928,36 @@ body.dialog footer {
     background-color    : transparent;
     border-radius       : var(--border-radius-small);
 }
-#dialogEdit header button span,
-#dialogSetup header button span {
+#dialogEdit nav button#saveNote {
+    color            : var(--color-plt-white);
+    background-color : var(--color-plt-medium);
+}
+#dialogEdit header button span {
     display : none;
 }
 #dialogEdit form {
     border-radius : var(--border-radius-small);
 }
 #dialogEdit textarea {
-    width         : calc( 100% - 10px );
-    height        : calc( 100% - 10px );
+    width         : 100%;
+    height        : 100%;
+    margin        : 0;
     border-radius : var(--border-radius-small);
     resize        : none;
 }
-#dialogSetup form {
-    margin           : 15px auto;
-    padding          : 0;
-    border-radius    : var(--border-radius-small);
-    background-color : transparent;
-}
-#dialogSetup form fieldset {
-    display          : grid;
-    grid-gap         : 0;
-    width            : var(--dialog-width-small);
-    padding          : 40px 30px;
-    margin           : auto;
-    border           : none;
-    border-radius    : var(--border-radius-small);
-    background-color : var(--color-plt-white);
-    overflow         : hidden;
-}
-#dialogSetup form fieldset label {
-    display : block;
-    margin  : 0 0 10px 0;
-}
-#dialogSetup form fieldset input {
-    display       : block;
-    width         : 100%;
-    height        : 38px;
-    padding       : 10px;
-    margin        : 0 auto;
-    border        : 1px solid var(--color-text-base);
-    border-radius : var(--border-radius-small);
-}
-#dialogSetup .error {
-    visibility : hidden;
-    color      : var(--color-plt-accent-dark);
-    /*min-height : 1rem;*/
-    margin     : 5px 0 10px 0;
-}
-#dialogSetup .error.show {
-    visibility : visible;
-}
-#dialogSetup form fieldset button {
-    display          : block;
-    justify-self     : center;
-    width            : 120px;
-    min-width        : 120px;
-    padding          : 0 20px;
-    color            : var(--color-plt-white);
-    background-color : var(--color-plt-medium);
-}
 #dialogEdit nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr;
-    grid-gap: 7px;
-    place-content: center;
-    place-items: center;
-    padding: 5px;
+    display               : grid;
+    grid-template-columns : 1fr 1fr 1fr 1fr 1fr 2fr;
+    grid-gap              : 7px;
+    place-content         : center;
+    place-items           : center;
 }
-#dialogSetup nav {
-    display: grid;
-    grid-template-columns: 4fr 1fr;
-    grid-gap: 7px;
-    place-content: center;
-    place-items: center;
-    padding: 5px;
-}
-#dialogEdit nav button,
-#dialogSetup nav button,
-#dialogSetup button {
+#dialogEdit nav button {
     height           : 44px;
     width            : 100%;
     padding          : 0 10px;
     background-color : var(--background-color-sections);
     border-radius    : var(--border-radius-small);
-}
-#dialogEdit nav button#saveNote,
-#dialogSetup nav button#saveSetup {
-    color            : var(--color-plt-white);
-    background-color : var(--color-plt-medium);
-}
-#dialogSetup form.processing button {
-    /*opacity : .5;*/
-}
-#dialogSetup form.processing button i {
-    display             : block;
-    width               : 38px;
-    height              : 38px;
-    margin              : auto;
-    background-image    : var( --pencil-white );
-    background-color    : transparent;
-    background-size     : 16px 16px;
-    background-position : center;
-    background-repeat   : no-repeat;
-    animation           : rotating 1.2s linear 0s infinite;
-}
-#dialogSetup form.processing button span {
-    display : none;
 }
 dialog form svg.pencil-progress {
     display : none;
@@ -1063,18 +987,112 @@ dialog.processing svg.pencil-progress {
     animation : rotating 1.2s linear 0s infinite;
 }
 
+
+#dialogSetup {
+    width            : calc( 100vw - 18px );
+    max-width        : 400px;
+    height           : 100vh;
+    background-color : var(--background-color-body);
+}
+#dialogSetup header {
+    display               : grid;
+    grid-template-columns : 3fr 160px 44px;
+    place-content         : center;
+    place-items           : center;
+    margin                : 0;
+}
+#dialogSetup header h2 {
+    place-self   : center start;
+    padding-left : 14px;
+}
+#dialogSetup header button {
+    width               : 44px;
+    min-width           : 44px;
+    height              : 44px;
+    padding             : 13px;
+    background-image    : var( --close-black );
+    background-repeat   : no-repeat;
+    background-position : center;
+    background-color    : transparent;
+    border-radius       : var(--border-radius-small);
+}
+#dialogSetup header button span {
+    display : none;
+}
+#dialogSetup form {
+    margin           : 0 auto 9px auto;
+    padding          : 0;
+    border-radius    : var(--border-radius-small);
+    background-color : transparent;
+}
+#dialogSetup fieldset {
+    display          : grid;
+    grid-gap         : 0;
+    width            : var(--dialog-width-small);
+    padding          : 40px 30px;
+    margin           : auto;
+    border           : none;
+    border-radius    : var(--border-radius-small);
+    background-color : var(--color-plt-white);
+    overflow         : hidden;
+}
+#dialogSetup label {
+    display : block;
+    margin  : 0 0 10px 0;
+}
+#dialogSetup input {
+    display       : block;
+    width         : 100%;
+    height        : 38px;
+    padding       : 10px;
+    margin        : 0 auto;
+    border        : 1px solid var(--color-text-base);
+    border-radius : var(--border-radius-small);
+}
+#dialogSetup .error {
+    visibility : hidden;
+    color      : var(--color-plt-accent-dark);
+    margin     : 5px 0 10px 0;
+}
+#dialogSetup .error.show {
+    visibility : visible;
+}
+#dialogSetup button {
+    display          : block;
+    justify-self     : center;
+    height           : 44px;
+    width            : 120px;
+    min-width        : 120px;
+    padding          : 0 20px;
+    color            : var(--color-plt-white);
+    background-color : var(--color-plt-medium);
+}
+#dialogSetup form.processing button {}
+#dialogSetup form.processing button i {
+    display             : block;
+    width               : 38px;
+    height              : 38px;
+    margin              : auto;
+    background-image    : var( --pencil-white );
+    background-color    : transparent;
+    background-size     : 16px 16px;
+    background-position : center;
+    background-repeat   : no-repeat;
+    animation           : rotating 1.2s linear 0s infinite;
+}
+#dialogSetup form.processing button span {
+    display : none;
+}
+
+
 @media ( max-width: 600px ) and ( pointer: coarse ) {
     #dialogPassphrase input,
     #dialogPassphrase button {
         height : 44px;
     }
-    #dialogEdit,
-    #dialogSetup {
-        height     : calc( 100vh - 90px );
-        margin-top : -3px;
+    #dialogEdit {
+        height : calc( 100vh - 88px );
     }
-    #dialogPassphrase {}
-    #dialogProgress {}
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
     }
