@@ -53,10 +53,10 @@ const storeNote = ( name, value ) => {
             localStorage.setItem( 'note-' + name, value );
         }
         catch( err ) {
-            console.log( 'There was a problem saving to storage.', { err, name, value } );
+            console.error( 'There was a problem saving to storage.', { err, name, value } );
         }
     } else {
-        console.log( 'Name or value is missing.', { name, value } );
+        console.error( 'Name or value is missing.', { name, value } );
     }
 };
 const getStoredNote = ( name ) => {
@@ -218,11 +218,16 @@ const handleDialogEventsDelete = () => {
 const handleDialogEvents = ( e ) => {
     const target = e.target;
     const btn    = target.closest('button');
-    const id     = ( target.id ) ? target.id : btn.id;
     const key    = e.key;
+    let id;
     let refreshId;
     let form;
     let data;
+    if ( target.id ) {
+        id = target.id;
+    } else if ( btn && btn.id ) {
+        id = btn.id;
+    }
     if ( e.repeat || btn && key ) { return } // Enter key fires click and keyup on buttons. This prevents duplicate processing.
     if ( btn && btn.className === 'close' ) {
         e.preventDefault();
@@ -250,7 +255,6 @@ const handleDialogEvents = ( e ) => {
                         let response = await saveNote( data );
                         const code = parseInt(response.code);
                         if ( code === 200 ) {
-                            console.log({response});
                             storeNote(id, textareaValueEncrypted);
                             if (!isDemo && useEncryption) {
                                 document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = decrypt(getStoredNote(id));
@@ -326,7 +330,6 @@ const handleDialogEvents = ( e ) => {
                 handleDialogEventsPassphrase();
                 break;
             case 'passphrase':
-                console.log('passphrase', key);
                 e.preventDefault();
                 e.stopPropagation();
                 if ( key === "Enter" ) {
