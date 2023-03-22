@@ -170,7 +170,7 @@ def create_note():
             if not os.path.exists(absolute_url):
                 with open(absolute_url, 'w') as f:
                     f.write('<section class="bkm__section">\n  <ul>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n  </ul>\n</section>\n<section class="note__section">\n  <h3></h3>\n    <ul>\n      <li></li>\n      <li></li>\n      <li></li>\n    </ul>\n</section>')
-                    return get_response('success', '200', SUCCESS_NOTE_CREATED ), 200
+                    return get_response('success', '200', SUCCESS_NOTE_CREATED), 200
         except Exception as e:
             message = ERROR_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
             return get_response('error', '500', message, str(e)), 500

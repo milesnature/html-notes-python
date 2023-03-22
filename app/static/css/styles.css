@@ -296,7 +296,9 @@ tr {
 }
 * {
     box-sizing      : border-box;
+    /*noinspection CssUnknownProperty*/
     scrollbar-color : var(--scrollbar-thumb-textarea-background-color) transparent;
+    /*noinspection CssUnknownProperty*/
     scrollbar-width : thin;
 }
 ::-webkit-scrollbar {
@@ -857,7 +859,7 @@ html.dialog {
 
 #dialogPassphrase div {
     display    : grid;
-    grid-gap   : 0px;
+    grid-gap   : 0;
     padding    : 40px 30px;
     width      : var(--dialog-width-small);
     text-align : center;
