@@ -106,7 +106,14 @@ Some things, like the local storage of notes, are ongoing experiments.
 
 ## How to install
 
-### Locally
+### Prerequisites
+
+* [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* [python](https://www.python.org/downloads/)
+* [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html)
+* [pip](https://pip.pypa.io/en/stable/installation/)
+
+### Local
 
     ➜ git clone https://github.com/milesnature/html-notes-python.git
     ➜ cd html-notes-python
@@ -115,6 +122,8 @@ Some things, like the local storage of notes, are ongoing experiments.
     ➜ pip install Flask
     ➜ deactivate
     ➜ venv/bin/python app/app.py
+
+[http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ## What inspired this specific implementation?
 
