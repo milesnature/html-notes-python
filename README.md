@@ -87,7 +87,7 @@ Highlighted code blocks will copy to clipboard on click or enter.
     const isDemo = false;
     const notesDirectory = "notes/";
 
-A `getDir()` call returns all the html and txt files from the `/notes` directory in alphabetical order. A `notes` array object is generated and used to download and construct all the notes. The order (of this array) determines the order on the page. 
+A `getDir()` call returns all the html and txt files from the `/notes` directory in alphabetical order. A `notesArray` array object is generated and used to download and construct all the notes. The order (of this array) determines the order on the page. 
 
 The id of each category or note (derived from the directory or file name) will be used for the name of each respective note category. Hence, the capitalization. The same is true for the directories. **No duplicate names are permitted because duplicate ids are invalid html. Enforcing case sensitivity for directories and files could have adverse affects.**
 
@@ -104,6 +104,17 @@ Refer to the browser console for detailed error messages.
 Some things, like the local storage of notes, are ongoing experiments. 
 
 
+## How to install
+
+### Locally
+
+    ➜ git clone https://github.com/milesnature/html-notes-python.git
+    ➜ cd html-notes-python
+    ➜ virtualenv venv -p /usr/bin/python3
+    ➜ source venv/bin/activate
+    ➜ pip install Flask
+    ➜ deactivate
+    ➜ venv/bin/python app/app.py
 
 ## What inspired this specific implementation?
 

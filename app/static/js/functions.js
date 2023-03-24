@@ -549,7 +549,7 @@ const main = {
             });
         }
     }
-}
+};
 
 const navbar = {
     controller : document.querySelector('.controller'),
@@ -614,7 +614,7 @@ const navbar = {
             });
         }
     }
-}
+};
 
 const footer = {
     el : document.querySelector('footer'),
@@ -639,7 +639,7 @@ const footer = {
             });
         }
     }
-}
+};
 
 async function getDir() {
     const response = await fetch('get-dir');
@@ -685,7 +685,7 @@ const encryption = {
     isEncrypted : (data) => {
         return (data.substring(0, 3) === 'U2F');
     }
-}
+};
 
 const notes = {
     notesArray : [],
@@ -854,42 +854,13 @@ const notes = {
             }
         });
     }
-}
+};
 
 const checklist = {
-    CHECKLIST_ID : '',
+    CHECKLIST_KEY : '',
     CHECKLIST_LENGTH : '',
     get : (container) => {
         return (container) ? Array.from(container.querySelectorAll('input')) : [];
-    },
-    init : (id) => {
-        checklist.CHECKLIST_ID = id.toLowerCase() + 'Checklist';
-        checklist.CHECKLIST_LENGTH = id.toLowerCase() + 'ChecklistLength';
-        const checklistContainer = document.getElementById(id);
-        const checklistArray = checklist.get(checklistContainer);
-        const storedChecklistLength = (storage.getStoredChecklistLength(checklist.CHECKLIST_LENGTH)) ? storage.getStoredChecklistLength(checklist.CHECKLIST_LENGTH) : 0;
-        const checklistHasChanged = storage.getHasChanged(storedChecklistLength, checklistArray.length);
-        try {
-            if (checklistHasChanged) {
-                // The number of inputs has changed. Reset storage.
-                storage.clearChecklistValues(checklist.CHECKLIST_ID, checklistContainer);
-                storage.setChecklistLength(checklist.CHECKLIST_LENGTH, checklistArray.length);
-                storage.storeChecklistValues(checklist.CHECKLIST_ID, checklistArray);
-            } else if (!storedChecklistLength) {
-                // Values were never set.
-                storage.setChecklistLength(checklist.CHECKLIST_LENGTH, checklistArray.length);
-                storage.storeChecklistValues(checklist.CHECKLIST_ID, checklistArray);
-            } else {
-                // Update DOM with correct checked values.
-                checklistArray.forEach((item, index) => {
-                    item.checked = storage.getStoredValue(checklist.CHECKLIST_ID, index);
-                });
-            }
-        } catch (error) {
-            console.error('init', {
-                error
-            });
-        }
     },
     viewChecked : (section, checked) => {
         const checklistArray = checklist.get(section);
@@ -924,7 +895,7 @@ const checklist = {
             });
             section.querySelector('.cl__section input').checked = false;
             checklist.viewChecked(section, false);
-            storage.storeChecklistValues(checklist.CHECKLIST_ID, checklistArray);
+            storage.storeChecklistValues(checklist.CHECKLIST_KEY, checklistArray);
         } catch (error) {
             console.error('selectAll', {error, checklistArray});
         }
@@ -939,12 +910,41 @@ const checklist = {
             });
             section.querySelector('.cl__section input').checked = false;
             checklist.viewChecked(section, false);
-            storage.storeChecklistValues(checklist.CHECKLIST_ID, checklistArray);
+            storage.storeChecklistValues(checklist.CHECKLIST_KEY, checklistArray);
         } catch (error) {
             console.error('deselectAll', {error, checklistArray});
         }
+    },
+    init : (id) => {
+        checklist.CHECKLIST_KEY = id.toLowerCase() + 'Checklist';
+        checklist.CHECKLIST_LENGTH = id.toLowerCase() + 'ChecklistLength';
+        const checklistContainer = document.getElementById(id);
+        const checklistArray = checklist.get(checklistContainer);
+        const storedChecklistLength = (storage.getStoredChecklistLength(checklist.CHECKLIST_LENGTH)) ? storage.getStoredChecklistLength(checklist.CHECKLIST_LENGTH) : 0;
+        const checklistHasChanged = storage.getHasChanged(storedChecklistLength, checklistArray.length);
+        try {
+            if (checklistHasChanged) {
+                // The number of inputs has changed. Reset storage.
+                storage.clearChecklistValues(checklist.CHECKLIST_KEY, checklistContainer);
+                storage.setChecklistLength(checklist.CHECKLIST_LENGTH, checklistArray.length);
+                storage.storeChecklistValues(checklist.CHECKLIST_KEY, checklistArray);
+            } else if (!storedChecklistLength) {
+                // Values were never set.
+                storage.setChecklistLength(checklist.CHECKLIST_LENGTH, checklistArray.length);
+                storage.storeChecklistValues(checklist.CHECKLIST_KEY, checklistArray);
+            } else {
+                // Update DOM with correct checked values.
+                checklistArray.forEach((item, index) => {
+                    item.checked = storage.getStoredValue(checklist.CHECKLIST_KEY, index);
+                });
+            }
+        } catch (error) {
+            console.error('init', {
+                error
+            });
+        }
     }
-}
+};
 
 notes.init();
 main.setupEvents();
