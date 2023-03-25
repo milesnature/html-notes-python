@@ -1,0 +1,37 @@
+<section class="bkm__section">
+  <ul>
+    <li><a href="https://developer.fedoraproject.org/tech/languages/php/php-installation.html" target="_blank" rel="noreferrer">PHP Development Server (Fedora)</a></li>
+  </ul>
+</section>
+<section class="note__section">
+  <h3>Error Handling</h3>
+  <ul>
+    <li><button class="code">ini_set('display_errors', '1');</button></li>
+    <li><a href="https://www.inmotionhosting.com/blog/php-development-environment/" target="_blank">Run Default PHP Server (Linux)</a></li>
+    <li><button class="code">$ sudo dnf install php-cli</button></li>
+    <li><button class="code">$ sudo php --server localhost:8080 --docroot  .</button></li>
+  </ul>
+</section>
+<section class="note__section note--double-wide">
+  <label for="php_scan_dir">Scan Directory</label>
+  <textarea id="php_scan_dir">
+<?php
+    function getDirContents( $dir, &$results = array() ) {
+        $files = scandir($dir,0);
+        foreach ( $files as $key => $value ) {
+            $path = $dir . DIRECTORY_SEPARATOR . $value;
+            if ( !is_dir( $path ) ) {
+                $results[] = $path;
+            } else if ( $value != "." && $value != ".." ) {
+                $results[] = $path;
+                getDirContents( $path, $results );
+                
+            }
+        }
+        return json_encode( $results );
+    }
+    var_dump(getDirContents('notes'));
+    include 'db.php'; 
+?>
+    </textarea>
+</section>

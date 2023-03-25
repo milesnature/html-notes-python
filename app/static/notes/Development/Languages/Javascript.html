@@ -1,0 +1,49 @@
+<section class="note__section">
+  <h3>Keyboard Accessibility</h3>
+  <p>(keyup) is best for capturing enter key?</p>
+  <ol>
+    <li>mobile case</li>
+    <li>pointer cancellation</li>
+    <li>repeated keydown</li>
+  </ol>
+</section>
+
+<section class="note__section">
+  <h3>Console Log Methods</h3>
+  <ul>
+    <li><button class="code" tabindex="0">console.table()</button></li>
+    <li></li>
+    <li></li>
+  </ul>
+</section>
+<section class="note__section">
+  <h3>Methods</h3>
+  <ul>
+    <li><button class="code" tabindex="0">element.contentEditable()</button></li>
+    <li><button class="code" tabindex="0">import('./methods.js').then(module => module.method());</button></li>
+    <li></li>
+    <li></li>
+  </ul>
+</section>
+<section class="note__section">
+  <h3>RegEx</h3>
+  <ul>
+    <li><button class="code" tabindex="0"> class=\"[a-zA-Z0-9_.-]*\"</button></li>
+    <li></li>
+    <li></li>
+  </ul>
+</section>
+<section class="note__section note--triple-wide">
+  <label for="js_keyup">keyup example</label>
+  <textarea id="js_keyup">
+const keyup    = ( $event ) ? ( $event.type === 'keyup' ) : false;
+const enterKey = ( keyup ) ? ( $event.key === 'Enter' ) : false;
+if ( !$event || !keyup || ( keyup && enterKey ) ) {
+    if ( $event ) {
+        $event.preventDefault();  // Optional
+        $event.stopPropagation(); // Optional. Helps when an element is nested inside another with event handlers on it. (i.e. icon inside an input field bubbles up/outward).
+    }
+    // Do stuff.
+}
+    </textarea>
+</section>
