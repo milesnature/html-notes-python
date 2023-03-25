@@ -8,8 +8,8 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_response(status='success', code='200', message='', data=''):
-    return '{"status": "' + status + '", "code": "' + code + '", "message": "' + message + '", "data": "' + data + '"}'
+def get_message(status='success', code='200', message='', data=''):
+    return {'status': status, 'code': code, 'message': message, 'data': data}
 
 
 def get_notes_directories():
@@ -91,13 +91,14 @@ def is_missing(data):
 ERROR_INVALID_FILE_TYPE = 'Invalid file type. Only html and txt files are permitted.'
 ERROR_INPUT_IS_MISSING = 'Please enter a relative path and file name.'
 ERROR_DELETE_INPUT_IS_MISSING = 'Please enter a relative path to a file or folder.'
-ERROR_NOTES_FOLDER_EMPTY = 'This notes folder is empty or missing.'
+ERROR_NOTES_FOLDER_EMPTY = 'This notes folder is missing, empty, or contains the wrong file types.'
 ERROR_FILE_DOES_NOT_EXIST = 'File does not exist.'
 ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST = 'The file or folder does not exist.'
 ERROR_DUPLICATE_FILES_NOT_PERMITTED = 'Duplicate. All file and folder names must be unique.'
 ERROR_STRING_IS_OUT_OF_RANGE = 'string index out of range'
 ERROR_UNKNOWN = 'Unknown error.'
 
+SUCCESS_GET_DIRECTORIES = 'The notes folders and files were successfully retrieved.'
 SUCCESS_SAVED = 'Your note was saved.'
 SUCCESS_NOTE_CREATED = 'Your note was created.'
 SUCCESS_NOTE_DELETED = 'Your note was deleted.'
@@ -122,15 +123,16 @@ def manifest():
 @app.route('/get-dir', methods=['GET'])
 def get_dir():
     if request.method == 'GET':
+        message = {}
         try:
             notes_directories = get_notes_directories()
             if len(notes_directories) > 0:
                 notes_directories.sort()
-                return json.dumps(notes_directories)
+                return get_message("success", "200", SUCCESS_GET_DIRECTORIES, json.dumps(notes_directories)), 200
             else:
-                return get_response('error', '404', ERROR_NOTES_FOLDER_EMPTY, str(notes_directories)), 404
+                return get_message('error', '404', ERROR_NOTES_FOLDER_EMPTY, str(notes_directories)), 404
         except Exception as e:
-            return get_response('error', '500', 'get_dir', str(e)), 500
+            return get_message('error', '500', 'get_dir', str(e)), 500
 
 
 @app.route('/save-note', methods=['POST'])
@@ -140,17 +142,17 @@ def save_note():
             url = request.form.get('url')
             content = request.form.get('content')
             if not is_valid_file_type(url):
-                return get_response('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
+                return get_message('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
             file = os.path.join(basedir, url)
             if os.path.exists(file):
                 with open(file, 'w') as note:
                     note.write(content)
-                    return get_response('success', '200', SUCCESS_SAVED), 200
+                    return get_message('success', '200', SUCCESS_SAVED), 200
             else:
-                return get_response('error', '400', ERROR_FILE_DOES_NOT_EXIST, str(url)), 400
+                return get_message('error', '400', ERROR_FILE_DOES_NOT_EXIST, str(url)), 400
         except Exception as e:
             message = ERROR_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
-            return get_response('error', '500', message, str(e)), 500
+            return get_message('error', '500', message, str(e)), 500
 
 
 @app.route('/create-note', methods=['POST'])
@@ -162,18 +164,18 @@ def create_note():
             absolute_url = get_absolute_url(url)
             directory_only = get_directory_only(url)
             if not is_valid_file_type(url):
-                return get_response('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
+                return get_message('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
             if has_duplicate(url, directory_only):
-                return get_response('error', '400', ERROR_DUPLICATE_FILES_NOT_PERMITTED, str(url)), 400
+                return get_message('error', '400', ERROR_DUPLICATE_FILES_NOT_PERMITTED, str(url)), 400
             if not os.path.exists(directory_only):
                 os.makedirs(directory_only)
             if not os.path.exists(absolute_url):
                 with open(absolute_url, 'w') as f:
                     f.write('<section class="bkm__section">\n  <ul>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n  </ul>\n</section>\n<section class="note__section">\n  <h3></h3>\n    <ul>\n      <li></li>\n      <li></li>\n      <li></li>\n    </ul>\n</section>')
-                    return get_response('success', '200', SUCCESS_NOTE_CREATED), 200
+                    return get_message('success', '200', SUCCESS_NOTE_CREATED), 200
         except Exception as e:
             message = ERROR_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
-            return get_response('error', '500', message, str(e)), 500
+            return get_message('error', '500', message, str(e)), 500
 
 
 @app.route('/delete-note', methods=['POST'])
@@ -185,15 +187,15 @@ def delete_note():
             absolute_url = get_absolute_url(url)
             if os.path.exists(absolute_url) and os.path.isdir(absolute_url):
                 shutil.rmtree(absolute_url)
-                return get_response('success', '200', SUCCESS_DIRECTORY_AND_NOTES_DELETED), 200
+                return get_message('success', '200', SUCCESS_DIRECTORY_AND_NOTES_DELETED), 200
             elif os.path.exists(absolute_url) and os.path.isfile(absolute_url) and is_valid_file_type(absolute_url):
                 os.remove(absolute_url)
-                return get_response('success', '200', SUCCESS_NOTE_DELETED), 200
+                return get_message('success', '200', SUCCESS_NOTE_DELETED), 200
             else:
-                return get_response('error', '400', ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST, f'{url}, {absolute_url}'), 415
+                return get_message('error', '400', ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST, f'{url}, {absolute_url}'), 415
         except Exception as e:
             message = ERROR_DELETE_INPUT_IS_MISSING if str(e) == ERROR_STRING_IS_OUT_OF_RANGE else ERROR_UNKNOWN
-            return get_response('error', '500', message, str(e)), 500
+            return get_message('error', '500', message, str(e)), 500
 
 
 if __name__ == '__main__':

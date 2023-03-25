@@ -642,9 +642,7 @@ const footer = {
 };
 
 async function getDir() {
-    const response = await fetch('get-dir');
-    const content = await response.text();
-    return {content};
+    return (await fetch('get-dir')).json();
 }
 async function getNote(dir) {
     // last-modified response header does not work when deployed locally on localhost.
@@ -846,13 +844,26 @@ const notes = {
         });
     },
     init : () => {
-        getDir().then((response) => {
-            const data = JSON.parse(response.content);
-            if (Array.isArray(data)) {
-                notes.constructNotesObj(data);
-                notes.importStoreInsertAllNotes();
+        (async () => {
+            let response = {};
+            try {
+                response = await getDir();
+                const code = parseInt(response.code);
+                const data = JSON.parse(response.data);
+                if (code === 200) {
+                    if (Array.isArray(data)) {
+                        notes.constructNotesObj(data);
+                        notes.importStoreInsertAllNotes();
+                    }
+                } else if (code > 200) {
+                    dialog.insertSetup();
+                    console.error(response);
+                }
+            } catch (e) {
+                dialog.insertSetup();
+                console.error(e);
             }
-        });
+        })();
     }
 };
 
