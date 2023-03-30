@@ -57,6 +57,20 @@ const storage = {
     getStoredNote: (name) => {
         return localStorage.getItem('note-' + name);
     },
+    setScrollSnap: (value) => {
+        if (value) {
+            try {
+                localStorage.setItem('scroll-snap', value);
+            } catch (err) {
+                console.error('There was a problem saving to storage.', {err, value});
+            }
+        } else {
+            console.error('Value is missing.', {value});
+        }
+    },
+    getScrollSnap: () => {
+        return ( localStorage.getItem('scroll-snap') !== null ) ? localStorage.getItem('scroll-snap') : '';
+    },
     removeNote: (name) => {
         if (name) {
             try {
@@ -73,6 +87,27 @@ const storage = {
     // removeItem(key);
     // clear();
 };
+
+const settings = {
+    isScrollSnapTrue: () => {
+        return (storage.getScrollSnap() && storage.getScrollSnap() === 'true');
+    },
+    enableScrollSnap: () => {
+        document.getElementsByTagName('html')[0].classList.add('scroll-snap');
+        storage.setScrollSnap('true');
+    },
+    disableScrollSnap: () => {
+        document.getElementsByTagName('html')[0].classList.remove('scroll-snap');
+        storage.setScrollSnap('false');
+    },
+    init: () => {
+        if ( settings.isScrollSnapTrue() ) {
+            settings.enableScrollSnap();
+        } else {
+            settings.disableScrollSnap();
+        }
+    }
+}
 
 const dialog = {
     toggleBodyDialog: (display, type, id) => {
@@ -211,6 +246,7 @@ const dialog = {
     handleEvents: (e) => {
         const target = e.target;
         const btn = target.closest('button');
+        const label = target.closest('label');
         const key = e.key;
         let id;
         let refreshId;
@@ -220,6 +256,8 @@ const dialog = {
             id = target.id;
         } else if (btn && btn.id) {
             id = btn.id;
+        } else if (label && label.id) {
+            id = label.id;
         }
         if (e.repeat || btn && key) {
             return
@@ -331,6 +369,12 @@ const dialog = {
                         dialog.handleEventsPassphrase();
                     }
                     break;
+                case 'scrollSnapLabel':
+                    settings.enableScrollSnap();
+                    break;
+                case 'scrollDefaultLabel':
+                    settings.disableScrollSnap();
+                    break;
                 default:
                     break;
             }
@@ -401,6 +445,11 @@ const dialog = {
             document.body.prepend(fragment);
             window.scrollTo(0, 0);
             d.querySelector('input').focus();
+            if ( settings.isScrollSnapTrue() ) {
+                document.getElementById('scrollSnap').checked = 'checked';
+            } else {
+                document.getElementById('scrollDefault').checked = 'checked';
+            }
         }
     },
     removeSetup: () => {
@@ -961,6 +1010,7 @@ notes.init();
 main.setupEvents();
 navbar.setupEvents();
 footer.setupEvents();
+settings.init();
 
 if ('serviceWorker' in navigator) {
     // Wait for the 'load' event to not block other work

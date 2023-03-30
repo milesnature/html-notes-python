@@ -368,6 +368,18 @@ progress::-moz-progress-bar {
     word-break       : break-word;
     line-height      : 1rem;
 }
+.scroll-snap {
+    scroll-snap-type: y proximity;
+    scroll-padding-top: 43px;
+}
+.scroll-snap section {
+    scroll-snap-align: start;
+}
+@media ( max-width: 800px ) {
+    .scroll-snap {
+        scroll-padding-top: 49px;
+    }
+}
 @keyframes rotating {
     from {
         rotate : 0deg;
@@ -405,9 +417,10 @@ progress::-moz-progress-bar {
     display               : grid;
     grid-template-columns : repeat(auto-fill,minmax(300px,1fr));
     grid-gap              : 5px;
-    padding               : 5px;
+    padding               : 5px 5px 0 5px;
     border-radius         : var( --border-radius-small-bottom );
 }
+.not-encrypted .notes__sections { padding-bottom: 5px; }
 .notes__sections details {
     margin : 0;
 }
@@ -415,7 +428,7 @@ details {
     --color-background-details-summary      : var( --color-plt-white );
     --color-background-details-summary-open : var( --color-plt-medium );
     --padding-details-summary               : 0 0 0 10px;
-    margin                                  : 5px;
+    margin                                  : 7px 7px 0 7px;
     background-color                        : transparent;
     border-radius                           : var( --border-radius-small );
     overflow                                : visible;
@@ -558,12 +571,8 @@ details[open] > summary button.selected i {
     height           : fit-content;
     border-radius    : var( --border-radius-small );
 }
-.note__section details summary {
-    border-radius : var( --border-radius-small-bottom );
-}
-.note__section h4:first-child {
-    margin-top: 0;
-}
+.notes__sections details section { margin: 5px 5px 0 5px }
+.notes__sections details[open] section  h4:first-child { margin-top: 0 }
 .note--double-wide {
     grid-column : auto / span 2;
 }
@@ -1043,7 +1052,7 @@ dialog.processing svg.pencil-progress {
     display : block;
     margin  : 0 0 10px 0;
 }
-#dialogSetup input {
+#dialogSetup input[type='url'] {
     display       : block;
     width         : 100%;
     height        : 38px;
@@ -1051,6 +1060,26 @@ dialog.processing svg.pencil-progress {
     margin        : 0 auto;
     border        : 1px solid var(--color-text-base);
     border-radius : var(--border-radius-small);
+}
+#scrollForm label {
+    display: grid;
+    height: 38px;
+    align-content: center;
+    align-items: center;
+    grid-template-columns: min-content max-content;
+    margin: 0;
+}
+#scrollForm input[type='radio'] {
+    min-width: 15px;
+    margin: 0 10px 0 0;
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid var(--color-text-base);
+    border-radius: 50%;
+    aspect-ratio: 1;
+}
+#scrollForm input[type='radio']:checked {
+    background-color: var(--color-plt-medium);
 }
 #dialogSetup .error {
     visibility : hidden;
@@ -1099,6 +1128,9 @@ dialog.processing svg.pencil-progress {
     }
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
+    }
+    #scrollForm label {
+        height: 44px;
     }
 }
 

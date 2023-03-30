@@ -60,7 +60,7 @@ def has_duplicate(url, directory_only):
         note = sanitize_url(note)
         note_components = note.split('.')[0].split('/')
         for note_component in note_components:
-            app.logger.info(note_component + ' | ' + user_file)
+            # app.logger.info(note_component + ' | ' + user_file)
             if note_component == user_file:
                 return True
 
@@ -80,7 +80,6 @@ def has_duplicate(url, directory_only):
                     for note_component in note_components:
                         if note_component == directory:
                             return True
-
     return False
 
 
