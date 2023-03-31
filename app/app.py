@@ -20,7 +20,18 @@ def get_notes_directories():
             for file in files:
                 if is_valid_file_type(file):
                     notes_directories.append('/' + os.path.join(root.replace(mypath, ''), file))
-    return notes_directories
+    notes_directories.sort()
+    return tuple(notes_directories)
+
+
+def get_all_names(paths):
+    all_names = []
+    for path in paths:
+        path = sanitize_url(path)
+        names = path.split('.')[0].split('/')
+        for name in names:
+            all_names.append(name)
+    return tuple(all_names)
 
 
 def get_absolute_url(url):
@@ -46,7 +57,7 @@ def is_valid_file_type(file):
 
 def has_duplicate(url, directory_only):
 
-    notes = get_notes_directories()
+    names = get_all_names(get_notes_directories())
     user_file = url.split('.')[0].split('/')[-1]
     user_directory = url.split('.')[0].split('/') if not os.path.exists(directory_only) else []
 
@@ -56,13 +67,10 @@ def has_duplicate(url, directory_only):
         return True
 
     # Files are always checked against all current directory and file names.
-    for note in notes:
-        note = sanitize_url(note)
-        note_components = note.split('.')[0].split('/')
-        for note_component in note_components:
-            # app.logger.info(note_component + ' | ' + user_file)
-            if note_component == user_file:
-                return True
+    for name in names:
+        app.logger.info(name + ' | ' + user_file)
+        if name == user_file:
+            return True
 
     # Check for duplicate directories.
     if len(user_directory) > 1:
@@ -74,12 +82,9 @@ def has_duplicate(url, directory_only):
             # Test the existence of each directory.
             if not os.path.exists(placeholder):
                 # New directories are checked against all directory and file names.
-                for note in notes:
-                    note = sanitize_url(note)
-                    note_components = note.split('.')[0].split('/')
-                    for note_component in note_components:
-                        if note_component == directory:
-                            return True
+                for name in names:
+                    if name == directory:
+                        return True
     return False
 
 
@@ -122,11 +127,9 @@ def manifest():
 @app.route('/get-dir', methods=['GET'])
 def get_dir():
     if request.method == 'GET':
-        message = {}
         try:
             notes_directories = get_notes_directories()
             if len(notes_directories) > 0:
-                notes_directories.sort()
                 return get_message("success", "200", SUCCESS_GET_DIRECTORIES, json.dumps(notes_directories)), 200
             else:
                 return get_message('error', '404', ERROR_NOTES_FOLDER_EMPTY, str(notes_directories)), 404
