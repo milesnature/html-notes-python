@@ -380,21 +380,28 @@ const dialog = {
             }
         }
     },
-    addEventListeners: (modal) => {
+    addEventListeners: (d) => {
         if (supportsTouchEvents) {
             // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-            modal.addEventListener('touchend', (e) => {
+            d.addEventListener('touchend', (e) => {
                 dialog.handleEvents(e)
             });
         } else {
-            modal.addEventListener('click', (e) => {
-                dialog.handleEvents(e)
+            d.addEventListener('click', (e) => {
+                console.log('click', e, e.target.tagName);
+                // if ( e.target.tagName === 'BUTTON' ) {
+                    dialog.handleEvents(e)
+                // }
             });
-            modal.addEventListener('keyup', (e) => {
-                dialog.handleEvents(e)
-            });
+            // modal.addEventListener('keyup', (e) => {
+            //     console.log('keyup', e, e.target.tagName);
+            //     if ( e.target.tagName !== 'BUTTON' ) {
+            //         // dialog.handleEvents(e)
+            //     }
+            // });
         }
-        modal.addEventListener('submit', (e) => {
+        d.addEventListener('submit', (e) => {
+            console.log('submit');
             e.preventDefault();
         });
         dialog.setupDocumentEvents();
