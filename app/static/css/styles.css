@@ -424,6 +424,9 @@ progress::-moz-progress-bar {
 .notes__sections details {
     margin : 0;
 }
+.notes > details {
+    margin: 5px 5px 0 5px;
+}
 details {
     --color-background-details-summary      : var( --color-plt-white );
     --color-background-details-summary-open : var( --color-plt-medium );
@@ -868,13 +871,13 @@ html.dialog {
 
 #dialogPassphrase div {
     display    : grid;
-    grid-gap   : 0;
-    padding    : 40px 30px;
+    grid-gap   : 10px;
+    padding    : 50px 40px;
     width      : var(--dialog-width-small);
     text-align : center;
 }
 #dialogPassphrase label {
-    margin     : 0 0 10px 0;
+    margin     : 0;
     text-align : left;
 }
 #dialogPassphrase input {
@@ -885,20 +888,19 @@ html.dialog {
     border-radius : var(--border-radius-small);
 }
 #dialogPassphrase .error {
-    visibility : hidden;
-    margin     : 5px 0 10px 0;
-    /*min-height : 1rem;*/
-    color      : var(--color-plt-accent-dark);
+    color       : var(--color-plt-accent-dark);
+    margin      : 0;
+    height      : 1em;
+    line-height : 1em;
+    text-align  : center;
 }
-#dialogPassphrase .error.show {
-    visibility : visible;
-}
+#dialogPassphrase .error.show {}
 #dialogPassphrase button {
     height           : 38px;
     width            : 120px;
     min-width        : 120px;
     padding          : 0 20px;
-    margin-top       : 3px;
+    margin-top       : 0;
     justify-self     : center;
     color            : var(--color-plt-white);
     background-color : var(--color-plt-medium);
@@ -1038,22 +1040,23 @@ dialog.processing svg.pencil-progress {
     background-color : transparent;
 }
 #dialogSetup fieldset {
+    /*position         : relative;*/
     display          : grid;
-    grid-gap         : 0;
+    grid-gap         : 10px;
     width            : var(--dialog-width-small);
-    padding          : 40px 30px;
+    padding          : 50px 40px;
     margin           : auto;
     border           : none;
     border-radius    : var(--border-radius-small);
     background-color : var(--color-plt-white);
-    overflow         : hidden;
+    /*overflow         : hidden;*/
 }
 #scrollForm fieldset {
-    padding: 30px;
+    padding: 40px 40px;
 }
 #dialogSetup label {
     display : block;
-    margin  : 0 0 10px 0;
+    margin  : 0;
 }
 #dialogSetup input[type='url'] {
     display       : block;
@@ -1085,13 +1088,14 @@ dialog.processing svg.pencil-progress {
     background-color: var(--color-plt-medium);
 }
 #dialogSetup .error {
-    visibility : hidden;
-    color      : var(--color-plt-accent-dark);
-    margin     : 5px 0 10px 0;
-    text-align : center;
+    color       : var(--color-plt-accent-dark);
+    margin      : 0;
+    height      : 1em;
+    line-height : 1em;
+    text-align  : center;
 }
 #dialogSetup .error.show {
-    visibility : visible;
+    /*visibility : visible;*/
 }
 #dialogSetup button {
     display          : block;

@@ -388,7 +388,6 @@ const dialog = {
             });
         } else {
             d.addEventListener('click', (e) => {
-                console.log('click', e, e.target.tagName);
                 // if ( e.target.tagName === 'BUTTON' ) {
                     dialog.handleEvents(e)
                 // }
@@ -795,13 +794,13 @@ const notes = {
     },
     insertNote : (note) => {
         try {
-            if (note && note.id && notes.fragmentNotes.querySelector('#' + note.id + ' .notes__sections')) {
-                notes.fragmentNotes.querySelector('#' + note.id + ' .notes__sections').innerHTML = storage.getStoredNote(note.id);
+            if (note && note.id && notes.fragmentNotes.querySelector('[id="' +  note.id + '"] .notes__sections')) {
+                notes.fragmentNotes.querySelector('[id="' +  note.id + '"] .notes__sections').innerHTML = storage.getStoredNote(note.id);
             } else {
                 console.error('insertNote', {
                     note,
                     'note.id': note.id,
-                    '.notes__sections': notes.fragmentNotes.querySelector('#' + note.id + ' .notes__sections')
+                    '.notes__sections': notes.fragmentNotes.querySelector('[id="' +  note.id + '"] .notes__sections')
                 });
             }
         } catch (error) {
@@ -814,13 +813,13 @@ const notes = {
         if (isStoredNoteEncrypted) {
             const decryptedNote = encryption.decrypt(storedNote);
             if (decryptedNote) {
-                notes.fragmentNotes.querySelector('#' + note.id + ' .notes__sections').innerHTML = decryptedNote;
+                notes.fragmentNotes.querySelector('[id="' +  note.id + '"] .notes__sections').innerHTML = decryptedNote;
             } else {
                 // Decryption failed.
                 notes.decryptionFailed = true;
             }
         } else {
-            notes.fragmentNotes.querySelector('#' + note.id).classList.add('not-encrypted');
+            notes.fragmentNotes.querySelector('[id="' +  note.id + '"]').classList.add('not-encrypted');
         }
     },
     decryptAllNotes : () => {
