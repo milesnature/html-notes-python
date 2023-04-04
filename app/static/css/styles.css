@@ -973,10 +973,7 @@ html.dialog {
     background-color : var(--background-color-sections);
     border-radius    : var(--border-radius-small);
 }
-dialog form svg.pencil-progress {
-    display : none;
-}
-.processing form {
+#dialogEdit.processing form {
     display          : grid;
     place-content    : center;
     place-items      : center;
@@ -986,19 +983,24 @@ dialog form svg.pencil-progress {
     background-color : var(--color-plt-white);
     border-radius    : var(--border-radius-small);
 }
-.processing form input,
-.processing form textarea {
+#dialogEdit.processing form input,
+#dialogEdit.processing form textarea {
     visibility : hidden;
-    position   : absolute;
 }
-.pencil-progress {
+#dialogEdit.processing #saveNote i {
+    display             : block;
+    width               : 38px;
+    height              : 38px;
+    margin              : auto;
+    background-image    : var( --pencil-white );
+    background-color    : transparent;
+    background-size     : 16px 16px;
+    background-position : center;
+    background-repeat   : no-repeat;
+    animation           : rotating 1.2s linear 0s infinite;
+}
+#dialogEdit.processing #saveNote span {
     display : none;
-    width   : 36px;
-    height  : 36px;
-}
-dialog.processing svg.pencil-progress {
-    display   : block;
-    animation : rotating 1.2s linear 0s infinite;
 }
 
 
@@ -1107,7 +1109,6 @@ dialog.processing svg.pencil-progress {
     color            : var(--color-plt-white);
     background-color : var(--color-plt-medium);
 }
-#dialogSetup form.processing button {}
 #dialogSetup form.processing button i {
     display             : block;
     width               : 38px;

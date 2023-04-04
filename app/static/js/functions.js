@@ -111,6 +111,7 @@ const settings = {
 
 const dialog = {
     toggleBodyDialog: (display, type, id) => {
+        console.log('toggleBodyDialog');
         if (display) {
             document.getElementsByTagName("html")[0].classList.add('dialog');
             if (type) {
@@ -272,8 +273,10 @@ const dialog = {
                     e.stopPropagation();
                     // Get ID of section to repopulate
                     refreshId = target.closest('dialog').getAttribute('data');
+                    const dialogEdit = document.getElementById('dialogEdit');
                     // Show Spinner
-                    document.querySelector('dialog').classList.add('processing');
+                    // document.querySelector('dialog').classList.add('processing');
+                    dialogEdit.classList.add('processing');
                     // Get Data. This encrypts the textarea (in the DOM) before getting data for payload.
                     form = document.querySelector('form');
                     let textareaValue = form.querySelector('textarea').value;
@@ -1019,15 +1022,15 @@ navbar.setupEvents();
 footer.setupEvents();
 settings.init();
 
-if ('serviceWorker' in navigator) {
-    // Wait for the 'load' event to not block other work
-    window.addEventListener('load', async () => {
-        // Try to register the service worker.
-        try {
-            const reg = await navigator.serviceWorker.register('/service-worker.js');
-            // console.log('Service worker registered! 😎', reg);
-        } catch (err) {
-            // console.log('😥 Service worker registration failed: ', err);
-        }
-    });
-}
+// if ('serviceWorker' in navigator) {
+//     // Wait for the 'load' event to not block other work
+//     window.addEventListener('load', async () => {
+//         // Try to register the service worker.
+//         try {
+//             const reg = await navigator.serviceWorker.register('/service-worker.js');
+//             // console.log('Service worker registered! 😎', reg);
+//         } catch (err) {
+//             // console.log('😥 Service worker registration failed: ', err);
+//         }
+//     });
+// }

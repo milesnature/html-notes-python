@@ -76,7 +76,6 @@
               <input type="hidden" name="url" value="">
               <label for="dialogEditTextArea" id="dialogEditDesc" class="visually-hidden">Edit file contents</label>
               <textarea id="dialogEditTextArea" name="content"></textarea>
-              <svg class="pencil-progress"><use href="#pencil-progress"></use></svg>
             </form>
             <nav>
               <button id="copyToClipboardSection" title="Copy section to clipboard" type="button">section</button>
@@ -84,7 +83,7 @@
               <button id="copyToClipboardListItemCode" title="Copy li + code to clipboard" type="button">code</button>
               <button id="copyToClipboardListItemBookmark" title="Copy li + a to clipboard" type="button">a</button>
               <button id="copyToClipboardTimeStamp" title="Copy timestamp to clipboard" type="button">time</button>
-              <button id="saveNote" title="Save" type="button">Save</button>
+              <button id="saveNote" title="Save" type="button"><i></i><span>Save</span></button>
             </nav>
           </dialog>
         </template>
@@ -124,21 +123,6 @@
         <script src="static/js/crypto.js"></script>
         <script src="static/js/config.js"></script>
         <script src="static/js/functions.js"></script>
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
-          <symbol id="pencil-progress" width='36px' height='36px' viewBox='0 0 46 46' xmlns='http://www.w3.org/2000/svg'>
-            <defs>
-              <polygon id="pencil-progress-path-1" points="4 0 12 8 0 12"></polygon>
-              <polygon id="pencil-progress-path-3" points="38 -34 46 -26 14 6 6 -2"></polygon>
-            </defs>
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g transform="translate(0.000000, 34.000000)">
-                <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-1"></use>
-                <use fill="#1F4068" fill-rule="nonzero" href="#pencil-progress-path-3"></use>
-              </g>
-            </g>
-          </symbol>
-        </svg>
 
     </body>
 
