@@ -6,7 +6,7 @@ import re
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-notesdir = 'static/notes/'
+notes_dir = 'static/notes/'
 
 
 def get_message(status='success', code='200', message='', data=''):
@@ -15,12 +15,12 @@ def get_message(status='success', code='200', message='', data=''):
 
 def get_notes_directories():
     notes_directories = []
-    mypath = os.path.join(basedir, notesdir)
-    if os.path.exists(mypath):
-        for root, dirs, files in os.walk(mypath):
+    my_path = os.path.join(basedir, notes_dir)
+    if os.path.exists(my_path):
+        for root, dirs, files in os.walk(my_path):
             for file in files:
                 if is_valid_file(file):
-                    notes_directories.append('/' + os.path.join(root.replace(mypath, ''), file))
+                    notes_directories.append('/' + os.path.join(root.replace(my_path, ''), file))
     notes_directories.sort()
     app.logger.debug(f'get_notes_directories() → {{ notes_directories: "{str(notes_directories)}" }}')
     return tuple(notes_directories)
@@ -38,7 +38,7 @@ def get_all_names(paths):
 
 
 def get_absolute_url(url):
-    absolute_url = os.path.join(basedir, notesdir + url)
+    absolute_url = os.path.join(basedir, notes_dir + url)
     app.logger.debug(f'get_absolute_url() → {{ url: "{url}", absolute_url: "{absolute_url}" }}')
     return absolute_url
 
@@ -70,7 +70,7 @@ def remove_preceding_slash(url):
 
 def get_directory_only(url):
     dirlist = url.split('/')
-    directory_only = os.path.join(basedir, notesdir + '/'.join(map(str, dirlist[:-1])))
+    directory_only = os.path.join(basedir, notes_dir + '/'.join(map(str, dirlist[:-1])))
     app.logger.debug(f'get_directory_only() → {{ url: "{url}", directory_only: "{directory_only}" }}')
     return directory_only
 

@@ -143,7 +143,7 @@ const dialog = {
         }
     },
     setupDocumentEvents: () => {
-        document.addEventListener('keyup', (e) => {
+        document.addEventListener('keydown', (e) => {
             dialog.handleDocumentEvents(e)
         });
     },
@@ -261,7 +261,7 @@ const dialog = {
         }
         if (e.repeat || btn && key) {
             return
-        } // Enter key fires click and keyup on buttons. This prevents duplicate processing.
+        } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
         if (btn && btn.className === 'close') {
             e.preventDefault();
             dialog.removeDialog();
@@ -310,11 +310,13 @@ const dialog = {
                     break;
                 case 'createNote':
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     e.stopPropagation();
                     dialog.handleEventsCreate();
                     break;
                 case 'createNoteInput':
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     e.stopPropagation();
                     if (key === "Enter") {
                         dialog.handleEventsCreate();
@@ -322,11 +324,13 @@ const dialog = {
                     break;
                 case 'deleteNote':
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     e.stopPropagation();
                     dialog.handleEventsDelete();
                     break;
                 case 'deleteNoteInput':
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     e.stopPropagation();
                     if (key === "Enter") {
                         dialog.handleEventsDelete();
@@ -359,11 +363,13 @@ const dialog = {
                     break;
                 case 'submitPassphrase':
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     e.stopPropagation();
                     dialog.handleEventsPassphrase();
                     break;
                 case 'passphrase':
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     e.stopPropagation();
                     if (key === "Enter") {
                         dialog.handleEventsPassphrase();
@@ -388,19 +394,14 @@ const dialog = {
             });
         } else {
             d.addEventListener('click', (e) => {
-                // if ( e.target.tagName === 'BUTTON' ) {
-                    dialog.handleEvents(e)
-                // }
+                dialog.handleEvents(e)
             });
-            // modal.addEventListener('keyup', (e) => {
-            //     console.log('keyup', e, e.target.tagName);
-            //     if ( e.target.tagName !== 'BUTTON' ) {
-            //         // dialog.handleEvents(e)
-            //     }
-            // });
+            d.addEventListener('keydown', (e) => {
+                if (e.repeat) { return }
+                dialog.handleEvents(e)
+            });
         }
         d.addEventListener('submit', (e) => {
-            console.log('submit');
             e.preventDefault();
         });
         dialog.setupDocumentEvents();
