@@ -1,21 +1,20 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, make_response
 import os
 import shutil
 import json
 import re
+from app.py.config import config
+from app.py.return_messaging import *
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-notes_dir = 'static/notes/'
 
-
-def get_message(status='success', code='200', message='', data=''):
-    return {'status': status, 'code': code, 'message': message, 'data': data}
+# METHODS
 
 
 def get_notes_directories():
     notes_directories = []
-    my_path = os.path.join(basedir, notes_dir)
+    my_path = os.path.join(basedir, config['notes_dir'])
     if os.path.exists(my_path):
         for root, dirs, files in os.walk(my_path):
             for file in files:
@@ -38,7 +37,7 @@ def get_all_names(paths):
 
 
 def get_absolute_url(url):
-    absolute_url = os.path.join(basedir, notes_dir + url)
+    absolute_url = os.path.join(basedir, config['notes_dir'] + url)
     app.logger.debug(f'get_absolute_url() → {{ url: "{url}", absolute_url: "{absolute_url}" }}')
     return absolute_url
 
@@ -70,7 +69,7 @@ def remove_preceding_slash(url):
 
 def get_directory_only(url):
     dirlist = url.split('/')
-    directory_only = os.path.join(basedir, notes_dir + '/'.join(map(str, dirlist[:-1])))
+    directory_only = os.path.join(basedir, config['notes_dir'] + '/'.join(map(str, dirlist[:-1])))
     app.logger.debug(f'get_directory_only() → {{ url: "{url}", directory_only: "{directory_only}" }}')
     return directory_only
 
@@ -181,29 +180,18 @@ def is_missing(data):
     return data is None
 
 
-ERROR_INVALID_FILE_TYPE = 'Only .html and .txt files are permitted.'
-ERROR_INVALID_NAME = 'File and folder names must start with a letter.'
-ERROR_INVALID_URL = 'Valid characters include ( <strong>A-Z a-z 0-9 . _ -</strong> ).'
-ERROR_INPUT_IS_MISSING = 'Please enter a relative path and file name.'
-ERROR_DELETE_INPUT_IS_MISSING = 'Please enter a relative path to a file or folder.'
-ERROR_DELETE_ENTIRE_NOTES_FOLDER = 'This would delete the entire notes folder.'
-ERROR_NOTES_FOLDER_EMPTY = 'This notes folder is missing, empty, or contains the wrong file types.'
-ERROR_FILE_DOES_NOT_EXIST = 'File does not exist.'
-ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST = 'The file or folder does not exist.'
-ERROR_DUPLICATE_FILES_NOT_PERMITTED = 'Duplicate. All file and folder names must be unique.'
-ERROR_STRING_IS_OUT_OF_RANGE = 'string index out of range'
-ERROR_UNKNOWN = 'Unknown error.'
-
-SUCCESS_GET_DIRECTORIES = 'The notes folders and files were successfully retrieved.'
-SUCCESS_SAVED = 'Your note was saved.'
-SUCCESS_NOTE_CREATED = 'Your note was created.'
-SUCCESS_NOTE_DELETED = 'Your note was deleted.'
-SUCCESS_DIRECTORY_AND_NOTES_DELETED = 'Your folder and all of its contents were deleted.'
-
+# ROUTES
 
 @app.route('/')
 def notes_document():
     return app.send_static_file('index.html')
+
+
+@app.route('/config.js')
+def notes_config():
+    r = make_response(render_template('config.js', notes_dir=config['notes_dir'], is_demo=json.dumps(config['is_demo']), use_encryption=json.dumps(config['use_encryption'])))
+    r.headers.set('content-type', 'application/javascript')
+    return r
 
 
 @app.route('/service-worker.js', methods=['GET'])
@@ -242,8 +230,11 @@ def save_note():
                 return get_message('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
             file = os.path.join(basedir, url)
             if os.path.exists(file):
-                with open(file, 'w') as note:
-                    note.write(content)
+                if not config['is_demo']:
+                    with open(file, 'w') as note:
+                        note.write(content)
+                        return get_message('success', '200', SUCCESS_SAVED), 200
+                else:
                     return get_message('success', '200', SUCCESS_SAVED), 200
             else:
                 return get_message('error', '400', ERROR_FILE_DOES_NOT_EXIST, str(url)), 400
@@ -270,12 +261,15 @@ def create_note():
                 return get_message('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
             if has_duplicate(url, directory_only):
                 return get_message('error', '400', ERROR_DUPLICATE_FILES_NOT_PERMITTED, str(url)), 400
-            if not os.path.exists(directory_only):
-                os.makedirs(directory_only)
-            if not os.path.exists(absolute_url):
-                with open(absolute_url, 'w') as f:
-                    f.write('<section class="bkm__section">\n  <ul>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n  </ul>\n</section>\n<section class="note__section">\n  <h3></h3>\n    <ul>\n      <li></li>\n      <li></li>\n      <li></li>\n    </ul>\n</section>')
-                    return get_message('success', '200', SUCCESS_NOTE_CREATED), 200
+            if not config['is_demo']:
+                if not os.path.exists(directory_only):
+                    os.makedirs(directory_only)
+                if not os.path.exists(absolute_url):
+                    with open(absolute_url, 'w') as f:
+                        f.write('<section class="bkm__section">\n  <ul>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n    <li><a href="" target="_blank" rel="noreferrer"></a></li>\n  </ul>\n</section>\n<section class="note__section">\n  <h3></h3>\n    <ul>\n      <li></li>\n      <li></li>\n      <li></li>\n    </ul>\n</section>')
+                        return get_message('success', '200', SUCCESS_NOTE_CREATED), 200
+            else:
+                return get_message('success', '200', SUCCESS_NOTE_CREATED), 200
         except Exception as e:
             return get_message('error', '500', ERROR_UNKNOWN, str(e)), 500
 
@@ -294,15 +288,18 @@ def delete_note():
             if not has_valid_names(url):
                 return get_message('error', '400', ERROR_INVALID_NAME, str(url)), 415
             if len(url) > 0:
-                absolute_url = get_absolute_url(url)
-                if os.path.exists(absolute_url) and os.path.isdir(absolute_url):
-                    shutil.rmtree(absolute_url)
-                    return get_message('success', '200', SUCCESS_DIRECTORY_AND_NOTES_DELETED), 200
-                elif os.path.exists(absolute_url) and os.path.isfile(absolute_url) and is_valid_file(absolute_url):
-                    os.remove(absolute_url)
-                    return get_message('success', '200', SUCCESS_NOTE_DELETED), 200
+                if not config['is_demo']:
+                    absolute_url = get_absolute_url(url)
+                    if os.path.exists(absolute_url) and os.path.isdir(absolute_url):
+                        shutil.rmtree(absolute_url)
+                        return get_message('success', '200', SUCCESS_DIRECTORY_AND_NOTES_DELETED), 200
+                    elif os.path.exists(absolute_url) and os.path.isfile(absolute_url) and is_valid_file(absolute_url):
+                        os.remove(absolute_url)
+                        return get_message('success', '200', SUCCESS_NOTE_DELETED), 200
+                    else:
+                        return get_message('error', '400', ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST, f'{url}, {absolute_url}'), 415
                 else:
-                    return get_message('error', '400', ERROR_FILE_OR_DIRECTORY_DOES_NOT_EXIST, f'{url}, {absolute_url}'), 415
+                    return get_message('success', '200', SUCCESS_NOTE_DELETED), 200
             else:
                 return get_message('error', '500', ERROR_DELETE_ENTIRE_NOTES_FOLDER, str(url)), 500
         except Exception as e:

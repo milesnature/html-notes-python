@@ -790,7 +790,7 @@ html.hidden .controller {
 /* START FOOTER */
 
 footer {
-    padding    : 0 5px;
+    padding    : 0 5px 12px 5px;
     margin     : 0 auto;
     width      : clamp(250px, 100%, 1400px);
     text-align : center;
@@ -800,12 +800,13 @@ footer button {
     height              : 44px;
     padding             : 5px;
     background-color    : var(--color-gs-lt-83);
-    background-image    : var( --pencil-black );
+    background-image    : var(--pencil-black);
     background-size     : 16px 16px;
     background-position : center;
     background-repeat   : no-repeat;
     font-size           : 1em;
-    border-radius       : var(--border-radius-small);
+    border-radius       : 50%;
+    /*box-shadow          : 0 0 7px -2px var(--color-gs-lt-13);*/
 }
 @media ( hover: hover ) {
     footer button:hover {

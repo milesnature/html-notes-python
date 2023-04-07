@@ -121,7 +121,7 @@ Some things, like the local storage of notes, are ongoing experiments.
     ➜ source venv/bin/activate
     ➜ pip install Flask
     ➜ deactivate
-    ➜ venv/bin/python app/app.py
+    ➜ env FLASK_APP=app/app.py ../venv/bin/python -m flask run
 
 [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
