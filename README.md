@@ -123,7 +123,11 @@ Some things, like the local storage of notes, are ongoing experiments.
     ➜ deactivate
     ➜ env FLASK_APP=app/app.py venv/bin/python -m flask run
 
-[http://127.0.0.1:5000](http://127.0.0.1:5000)
+[http://127.0.0.1:5000](http://127.0.0.1:5000) 
+
+### Passphrase
+
+The app will immediately prompt you for a passphrase by default (see config). It's worth taking the time to generate a strong passphrase and to store it in a safe place before proceeding. Once a note is saved (and encrypted), it becomes permanent and cannot be changed.
 
 ## What inspired this specific implementation?
 
