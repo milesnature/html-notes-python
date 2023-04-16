@@ -7,14 +7,14 @@ from app.py.config import config
 from app.py.return_messaging import *
 
 app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = str(os.path.abspath(os.path.dirname(__file__)))
 
 # METHODS
 
 
 def get_notes_directories():
     notes_directories = []
-    my_path = str(os.path.join(basedir, config['notes_dir']))
+    my_path = os.path.join(basedir, config['notes_dir'])
     if os.path.exists(my_path):
         for root, dirs, files in os.walk(my_path):
             for file in files:
