@@ -1089,6 +1089,7 @@ html.dialog {
     height                : 38px;
     margin                : 0;
     font-size             : 1rem;
+    font-weight           : normal;
 }
 #scrollForm input[type='radio'] {
     min-width: 15px;
