@@ -872,12 +872,13 @@ html.dialog {
 
 #dialogPassphrase div {
     display               : grid;
-    grid-template-columns : max-content 1fr;
+    grid-template-columns : min-content 1fr;
     grid-gap              : 10px;
     padding               : 40px 40px;
     width                 : var(--dialog-width-small);
 }
 #dialogPassphrase label {
+    display     : block;
     margin      : 0;
     text-align  : left;
     line-height : 1.2rem;
@@ -887,7 +888,7 @@ html.dialog {
     height        : 38px;
     width         : 100%;
     padding       : 10px;
-    margin-bottom : 3px;
+    margin        : 0 0 5px 0;
     border        : 1px solid var(--color-text-base);
     border-radius : var(--border-radius-small);
     grid-column   : 1 / 3;
@@ -1045,7 +1046,7 @@ html.dialog {
 }
 #dialogSetup fieldset {
     display               : grid;
-    grid-template-columns : max-content 1fr;
+    grid-template-columns : min-content 1fr;
     grid-gap              : 10px;
     width                 : var(--dialog-width-small);
     padding               : 40px 40px;
@@ -1076,7 +1077,7 @@ html.dialog {
     width         : 100%;
     height        : 38px;
     padding       : 10px;
-    margin        : 0 auto 3px 0;
+    margin        : 0 0 5px 0;
     border        : 1px solid var(--color-text-base);
     border-radius : var(--border-radius-small);
     grid-column   : 1 / 3;
