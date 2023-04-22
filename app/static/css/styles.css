@@ -895,7 +895,7 @@ html.dialog {
 }
 #dialogPassphrase .error {
     color       : var(--color-plt-accent-dark);
-    margin      : 0;
+    margin      : 0 0 0 3px;
     line-height : 1.2em;
 }
 #dialogPassphrase .error.show {}
@@ -1107,7 +1107,7 @@ html.dialog {
 }
 #dialogSetup .error {
     color       : var(--color-plt-accent-dark);
-    margin      : 0;
+    margin      : 0 0 0 3px;
     line-height : 1.2em;
 }
 #dialogSetup .error.show {
