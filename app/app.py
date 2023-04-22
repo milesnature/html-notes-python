@@ -3,14 +3,12 @@ import os
 import shutil
 import json
 from app.config import config
-from app.return_messaging import *
+from app.messaging import *
 import app.utilities as utility
 import app.validation as validation
 
 app = Flask(__name__)
 base_dir = utility.get_base_dir()
-
-# ROUTES
 
 
 @app.route('/')
