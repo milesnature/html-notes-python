@@ -5,10 +5,10 @@ import json
 from app.config import config
 from app.messaging import *
 import app.utilities as utility
-import app.validation as validation
+import app.validation as validate
 
 app = Flask(__name__)
-base_dir = utility.get_base_dir()
+base_dir = utility.base_dir
 
 
 @app.route('/')
@@ -55,7 +55,7 @@ def save_note():
             app.logger.debug(f'save_note() → {{ url: "{url}", content: "{content}" }}')
             if not any([url, content]):
                 return get_message('error', '500', ERROR_INPUT_IS_MISSING, str(url)), 500
-            if not validation.is_valid_file(url):
+            if not validate.is_valid_file(url):
                 return get_message('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
             file = os.path.join(base_dir, url)
             if os.path.exists(file):
@@ -79,16 +79,16 @@ def create_note():
             app.logger.debug(f'create-note() → {{ url: "{url}", len(url): "{len(url)}" }}')
             if not len(url) > 0:
                 return get_message('error', '500', ERROR_INPUT_IS_MISSING, str(url)), 500
-            if not validation.is_valid_url(url):
+            if not validate.is_valid_url(url):
                 return get_message('error', '400', ERROR_INVALID_URL, str(url)), 415
-            if not validation.has_valid_names(url):
+            if not validate.has_valid_names(url):
                 return get_message('error', '400', ERROR_INVALID_NAME, str(url)), 415
             url = utility.remove_preceding_slash(url)
             absolute_url = utility.get_absolute_url(url)
             directory_only = utility.get_directory_only(url)
-            if not validation.is_valid_file(url):
+            if not validate.is_valid_file(url):
                 return get_message('error', '400', ERROR_INVALID_FILE_TYPE, str(url)), 415
-            if validation.has_duplicate(url, directory_only):
+            if validate.has_duplicate(url, directory_only):
                 return get_message('error', '400', ERROR_DUPLICATE_FILES_NOT_PERMITTED, str(url)), 400
             if not config['is_demo']:
                 if not os.path.exists(directory_only):
@@ -112,9 +112,9 @@ def delete_note():
             if not len(url) > 0:
                 return get_message('error', '500', ERROR_DELETE_INPUT_IS_MISSING, str(url)), 500
             url = utility.remove_preceding_slash(url)
-            if not validation.is_valid_url(url):
+            if not validate.is_valid_url(url):
                 return get_message('error', '400', ERROR_INVALID_URL, str(url)), 415
-            if not validation.has_valid_names(url):
+            if not validate.has_valid_names(url):
                 return get_message('error', '400', ERROR_INVALID_NAME, str(url)), 415
             if len(url) > 0:
                 if not config['is_demo']:
@@ -122,7 +122,7 @@ def delete_note():
                     if os.path.exists(absolute_url) and os.path.isdir(absolute_url):
                         shutil.rmtree(absolute_url)
                         return get_message('success', '200', SUCCESS_DIRECTORY_AND_NOTES_DELETED), 200
-                    elif os.path.exists(absolute_url) and os.path.isfile(absolute_url) and validation.is_valid_file(absolute_url):
+                    elif os.path.exists(absolute_url) and os.path.isfile(absolute_url) and validate.is_valid_file(absolute_url):
                         os.remove(absolute_url)
                         return get_message('success', '200', SUCCESS_NOTE_DELETED), 200
                     else:
