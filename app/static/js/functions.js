@@ -110,8 +110,8 @@ const settings = {
 }
 
 const dialog = {
+
     toggleBodyDialog: (display, type, id) => {
-        console.log('toggleBodyDialog');
         if (display) {
             document.getElementsByTagName("html")[0].classList.add('dialog');
             if (type) {
@@ -130,34 +130,9 @@ const dialog = {
     },
     removeDialog: () => {
         if (document.getElementById('dialogEdit')) {
-            dialog.removeEdit();
+            dialog.edit.remove();
         } else if (document.getElementById('dialogSetup')) {
-            dialog.removeSetup();
-        }
-    },
-    handleDocumentEvents: (e) => {
-        const key = e.key;
-        if (key === "Escape") {
-            e.preventDefault();
-            dialog.removeDialog();
-            main.removeSelectedClass();
-        }
-    },
-    setupDocumentEvents: () => {
-        document.addEventListener('keydown', (e) => {
-            dialog.handleDocumentEvents(e)
-        });
-    },
-    handlePassphrase: (value) => {
-        if (value) {
-            storage.setPassphrase(value);
-            dialog.removePassphrase();
-            if (notes.downloadComplete) {
-                notes.decryptAllNotes();
-                notes.appendNotesToMain();
-            } else {
-                dialog.insertProgressBar();
-            }
+            dialog.setup.remove();
         }
     },
     refreshNotes: () => {
@@ -165,337 +140,475 @@ const dialog = {
         notes.clearMainNotes();
         notes.init();
     },
-    handleEventsPassphrase: () => {
-        const input = document.querySelector('#dialogPassphrase input');
-        const error = document.querySelector('#dialogPassphrase .error');
-        if (input.value) {
-            error.innerHTML = '';
-            error.classList.remove('show');
-            dialog.handlePassphrase(input.value);
-        } else {
-            error.innerHTML = 'Please renter your passphrase.';
-            error.classList.add('show');
-            input.focus();
+    handleDocumentEvents: (e) => {
+        const key = e.key;
+        const btn = e.target.closest('button');
+        if (e.repeat || btn && key) {
+            // Enter key fires click and keydown on buttons. This prevents duplicate processing.
+            return;
+        }
+        const removeDialog = () => {
+            e.preventDefault();
+            e.stopPropagation();
+            dialog.removeDialog();
+        }
+        if (key === "Escape") {
+            removeDialog();
+        } else if (btn && btn.className === 'close' && !key) {
+            removeDialog();
         }
     },
-    handleEventsCreate: () => {
-        const data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
-        const createForm = document.querySelector('#createForm');
-        const createFormInput = createForm.querySelector('#createForm input');
-        const createFormError = createForm.querySelector('#createForm .error');
-        if (!createForm.classList.contains('processing')) {
-            (async () => {
-                let response = {};
-                try {
-                    createForm.classList.add('processing');
-                    createFormError.innerHTML = '';
-                    createFormError.classList.remove('show');
-                    response = await createNote(data);
-                    const code = parseInt(response.code);
-                    if (code === 200) {
-                        dialog.refreshNotes();
-                        dialog.removeSetup();
-                    } else if (code > 200) {
-                        createForm.classList.remove('processing');
-                        createFormError.innerHTML = response.message;
+    setupDocumentEvents: () => {
+        document.addEventListener('keydown', (e) => {
+            dialog.handleDocumentEvents(e);
+        });
+        document.addEventListener('click', (e) => {
+            dialog.handleDocumentEvents(e)
+        });
+    },
+
+    progress: {
+        insert: () => {
+            const templateProgressBar = document.getElementById('templateDialogProgressBar');
+            const fragment = templateProgressBar.content.cloneNode(true);
+            dialog.toggleBodyDialog(true);
+            document.body.prepend(fragment);
+            document.getElementById('dialogProgressBar').open = true;
+        },
+        remove: () => {
+            document.getElementById('dialogProgressBar').remove();
+            dialog.toggleBodyDialog(false);
+        },
+    },
+
+    passphrase : {
+        setPassphrase: (value) => {
+            if (value) {
+                storage.setPassphrase(value);
+                dialog.passphrase.remove();
+                if (notes.downloadComplete) {
+                    notes.decryptAllNotes();
+                    notes.appendNotesToMain();
+                } else {
+                    dialog.progress.insert();
+                }
+            }
+        },
+        handleEventsPassphrase: (e) => {
+            const target = e.target;
+            const btn = target.closest('button');
+            const key = e.key;
+            const id = (target.id) ? target.id : '';
+            if (e.repeat || btn && key) {
+                return
+            } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
+            if (key === "Enter" || (btn && !key)) {
+                const input = document.querySelector('#dialogPassphrase input');
+                const error = document.querySelector('#dialogPassphrase .error');
+                const action = (v) => {
+                    if (v) {
+                        error.innerHTML = '';
+                        error.classList.remove('show');
+                        dialog.passphrase.setPassphrase(v);
+                    } else {
+                        error.innerHTML = 'Please renter your passphrase.';
+                        error.classList.add('show');
+                        input.focus();
+                    }
+                }
+                switch (id) {
+                    case 'submitPassphrase':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        action(input.value);
+                        break;
+                    case 'passphrase':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        if (key === "Enter") {
+                            action(input.value);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        },
+        addEventListeners: (d) => {
+            if (supportsTouchEvents) {
+                // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
+                d.addEventListener('touchend', (e) => {
+                    dialog.passphrase.handleEventsPassphrase(e)
+                });
+            } else {
+                d.addEventListener('click', (e) => {
+                    dialog.passphrase.handleEventsPassphrase(e)
+                });
+                d.addEventListener('keydown', (e) => {
+                    if (e.repeat) { return }
+                    dialog.passphrase.handleEventsPassphrase(e)
+                });
+            }
+            d.addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
+        },
+        insert: (err) => {
+            notes.clearMainNotes();
+            const templateDialogPassphrase = document.getElementById('templateDialogPassphrase');
+            const fragment = templateDialogPassphrase.content.cloneNode(true);
+            const d = fragment.querySelector('dialog');
+            dialog.passphrase.addEventListeners(d);
+            dialog.toggleBodyDialog(true);
+            document.body.prepend(fragment);
+            document.querySelector('#dialogPassphrase input').focus();
+            if (err) {
+                const error = document.querySelector('#dialogPassphrase .error');
+                error.innerHTML = 'Please renter your passphrase.';
+                error.classList.add('show');
+            }
+        },
+        remove: () => {
+            document.getElementById('dialogPassphrase').remove();
+            dialog.toggleBodyDialog(false);
+        }
+    },
+
+    edit : {
+        insert: (content, dir, id, title, lastModified) => {
+            if (!document.getElementById('dialogEdit')) {
+                const templateDialogEdit = document.getElementById('templateDialogEdit');
+                let fragment = templateDialogEdit.content.cloneNode(true);
+                let d = fragment.querySelector('dialog');
+                d.setAttribute('data', id);
+                if (content) {
+                    let textarea = d.querySelector('#dialogEditTextArea');
+                    if (encryption.isEncrypted(content)) {
+                        content = encryption.decrypt(content);
+                    }
+                    textarea.appendChild(document.createTextNode(content));
+                }
+                let h2 = d.querySelector('h2');
+                h2.replaceChild(document.createTextNode(title.replace('-', ' ')), h2.childNodes[0]);
+                let time = d.querySelector('time');
+                const lastModifiedDate = (new Date(lastModified).toLocaleString() !== 'Invalid Date') ? new Date(lastModified).toLocaleString('en-US', {
+                    dateStyle: 'medium',
+                    timeStyle: 'medium'
+                }) : '';
+                time.appendChild(document.createTextNode(lastModifiedDate));
+                d.querySelector('input[name="url"]').value = dir;
+                dialog.edit.addEventListeners(d);
+                dialog.toggleBodyDialog(true, 'edit');
+                document.body.prepend(fragment);
+                window.scrollTo(0, 0);
+                const eventFocus = new Event('focus');
+                d.querySelector('#dialogEdit textarea').focus();
+                d.querySelector('#dialogEdit textarea').dispatchEvent(eventFocus);
+            }
+        },
+        remove: (id) => {
+            document.getElementById('dialogEdit').remove();
+            main.removeSelectedClass();
+            dialog.toggleBodyDialog(false, 'edit', id);
+        },
+        handleEvents: (e) => {
+            const type = e.type;
+            const target = e.target;
+            const tag = target.tagName;
+            const btn = target.closest('button');
+            const key = e.key;
+            let id;
+            let refreshId;
+            let form;
+            let data;
+            if ( btn && btn.id ) {
+                id = btn.id; }
+            else if ( type === 'change' && tag === 'SELECT') {
+                id = target[target.selectedIndex].id
+            }
+            console.log('handleEventsEdit()', { e, target, id, type, key });
+            if ((btn && !key) || (key && key === 'Enter')) {
+                switch (id) {
+                    case 'saveNote':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Get ID of section to repopulate
+                        refreshId = target.closest('dialog').getAttribute('data');
+                        const dialogEdit = document.getElementById('dialogEdit');
+                        // Show Spinner
+                        // document.querySelector('dialog').classList.add('processing');
+                        dialogEdit.classList.add('processing');
+                        // Get Data. This encrypts the textarea (in the DOM) before getting data for payload.
+                        form = document.querySelector('form');
+                        let textareaValue = form.querySelector('textarea').value;
+                        let textareaValueEncrypted = textareaValue;
+                        if (!encryption.isEncrypted(textareaValue) && useEncryption) {
+                            textareaValueEncrypted = encryption.encrypt(textareaValue);
+                            form.querySelector('textarea').value = textareaValueEncrypted;
+                        }
+                        data = new FormData(document.querySelector('form')); // Use Array.from(data) to view FormData which appears empty.
+                        (async () => {
+                            try {
+                                let response = await saveNote(data);
+                                const code = parseInt(response.code);
+                                if (code === 200) {
+                                    storage.storeNote(id, textareaValueEncrypted);
+                                    if (!isDemo && useEncryption) {
+                                        document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = encryption.decrypt(storage.getStoredNote(id));
+                                    } else {
+                                        document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = textareaValue;
+                                    }
+                                    const updatedElement = document.getElementById(refreshId);
+                                    updatedElement.open = true;
+                                    if (useEncryption) {
+                                        updatedElement.classList.remove('not-encrypted');
+                                    }
+                                    dialog.edit.remove(refreshId);
+                                } else if (code > 200) {
+                                    console.error(response);
+                                }
+                            } catch (e) {
+                                console.error(e);
+                            }
+                        })();
+                        break;
+                    case 'snippetsButton':
+                        const snippets = document.getElementById('copyToClipboardSnippets');
+                        console.log('handleEventsEdit() #snippetsButton', { e, target, id, type, snippets });
+                        if ( snippets.classList.contains('show') ) {
+                            snippets.classList.remove('show');
+                        } else {
+                            snippets.classList.add('show');
+                        }
+                        break;
+                    case 'copyToClipboardSection':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard(dialog.section);
+                        break;
+                    case 'copyToClipboardListItem':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard(dialog.listItem);
+                        break;
+                    case 'copyToClipboardListItemCode':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard(dialog.listItemCode);
+                        break;
+                    case 'copyToClipboardListItemBookmark':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard(dialog.listItemBookmark);
+                        break;
+                    case 'copyToClipboardTimeStamp':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard(dialog.timeStamp);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        },
+        addEventListeners: (d) => {
+            if (supportsTouchEvents) {
+                // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
+                d.addEventListener('touchend', (e) => {
+                    dialog.edit.handleEvents(e)
+                });
+            } else {
+                d.addEventListener('click', (e) => {
+                    dialog.edit.handleEvents(e)
+                });
+                d.addEventListener('keydown', (e) => {
+                    if (e.repeat) { return }
+                    dialog.edit.handleEvents(e)
+                });
+            }
+            d.addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
+        }
+    },
+
+    setup: {
+        insert: () => {
+            if (!document.getElementById('dialogEdit')) {
+                const templateDialogSetup = document.getElementById('templateDialogSetup');
+                let fragment = templateDialogSetup.content.cloneNode(true);
+                let d = fragment.querySelector('dialog');
+                dialog.setup.addEventListeners(d);
+                dialog.toggleBodyDialog(true, 'setup');
+                document.body.prepend(fragment);
+                window.scrollTo(0, 0);
+                d.querySelector('input').focus();
+                if ( settings.isScrollSnapTrue() ) {
+                    document.getElementById('scrollSnap').checked = 'checked';
+                } else {
+                    document.getElementById('scrollDefault').checked = 'checked';
+                }
+            }
+        },
+        remove: () => {
+            document.getElementById('dialogSetup').remove();
+            dialog.toggleBodyDialog(false, 'setup');
+        },
+        handleEvents: (e) => {
+            const target = e.target;
+            const btn = target.closest('button');
+            const label = target.closest('label');
+            const key = e.key;
+            let id;
+            if (target.id) {
+                id = target.id;
+            } else if (btn && btn.id) {
+                id = btn.id;
+            } else if (label && label.id) {
+                id = label.id;
+            }
+            if (e.repeat || btn && key) {
+                return
+            } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
+            if (!key || key === "Enter" || (btn && !key) || (e.type === 'change' && target === 'select')) {
+                switch (id) {
+                    case 'createNote':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        dialog.create.handleEvents();
+                        break;
+                    case 'createNoteInput':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        if (key === "Enter") {
+                            dialog.create.handleEvents();
+                        }
+                        break;
+                    case 'deleteNote':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        dialog.delete.handleEvents();
+                        break;
+                    case 'deleteNoteInput':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        if (key === "Enter") {
+                            dialog.delete.handleEvents();
+                        }
+                        break;
+                    case 'scrollSnapLabel':
+                        settings.enableScrollSnap();
+                        break;
+                    case 'scrollDefaultLabel':
+                        settings.disableScrollSnap();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        },
+        addEventListeners: (d) => {
+            if (supportsTouchEvents) {
+                // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
+                d.addEventListener('touchend', (e) => {
+                    dialog.setup.handleEvents(e)
+                });
+            } else {
+                d.addEventListener('click', (e) => {
+                    dialog.setup.handleEvents(e)
+                });
+                d.addEventListener('keydown', (e) => {
+                    if (e.repeat) { return }
+                    dialog.setup.handleEvents(e)
+                });
+                d.addEventListener('change', (e) => {
+                    dialog.setup.handleEvents(e)
+                });
+            }
+            d.addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
+        }
+    },
+
+    create : {
+        handleEvents: () => {
+            const data = new FormData(document.getElementById('createForm')); // Use Array.from(data) to view FormData which appears empty.
+            const createForm = document.querySelector('#createForm');
+            const createFormInput = createForm.querySelector('#createForm input');
+            const createFormError = createForm.querySelector('#createForm .error');
+            if (!createForm.classList.contains('processing')) {
+                (async () => {
+                    let response = {};
+                    try {
+                        createForm.classList.add('processing');
+                        createFormError.innerHTML = '';
+                        createFormError.classList.remove('show');
+                        response = await createNote(data);
+                        const code = parseInt(response.code);
+                        if (code === 200) {
+                            dialog.refreshNotes();
+                            dialog.setup.remove();
+                        } else if (code > 200) {
+                            createForm.classList.remove('processing');
+                            createFormError.innerHTML = response.message;
+                            createFormError.classList.add('show');
+                            createFormInput.focus();
+                            console.error(response);
+                        }
+                    } catch (e) {
+                        createFormError.innerHTML = e;
                         createFormError.classList.add('show');
                         createFormInput.focus();
-                        console.error(response);
+                        console.error(e);
                     }
-                } catch (e) {
-                    createFormError.innerHTML = e;
-                    createFormError.classList.add('show');
-                    createFormInput.focus();
-                    console.error(e);
-                }
-            })();
+                })();
+            }
         }
     },
-    handleEventsDelete: () => {
-        const data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
-        const deleteForm = document.querySelector('#deleteForm');
-        const deleteFormInput = deleteForm.querySelector('#deleteForm input');
-        const deleteFormError = deleteForm.querySelector('#deleteForm .error');
-        if (!deleteForm.classList.contains('processing')) {
-            (async () => {
-                let response = {};
-                try {
-                    deleteForm.classList.add('processing');
-                    deleteFormError.innerHTML = '';
-                    deleteFormError.classList.remove('show');
-                    response = await deleteNote(data);
-                    const code = parseInt(response.code);
-                    if (code === 200) {
-                        dialog.refreshNotes();
-                        dialog.removeSetup();
-                    } else if (code > 200) {
-                        deleteForm.classList.remove('processing');
-                        deleteFormError.innerHTML = response.message;
+
+    delete : {
+        handleEvents: () => {
+            const data = new FormData(document.getElementById('deleteForm')); // Use Array.from(data) to view FormData which appears empty.
+            const deleteForm = document.querySelector('#deleteForm');
+            const deleteFormInput = deleteForm.querySelector('#deleteForm input');
+            const deleteFormError = deleteForm.querySelector('#deleteForm .error');
+            if (!deleteForm.classList.contains('processing')) {
+                (async () => {
+                    let response = {};
+                    try {
+                        deleteForm.classList.add('processing');
+                        deleteFormError.innerHTML = '';
+                        deleteFormError.classList.remove('show');
+                        response = await deleteNote(data);
+                        const code = parseInt(response.code);
+                        if (code === 200) {
+                            dialog.refreshNotes();
+                            dialog.setup.remove();
+                        } else if (code > 200) {
+                            deleteForm.classList.remove('processing');
+                            deleteFormError.innerHTML = response.message;
+                            deleteFormError.classList.add('show');
+                            deleteFormInput.focus();
+                            console.error(response);
+                        }
+                    } catch (e) {
+                        deleteFormError.innerHTML = e;
                         deleteFormError.classList.add('show');
                         deleteFormInput.focus();
                         console.error(response);
                     }
-                } catch (e) {
-                    deleteFormError.innerHTML = e;
-                    deleteFormError.classList.add('show');
-                    deleteFormInput.focus();
-                    console.error(response);
-                }
-            })();
-        }
-    },
-    handleEvents: (e) => {
-        const target = e.target;
-        const btn = target.closest('button');
-        const label = target.closest('label');
-        const key = e.key;
-        let id;
-        let refreshId;
-        let form;
-        let data;
-        if (target.id) {
-            id = target.id;
-        } else if (btn && btn.id) {
-            id = btn.id;
-        } else if (label && label.id) {
-            id = label.id;
-        }
-        if (e.repeat || btn && key) {
-            return
-        } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
-        if (btn && btn.className === 'close') {
-            e.preventDefault();
-            dialog.removeDialog();
-        } else if (!key || key === "Enter" || (btn && !key)) {
-            switch (id) {
-                case 'saveNote':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // Get ID of section to repopulate
-                    refreshId = target.closest('dialog').getAttribute('data');
-                    const dialogEdit = document.getElementById('dialogEdit');
-                    // Show Spinner
-                    // document.querySelector('dialog').classList.add('processing');
-                    dialogEdit.classList.add('processing');
-                    // Get Data. This encrypts the textarea (in the DOM) before getting data for payload.
-                    form = document.querySelector('form');
-                    let textareaValue = form.querySelector('textarea').value;
-                    let textareaValueEncrypted = textareaValue;
-                    if (!encryption.isEncrypted(textareaValue) && useEncryption) {
-                        textareaValueEncrypted = encryption.encrypt(textareaValue);
-                        form.querySelector('textarea').value = textareaValueEncrypted;
-                    }
-                    data = new FormData(document.querySelector('form')); // Use Array.from(data) to view FormData which appears empty.
-                    (async () => {
-                        try {
-                            let response = await saveNote(data);
-                            const code = parseInt(response.code);
-                            if (code === 200) {
-                                storage.storeNote(id, textareaValueEncrypted);
-                                if (!isDemo && useEncryption) {
-                                    document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = encryption.decrypt(storage.getStoredNote(id));
-                                } else {
-                                    document.querySelector('#' + refreshId + ' .notes__sections').innerHTML = textareaValue;
-                                }
-                                const updatedElement = document.getElementById(refreshId);
-                                updatedElement.open = true;
-                                if (useEncryption) {
-                                    updatedElement.classList.remove('not-encrypted');
-                                }
-                                dialog.removeEdit(refreshId);
-                            } else if (code > 200) {
-                                console.error(response);
-                            }
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    })();
-                    break;
-                case 'createNote':
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    dialog.handleEventsCreate();
-                    break;
-                case 'createNoteInput':
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    if (key === "Enter") {
-                        dialog.handleEventsCreate();
-                    }
-                    break;
-                case 'deleteNote':
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    dialog.handleEventsDelete();
-                    break;
-                case 'deleteNoteInput':
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    if (key === "Enter") {
-                        dialog.handleEventsDelete();
-                    }
-                    break;
-                case 'copyToClipboardSection':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyToClipboard(dialog.section);
-                    break;
-                case 'copyToClipboardListItem':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyToClipboard(dialog.listItem);
-                    break;
-                case 'copyToClipboardListItemCode':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyToClipboard(dialog.listItemCode);
-                    break;
-                case 'copyToClipboardListItemBookmark':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyToClipboard(dialog.listItemBookmark);
-                    break;
-                case 'copyToClipboardTimeStamp':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyToClipboard(dialog.timeStamp);
-                    break;
-                case 'submitPassphrase':
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    dialog.handleEventsPassphrase();
-                    break;
-                case 'passphrase':
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    if (key === "Enter") {
-                        dialog.handleEventsPassphrase();
-                    }
-                    break;
-                case 'scrollSnapLabel':
-                    settings.enableScrollSnap();
-                    break;
-                case 'scrollDefaultLabel':
-                    settings.disableScrollSnap();
-                    break;
-                default:
-                    break;
+                })();
             }
         }
     },
-    addEventListeners: (d) => {
-        if (supportsTouchEvents) {
-            // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-            d.addEventListener('touchend', (e) => {
-                dialog.handleEvents(e)
-            });
-        } else {
-            d.addEventListener('click', (e) => {
-                dialog.handleEvents(e)
-            });
-            d.addEventListener('keydown', (e) => {
-                if (e.repeat) { return }
-                dialog.handleEvents(e)
-            });
-        }
-        d.addEventListener('submit', (e) => {
-            e.preventDefault();
-        });
-        dialog.setupDocumentEvents();
-    },
-    insertEdit: (content, dir, id, title, lastModified) => {
-        if (!document.getElementById('dialogEdit')) {
-            const templateDialogEdit = document.getElementById('templateDialogEdit');
-            let fragment = templateDialogEdit.content.cloneNode(true);
-            let d = fragment.querySelector('dialog');
-            d.setAttribute('data', id);
-            if (content) {
-                let textarea = d.querySelector('#dialogEditTextArea');
-                if (encryption.isEncrypted(content)) {
-                    content = encryption.decrypt(content);
-                }
-                textarea.appendChild(document.createTextNode(content));
-            }
-            let h2 = d.querySelector('h2');
-            h2.replaceChild(document.createTextNode(title.replace('-', ' ')), h2.childNodes[0]);
-            let time = d.querySelector('time');
-            const lastModifiedDate = (new Date(lastModified).toLocaleString() !== 'Invalid Date') ? new Date(lastModified).toLocaleString('en-US', {
-                dateStyle: 'medium',
-                timeStyle: 'medium'
-            }) : '';
-            time.appendChild(document.createTextNode(lastModifiedDate));
-            d.querySelector('input[name="url"]').value = dir;
-            dialog.addEventListeners(d);
-            dialog.toggleBodyDialog(true, 'edit');
-            document.body.prepend(fragment);
-            window.scrollTo(0, 0);
-            const eventFocus = new Event('focus');
-            d.querySelector('#dialogEdit textarea').focus();
-            d.querySelector('#dialogEdit textarea').dispatchEvent(eventFocus);
-        }
-    },
-    removeEdit: (id) => {
-        document.getElementById('dialogEdit').remove();
-        main.removeSelectedClass();
-        dialog.toggleBodyDialog(false, 'edit', id);
-    },
-    insertSetup: () => {
-        if (!document.getElementById('dialogEdit')) {
-            const templateDialogSetup = document.getElementById('templateDialogSetup');
-            let fragment = templateDialogSetup.content.cloneNode(true);
-            let d = fragment.querySelector('dialog');
-            dialog.addEventListeners(d);
-            dialog.toggleBodyDialog(true, 'setup');
-            document.body.prepend(fragment);
-            window.scrollTo(0, 0);
-            d.querySelector('input').focus();
-            if ( settings.isScrollSnapTrue() ) {
-                document.getElementById('scrollSnap').checked = 'checked';
-            } else {
-                document.getElementById('scrollDefault').checked = 'checked';
-            }
-        }
-    },
-    removeSetup: () => {
-        document.getElementById('dialogSetup').remove();
-        dialog.toggleBodyDialog(false, 'setup');
-    },
-    insertPassphrase: (err) => {
-        notes.clearMainNotes();
-        const templateDialogPassphrase = document.getElementById('templateDialogPassphrase');
-        const fragment = templateDialogPassphrase.content.cloneNode(true);
-        const d = fragment.querySelector('dialog');
-        dialog.addEventListeners(d);
-        dialog.toggleBodyDialog(true);
-        document.body.prepend(fragment);
-        document.querySelector('#dialogPassphrase input').focus();
-        if (err) {
-            const error = document.querySelector('#dialogPassphrase .error');
-            error.innerHTML = 'Please renter your passphrase.';
-            error.classList.add('show');
-        }
-    },
-    removePassphrase: () => {
-        document.getElementById('dialogPassphrase').remove();
-        dialog.toggleBodyDialog(false);
-    },
-    insertProgressBar: () => {
-        const templateProgressBar = document.getElementById('templateDialogProgressBar');
-        const fragment = templateProgressBar.content.cloneNode(true);
-        dialog.toggleBodyDialog(true);
-        document.body.prepend(fragment);
-        document.getElementById('dialogProgressBar').open = true;
-    },
-    removeProgressBar: () => {
-        document.getElementById('dialogProgressBar').remove();
-        dialog.toggleBodyDialog(false);
-    },
+
     section: `
 <section class="note__section">
   <h3></h3>
@@ -545,7 +658,7 @@ const main = {
                 // Check whether storage or server is newer?
                 getNote(dir)
                     .then(data => {
-                        dialog.insertEdit(data.content, dir, id, title, data.lastModified);
+                        dialog.edit.insert(data.content, dir, id, title, data.lastModified);
                         main.removeSelectedClass();
                     })
                     .catch(error => {
@@ -555,7 +668,7 @@ const main = {
                             return note.id === id
                         });
                         const content = storage.getStoredNote(id);
-                        dialog.insertEdit(content, note[0].dir, note[0].id, title, '');
+                        dialog.edit.insert(content, note[0].dir, note[0].id, title, '');
                     });
             } else if (btn && btn.className === 'select-all') {
                 // Checklist
@@ -683,7 +796,7 @@ const footer = {
             btn = target.closest('button');
         if (btn) {
             e.preventDefault();
-            dialog.insertSetup();
+            dialog.setup.insert();
         }
     },
     setupEvents : () => {
@@ -836,7 +949,7 @@ const notes = {
             });
             if (notes.decryptionFailed) {
                 notes.clearMainNotes();
-                dialog.insertPassphrase(true);
+                dialog.passphrase.insert(true);
             }
         }
     },
@@ -862,7 +975,7 @@ const notes = {
         notes.downloadComplete = (notes.downloadTally === notes.notesArray.length);
         if (notes.downloadComplete) {
             if ((useEncryption && storage.getPassphrase()) || !useEncryption || isDemo) {
-                dialog.removeProgressBar();
+                dialog.progress.remove();
                 notes.decryptAllNotes();
                 notes.appendNotesToMain();
             }
@@ -875,9 +988,9 @@ const notes = {
         notes.decryptionFailed = false;
         notes.clearMainNotes();
         if (useEncryption && !storage.getPassphrase()) {
-            dialog.insertPassphrase();
+            dialog.passphrase.insert();
         } else {
-            dialog.insertProgressBar();
+            dialog.progress.insert();
         }
         notes.notesArray.forEach((note) => {
             notes.constructDetails(note);
@@ -915,11 +1028,11 @@ const notes = {
                         notes.importStoreInsertAllNotes();
                     }
                 } else if (code > 200) {
-                    dialog.insertSetup();
+                    dialog.setup.insert();
                     console.error(response);
                 }
             } catch (e) {
-                dialog.insertSetup();
+                dialog.setup.insert();
                 console.error(e);
             }
         })();
@@ -1020,6 +1133,7 @@ notes.init();
 main.setupEvents();
 navbar.setupEvents();
 footer.setupEvents();
+dialog.setupDocumentEvents();
 settings.init();
 
 // if ('serviceWorker' in navigator) {
