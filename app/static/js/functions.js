@@ -76,7 +76,7 @@ const storage = {
             try {
                 localStorage.removeItem('note-' + name);
             } catch (err) {
-                console.log('There was a problem deleting this note.', {err, name});
+                console.error('There was a problem deleting this note.', {err, name});
             }
         } else {
             console.log('Name was missing.', {name});
@@ -166,6 +166,26 @@ const dialog = {
             dialog.handleDocumentEvents(e)
         });
     },
+    eventListeners: (obj, callback) => {
+        if (supportsTouchEvents) {
+            // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
+            obj.addEventListener('touchend', (e) => {
+                callback(e)
+            });
+        } else {
+            obj.addEventListener('click', (e) => {
+                callback(e)
+            });
+            obj.addEventListener('keydown', (e) => {
+                if (e.repeat) { return }
+                callback(e)
+            });
+        }
+        obj.addEventListener('submit', (e) => {
+            // Prevent default form submission which triggers an unnecessary GET call.
+            e.preventDefault();
+        });
+    },
 
     progress: {
         insert: () => {
@@ -194,7 +214,7 @@ const dialog = {
                 }
             }
         },
-        handleEventsPassphrase: (e) => {
+        handleEvents: (e) => {
             const target = e.target;
             const btn = target.closest('button');
             const key = e.key;
@@ -211,7 +231,7 @@ const dialog = {
                         error.classList.remove('show');
                         dialog.passphrase.setPassphrase(v);
                     } else {
-                        error.innerHTML = 'Please renter your passphrase.';
+                        error.innerHTML = 'Please re-enter your passphrase.';
                         error.classList.add('show');
                         input.focus();
                     }
@@ -236,38 +256,24 @@ const dialog = {
                 }
             }
         },
-        addEventListeners: (d) => {
-            if (supportsTouchEvents) {
-                // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-                d.addEventListener('touchend', (e) => {
-                    dialog.passphrase.handleEventsPassphrase(e)
-                });
-            } else {
-                d.addEventListener('click', (e) => {
-                    dialog.passphrase.handleEventsPassphrase(e)
-                });
-                d.addEventListener('keydown', (e) => {
-                    if (e.repeat) { return }
-                    dialog.passphrase.handleEventsPassphrase(e)
-                });
-            }
-            d.addEventListener('submit', (e) => {
-                e.preventDefault();
-            });
+        addEventListeners: (obj) => {
+            dialog.eventListeners(obj, dialog.passphrase.handleEvents);
         },
         insert: (err) => {
-            notes.clearMainNotes();
-            const templateDialogPassphrase = document.getElementById('templateDialogPassphrase');
-            const fragment = templateDialogPassphrase.content.cloneNode(true);
-            const d = fragment.querySelector('dialog');
-            dialog.passphrase.addEventListeners(d);
-            dialog.toggleBodyDialog(true);
-            document.body.prepend(fragment);
-            document.querySelector('#dialogPassphrase input').focus();
-            if (err) {
-                const error = document.querySelector('#dialogPassphrase .error');
-                error.innerHTML = 'Please renter your passphrase.';
-                error.classList.add('show');
+            if (!document.getElementById('dialogPassphrase')) {
+                notes.clearMainNotes();
+                const templateDialogPassphrase = document.getElementById('templateDialogPassphrase');
+                const fragment = templateDialogPassphrase.content.cloneNode(true);
+                const d = fragment.querySelector('dialog');
+                dialog.passphrase.addEventListeners(d);
+                dialog.toggleBodyDialog(true);
+                document.body.prepend(fragment);
+                document.querySelector('#dialogPassphrase input').focus();
+                if (err) {
+                    const error = document.querySelector('#dialogPassphrase .error');
+                    error.innerHTML = 'Please renter your passphrase.';
+                    error.classList.add('show');
+                }
             }
         },
         remove: () => {
@@ -277,46 +283,8 @@ const dialog = {
     },
 
     edit : {
-        insert: (content, dir, id, title, lastModified) => {
-            if (!document.getElementById('dialogEdit')) {
-                const templateDialogEdit = document.getElementById('templateDialogEdit');
-                let fragment = templateDialogEdit.content.cloneNode(true);
-                let d = fragment.querySelector('dialog');
-                d.setAttribute('data', id);
-                if (content) {
-                    let textarea = d.querySelector('#dialogEditTextArea');
-                    if (encryption.isEncrypted(content)) {
-                        content = encryption.decrypt(content);
-                    }
-                    textarea.appendChild(document.createTextNode(content));
-                }
-                let h2 = d.querySelector('h2');
-                h2.replaceChild(document.createTextNode(title.replace('-', ' ')), h2.childNodes[0]);
-                let time = d.querySelector('time');
-                const lastModifiedDate = (new Date(lastModified).toLocaleString() !== 'Invalid Date') ? new Date(lastModified).toLocaleString('en-US', {
-                    dateStyle: 'medium',
-                    timeStyle: 'medium'
-                }) : '';
-                time.appendChild(document.createTextNode(lastModifiedDate));
-                d.querySelector('input[name="url"]').value = dir;
-                dialog.edit.addEventListeners(d);
-                dialog.toggleBodyDialog(true, 'edit');
-                document.body.prepend(fragment);
-                window.scrollTo(0, 0);
-                const eventFocus = new Event('focus');
-                d.querySelector('#dialogEdit textarea').focus();
-                d.querySelector('#dialogEdit textarea').dispatchEvent(eventFocus);
-            }
-        },
-        remove: (id) => {
-            document.getElementById('dialogEdit').remove();
-            main.removeSelectedClass();
-            dialog.toggleBodyDialog(false, 'edit', id);
-        },
         handleEvents: (e) => {
-            const type = e.type;
             const target = e.target;
-            const tag = target.tagName;
             const btn = target.closest('button');
             const key = e.key;
             let id;
@@ -325,10 +293,6 @@ const dialog = {
             let data;
             if ( btn && btn.id ) {
                 id = btn.id; }
-            else if ( type === 'change' && tag === 'SELECT') {
-                id = target[target.selectedIndex].id
-            }
-            console.log('handleEventsEdit()', { e, target, id, type, key });
             if ((btn && !key) || (key && key === 'Enter')) {
                 switch (id) {
                     case 'saveNote':
@@ -374,15 +338,6 @@ const dialog = {
                             }
                         })();
                         break;
-                    case 'snippetsButton':
-                        const snippets = document.getElementById('copyToClipboardSnippets');
-                        console.log('handleEventsEdit() #snippetsButton', { e, target, id, type, snippets });
-                        if ( snippets.classList.contains('show') ) {
-                            snippets.classList.remove('show');
-                        } else {
-                            snippets.classList.add('show');
-                        }
-                        break;
                     case 'copyToClipboardSection':
                         e.preventDefault();
                         e.stopPropagation();
@@ -413,49 +368,48 @@ const dialog = {
                 }
             }
         },
-        addEventListeners: (d) => {
-            if (supportsTouchEvents) {
-                // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-                d.addEventListener('touchend', (e) => {
-                    dialog.edit.handleEvents(e)
-                });
-            } else {
-                d.addEventListener('click', (e) => {
-                    dialog.edit.handleEvents(e)
-                });
-                d.addEventListener('keydown', (e) => {
-                    if (e.repeat) { return }
-                    dialog.edit.handleEvents(e)
-                });
+        addEventListeners: (obj) => {
+            dialog.eventListeners(obj, dialog.edit.handleEvents);
+        },
+        insert: (content, dir, id, title, lastModified) => {
+            if (!document.getElementById('dialogEdit')) {
+                const templateDialogEdit = document.getElementById('templateDialogEdit');
+                let fragment = templateDialogEdit.content.cloneNode(true);
+                let d = fragment.querySelector('dialog');
+                d.setAttribute('data', id);
+                if (content) {
+                    let textarea = d.querySelector('#dialogEditTextArea');
+                    if (encryption.isEncrypted(content)) {
+                        content = encryption.decrypt(content);
+                    }
+                    textarea.appendChild(document.createTextNode(content));
+                }
+                let h2 = d.querySelector('h2');
+                h2.replaceChild(document.createTextNode(title.replace('-', ' ')), h2.childNodes[0]);
+                let time = d.querySelector('time');
+                const lastModifiedDate = (new Date(lastModified).toLocaleString() !== 'Invalid Date') ? new Date(lastModified).toLocaleString('en-US', {
+                    dateStyle: 'medium',
+                    timeStyle: 'medium'
+                }) : '';
+                time.appendChild(document.createTextNode(lastModifiedDate));
+                d.querySelector('input[name="url"]').value = dir;
+                dialog.edit.addEventListeners(d);
+                dialog.toggleBodyDialog(true, 'edit');
+                document.body.prepend(fragment);
+                window.scrollTo(0, 0);
+                const eventFocus = new Event('focus');
+                d.querySelector('#dialogEdit textarea').focus();
+                d.querySelector('#dialogEdit textarea').dispatchEvent(eventFocus);
             }
-            d.addEventListener('submit', (e) => {
-                e.preventDefault();
-            });
-        }
+        },
+        remove: (id) => {
+            document.getElementById('dialogEdit').remove();
+            main.removeSelectedClass();
+            dialog.toggleBodyDialog(false, 'edit', id);
+        },
     },
 
     setup: {
-        insert: () => {
-            if (!document.getElementById('dialogEdit')) {
-                const templateDialogSetup = document.getElementById('templateDialogSetup');
-                let fragment = templateDialogSetup.content.cloneNode(true);
-                let d = fragment.querySelector('dialog');
-                dialog.setup.addEventListeners(d);
-                dialog.toggleBodyDialog(true, 'setup');
-                document.body.prepend(fragment);
-                window.scrollTo(0, 0);
-                d.querySelector('input').focus();
-                if ( settings.isScrollSnapTrue() ) {
-                    document.getElementById('scrollSnap').checked = 'checked';
-                } else {
-                    document.getElementById('scrollDefault').checked = 'checked';
-                }
-            }
-        },
-        remove: () => {
-            document.getElementById('dialogSetup').remove();
-            dialog.toggleBodyDialog(false, 'setup');
-        },
         handleEvents: (e) => {
             const target = e.target;
             const btn = target.closest('button');
@@ -472,7 +426,7 @@ const dialog = {
             if (e.repeat || btn && key) {
                 return
             } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
-            if (!key || key === "Enter" || (btn && !key) || (e.type === 'change' && target === 'select')) {
+            if (!key || key === "Enter" || (btn && !key)) {
                 switch (id) {
                     case 'createNote':
                         e.preventDefault();
@@ -513,28 +467,30 @@ const dialog = {
                 }
             }
         },
-        addEventListeners: (d) => {
-            if (supportsTouchEvents) {
-                // Avoid double clicks in mobile. This covers tap, pencil, mouse, and keyboard in iOS.
-                d.addEventListener('touchend', (e) => {
-                    dialog.setup.handleEvents(e)
-                });
-            } else {
-                d.addEventListener('click', (e) => {
-                    dialog.setup.handleEvents(e)
-                });
-                d.addEventListener('keydown', (e) => {
-                    if (e.repeat) { return }
-                    dialog.setup.handleEvents(e)
-                });
-                d.addEventListener('change', (e) => {
-                    dialog.setup.handleEvents(e)
-                });
+        addEventListeners: (obj) => {
+            dialog.eventListeners(obj, dialog.setup.handleEvents);
+        },
+        insert: () => {
+            if (!document.getElementById('dialogSetup')) {
+                const templateDialogSetup = document.getElementById('templateDialogSetup');
+                let fragment = templateDialogSetup.content.cloneNode(true);
+                let d = fragment.querySelector('dialog');
+                dialog.setup.addEventListeners(d);
+                dialog.toggleBodyDialog(true, 'setup');
+                document.body.prepend(fragment);
+                window.scrollTo(0, 0);
+                d.querySelector('input').focus();
+                if ( settings.isScrollSnapTrue() ) {
+                    document.getElementById('scrollSnap').checked = 'checked';
+                } else {
+                    document.getElementById('scrollDefault').checked = 'checked';
+                }
             }
-            d.addEventListener('submit', (e) => {
-                e.preventDefault();
-            });
-        }
+        },
+        remove: () => {
+            document.getElementById('dialogSetup').remove();
+            dialog.toggleBodyDialog(false, 'setup');
+        },
     },
 
     create : {
