@@ -216,6 +216,16 @@ button {
     color            : var( --color-text-base );
     background-color : var( --background-color-button );
 }
+.primary {
+    background-color : var(--color-plt-medium);
+    color            : var(--color-plt-white);
+    border-radius    : var(--border-radius-small);
+}
+.secondary {
+    background-color : transparent;
+    border           : 1px solid var(--color-text-base);
+    border-radius    : var(--border-radius-small);
+}
 label {
     display       : inline-block;
     margin-bottom : 5px;
@@ -908,9 +918,6 @@ html.dialog {
     min-width        : 120px;
     padding          : 0 20px;
     justify-self     : left;
-    color            : var(--color-plt-white);
-    background-color : var(--color-plt-medium);
-    border-radius    : var(--border-radius-small);
 }
 
 
@@ -948,10 +955,6 @@ html.dialog {
     background-color    : transparent;
     border-radius       : var(--border-radius-small);
 }
-#dialogEdit nav button#saveNote {
-    color            : var(--color-plt-white);
-    background-color : var(--color-plt-medium);
-}
 #dialogEdit header button span {
     display : none;
 }
@@ -977,17 +980,13 @@ html.dialog {
     width            : 100%;
     padding          : 0 5px;
     font-size        : 1rem;
-    background-color : transparent;
-    /*background-color : var(--color-gs-lt-83);*/
-    border           : 1px solid var(--color-text-base);
-    border-radius    : var(--border-radius-small);
     font-family      : monospace;
 }
 #dialogEdit nav button#saveNote {
-    padding: 0 13px;
-    font-size: 1rem;
-    font-family: var(--font-family);
-    border-color: transparent;
+    padding          : 0 13px;
+    font-size        : 1rem;
+    font-family      : var(--font-family);
+    border           : 1px solid transparent;
 }
 #dialogEdit.processing form {
     display          : grid;
@@ -1133,9 +1132,6 @@ html.dialog {
     width            : 120px;
     min-width        : 120px;
     padding          : 0 20px;
-    color            : var(--color-plt-white);
-    background-color : var(--color-plt-medium);
-    border-radius    : var(--border-radius-small);
 }
 #dialogSetup form.processing button i {
     display             : block;
