@@ -818,22 +818,27 @@ footer {
     width      : clamp(250px, 100%, 1400px);
     text-align : center;
 }
-footer button {
-    width               : 44px;
-    height              : 44px;
-    padding             : 5px;
-    background-color    : var(--color-gs-lt-83);
+footer button.btn__secondary {
+    width               : 38px;
+    min-width           : 38px;
+    height              : 38px;
+    min-height          : 38px;
     background-image    : var(--pencil-black);
     background-size     : 16px 16px;
     background-position : center;
     background-repeat   : no-repeat;
-    font-size           : 1em;
-    border-radius       : 50%;
-    /*box-shadow          : 0 0 7px -2px var(--color-gs-lt-13);*/
 }
 @media ( hover: hover ) {
     footer button:hover {
         /*background-image: var( --pencil-accent );*/
+    }
+}
+@media ( max-width: 800px ) {
+    footer button.btn__secondary {
+        width      : 44px;
+        min-width  : 44px;
+        height     : 44px;
+        min-height : 44px;
     }
 }
 
