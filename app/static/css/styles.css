@@ -216,13 +216,23 @@ button {
     color            : var( --color-text-base );
     background-color : var( --background-color-button );
 }
-.primary {
+.btn__primary {
+    block-size       : fit-content;
+    width            : fit-content;
+    min-width        : 44px;
+    min-height       : 44px;
     background-color : var(--color-plt-medium);
     color            : var(--color-plt-white);
+    border           : 1px solid transparent;
     border-radius    : var(--border-radius-small);
 }
-.secondary {
+.btn__secondary {
+    block-size       : fit-content;
+    width            : fit-content;
+    min-width        : 44px;
+    min-height       : 44px;
     background-color : transparent;
+    color            : var(--color-text-base);
     border           : 1px solid var(--color-text-base);
     border-radius    : var(--border-radius-small);
 }
@@ -823,7 +833,7 @@ footer button {
 }
 @media ( hover: hover ) {
     footer button:hover {
-        background-image: var( --pencil-accent );
+        /*background-image: var( --pencil-accent );*/
     }
 }
 
@@ -986,7 +996,6 @@ html.dialog {
     padding          : 0 13px;
     font-size        : 1rem;
     font-family      : var(--font-family);
-    border           : 1px solid transparent;
 }
 #dialogEdit.processing form {
     display          : grid;
