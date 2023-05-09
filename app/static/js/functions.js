@@ -1,9 +1,50 @@
 const supportsTouchEvents = (window.DocumentTouch && document instanceof DocumentTouch);
-const copyToClipboard = (snippet) => {
-    navigator.clipboard.writeText(snippet).then(() => {
-        console.log("Copied to clipboard successfully");
-    }); // This only works over localhost or https.
-};
+
+copyToClipboard = ( snippet ) => {
+    navigator.clipboard.readText().then(( clipText ) => {
+        let template;
+        const text = ( clipText ) ? clipText : '';
+        const section = `<section class="note__section">
+  <h3></h3>
+  <p></p>
+  <ul>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+</section>`;
+        const listItem = `<li>${text}</li>`;
+        const listItemCode = `<li><button class="code">${text}</button></li>`;
+        const listItemBookmark = `<li><a href="${text}" target="_blank" rel="noreferrer">${text}</a></li>`;
+        const timeStamp = `<time>` + new Date().toLocaleString('en-US', {
+                dateStyle: 'short',
+                timeStyle: 'short'
+            }) + `</time>`;
+        switch ( snippet ) {
+            case 'copyToClipboardSection':
+                template = section;
+                break;
+            case 'copyToClipboardListItem':
+                template = listItem;
+                break;
+            case 'copyToClipboardListItemCode':
+                template = listItemCode;
+                break;
+            case 'copyToClipboardListItemBookmark':
+                template = listItemBookmark;
+                break;
+            case 'copyToClipboardTimeStamp':
+                template = timeStamp;
+                break;
+            default:
+                template = snippet;
+                break;
+        }
+        navigator.clipboard.writeText(template).then(() => {
+            console.log("Copied to clipboard successfully");
+        }); // This only works over localhost or https.
+    });
+}
 
 const storage = {
     getStoredChecklistLength: (key) => {
@@ -283,6 +324,7 @@ const dialog = {
     },
 
     edit : {
+
         handleEvents: (e) => {
             const target = e.target;
             const btn = target.closest('button');
@@ -341,27 +383,27 @@ const dialog = {
                     case 'copyToClipboardSection':
                         e.preventDefault();
                         e.stopPropagation();
-                        copyToClipboard(dialog.section);
+                        copyToClipboard('copyToClipboardSection');
                         break;
                     case 'copyToClipboardListItem':
                         e.preventDefault();
                         e.stopPropagation();
-                        copyToClipboard(dialog.listItem);
+                        copyToClipboard('copyToClipboardListItem');
                         break;
                     case 'copyToClipboardListItemCode':
                         e.preventDefault();
                         e.stopPropagation();
-                        copyToClipboard(dialog.listItemCode);
+                        copyToClipboard('copyToClipboardListItemCode');
                         break;
                     case 'copyToClipboardListItemBookmark':
                         e.preventDefault();
                         e.stopPropagation();
-                        copyToClipboard(dialog.listItemBookmark);
+                        copyToClipboard('copyToClipboardListItemBookmark');
                         break;
                     case 'copyToClipboardTimeStamp':
                         e.preventDefault();
                         e.stopPropagation();
-                        copyToClipboard(dialog.timeStamp);
+                        copyToClipboard('copyToClipboardTimeStamp');
                         break;
                     default:
                         break;
@@ -565,20 +607,6 @@ const dialog = {
         }
     },
 
-    section: `
-<section class="note__section">
-  <h3></h3>
-  <p></p>
-  <ul>
-    <li></li>
-    <li></li>
-    <li></li>
-  </ul>
-</section>`,
-    listItem: `<li></li>`,
-    listItemCode: `<li><button class="code"></button></li>`,
-    listItemBookmark: `<li><a href="" target="_blank" rel="noreferrer"></a></li>`,
-    timeStamp: `<time>` + new Date().toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}) + `</time>`
 };
 
 const main = {
