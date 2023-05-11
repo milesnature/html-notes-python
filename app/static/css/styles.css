@@ -104,7 +104,7 @@
     --arrow-down-white  : url("data:image/svg+xml,%3Csvg width='12px' height='12px' viewBox='0 0 10 10' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3EExpand%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(-14.000000  -5.000000)' fill='%23FFFFFF' fill-rule='nonzero'%3E%3Cpolygon transform='translate(19.000000  10.000000) rotate(-180.000000) translate(-19.000000  -10.000000) ' points='19 5 24 15 14 15'%3E%3C/polygon%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     --close-black       : url("data:image/svg+xml,%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd' stroke-linecap='round'%3E%3Cg transform='translate(1.666667  1.666667)' fill-rule='nonzero' stroke='%230F0F0F' stroke-width='2'%3E%3Cline shape-rendering='geometricPrecision' x1='0' y1='0' x2='14.6666667' y2='14.6666667'%3E%3C/line%3E%3Cline shape-rendering='geometricPrecision' x1='14.6666667' y1='0' x2='0' y2='14.6666667'%3E%3C/line%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     --close-white       : url("data:image/svg+xml,%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg fill='none' fill-rule='evenodd' stroke-linecap='round'%3E%3Cg transform='translate(1.666667  1.666667)' fill-rule='nonzero' stroke='%23FFFFFF' stroke-width='2'%3E%3Cline x1='0' y1='0' x2='14.6666667' y2='14.6666667'%3E%3C/line%3E%3Cline x1='14.6666667' y1='0' x2='0' y2='14.6666667'%3E%3C/line%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    --command-prompt    : url("data:image/svg+xml,%3Csvg width='14px' height='11px' viewBox='0 0 14 11' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(0.981633, 1.000820)' stroke='currentColor' stroke-width='2'%3E%3Cpolyline points='7.01362684 0 11.5183674 4.49917986 7.01362684 9.00929322'%3E%3C/polyline%3E%3Cline x1='11.5183674' y1='4.49917986' x2='0.518367387' y2='4.49917986'%3E%3C/line%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    --command-prompt    : url("data:image/svg+xml,%3Csvg width='14px' height='11px' viewBox='0 0 14 11' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(0.981633, 1.000820)' stroke='%230f0f0f' stroke-width='2'%3E%3Cpolyline points='7.01362684 0 11.5183674 4.49917986 7.01362684 9.00929322'%3E%3C/polyline%3E%3Cline x1='11.5183674' y1='4.49917986' x2='0.518367387' y2='4.49917986'%3E%3C/line%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 
     --scrollbar-thumb-background-color : var(--color-plt-medium);
     --scrollbar-thumb-border           : 1px solid var(--background-color-body);
@@ -163,8 +163,17 @@ h4 {
 }
 ul {
     padding-left    : 1.4rem;
-    margin          : .5rem 0 .5rem 0;
+    margin          : .8rem 0;
     list-style-type : square;
+}
+ol {
+    padding-left    : 1.4rem;
+    margin          : .8rem auto;
+    list-style-type : decimal;
+}
+li {
+    margin-bottom: .6rem;
+    line-height: 1.1;
 }
 .cmd {
     list-style-image: var(--command-prompt);
@@ -172,17 +181,13 @@ ul {
 .cmd li {
     padding-left: 3px;
 }
-ol {
-    padding-left    : 1.4rem;
-    margin          : .5rem auto .5rem auto;
-    list-style-type : decimal;
-}
-li {
-    line-height : 1.65rem;
+.cmd li small, .desc {
+    display: block;
+    line-height: 1rem;
 }
 p {
-    line-height   : 1.25rem;
-    margin-bottom : .6rem;
+    line-height: 1.25rem;
+    margin: .8rem 0;
 }
 a,
 a:link,
