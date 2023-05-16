@@ -179,11 +179,12 @@ li {
     list-style-image: var(--command-prompt);
 }
 .cmd li {
-    padding-left: 3px;
+    padding-left: 2px;
 }
 .cmd li small, .desc {
     display: block;
     line-height: 1rem;
+    margin-top: .2rem;
 }
 p {
     line-height: 1.25rem;
@@ -997,22 +998,22 @@ html.dialog {
 }
 #dialogEdit nav {
     display               : grid;
-    grid-template-columns : repeat(6, minmax(min-content, 1fr));
+    grid-template-columns : 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap              : 5px;
     place-content         : center;
     place-items           : center;
 }
 #dialogEdit nav button {
-    height           : 44px;
-    width            : 100%;
-    padding          : 0 5px;
-    font-size        : 1rem;
-    font-family      : monospace;
+    height      : 44px;
+    width       : 100%;
+    padding     : 0 5px;
+    line-height : 42px;
+    font-family : monospace;
 }
 #dialogEdit nav button#saveNote {
-    padding          : 0 13px;
-    font-size        : 1rem;
-    font-family      : var(--font-family);
+    width       : 100%;
+    padding     : 0 13px;
+    font-family : var(--font-family);
 }
 #dialogEdit.processing form {
     display          : grid;
@@ -1194,7 +1195,7 @@ html.dialog {
         font-size: .75rem;
     }
     #dialogEdit nav button {
-        font-size: .7rem;
+        /*font-size: .7rem;*/
     }
 }
 

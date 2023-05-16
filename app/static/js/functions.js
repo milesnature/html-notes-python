@@ -405,6 +405,11 @@ const dialog = {
                         e.stopPropagation();
                         copyToClipboard('copyToClipboardTimeStamp');
                         break;
+                    case 'clearTheClipboard':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard('');
+                        break;
                     default:
                         break;
                 }
