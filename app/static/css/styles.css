@@ -1006,13 +1006,13 @@ html.dialog {
 #dialogEdit nav button {
     height      : 44px;
     width       : 100%;
-    padding     : 0 5px;
+    padding     : 0;
     line-height : 42px;
     font-family : monospace;
 }
 #dialogEdit nav button#saveNote {
     width       : 100%;
-    padding     : 0 13px;
+    padding     : 0;
     font-family : var(--font-family);
 }
 #dialogEdit.processing form {
@@ -1183,7 +1183,7 @@ html.dialog {
         height : 44px;
     }
     #dialogEdit {
-        height : calc( 100vh - 88px );
+        height : calc( 100vh - 80px );
     }
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
@@ -1194,8 +1194,8 @@ html.dialog {
     .error {
         font-size: .75rem;
     }
-    #dialogEdit nav button {
-        /*font-size: .7rem;*/
+    #dialogEdit nav button:not(#saveNote) {
+        font-size : .85rem;
     }
 }
 
