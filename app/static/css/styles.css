@@ -959,7 +959,7 @@ html.dialog {
 }
 #dialogEdit header {
     display               : grid;
-    grid-template-columns : 3fr 160px 44px;
+    grid-template-columns : 3fr 180px 44px;
     place-content         : center;
     place-items           : center;
     margin                : 0;
@@ -1177,7 +1177,7 @@ html.dialog {
 }
 
 
-@media ( max-width: 600px ) and ( pointer: coarse ) {
+@media ( min-width: 300px ) and ( pointer: coarse ) {
     #dialogPassphrase input,
     #dialogPassphrase button {
         height : 44px;
@@ -1188,14 +1188,20 @@ html.dialog {
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
     }
+    #dialogEdit textarea {}
+    #dialogEdit nav button:not(#saveNote) {
+        font-size : .85rem;
+    }
     #scrollForm label {
         height: 44px;
     }
     .error {
         font-size: .75rem;
     }
-    #dialogEdit nav button:not(#saveNote) {
-        font-size : .85rem;
+}
+@media ( min-width: 744px ) and ( pointer: coarse ) {
+    #dialogEdit {
+        height: calc(100vh - 64px);
     }
 }
 
