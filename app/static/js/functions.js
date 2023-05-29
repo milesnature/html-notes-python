@@ -259,11 +259,12 @@ const dialog = {
             const target = e.target;
             const btn = target.closest('button');
             const key = e.key;
+            const enter = ((key === "Enter") && !e.isComposing);
             const id = (target.id) ? target.id : '';
             if (e.repeat || btn && key) {
                 return
             } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
-            if (key === "Enter" || (btn && !key)) {
+            if (enter || (btn && !key)) {
                 const input = document.querySelector('#dialogPassphrase input');
                 const error = document.querySelector('#dialogPassphrase .error');
                 const action = (v) => {
@@ -288,7 +289,7 @@ const dialog = {
                         e.preventDefault();
                         e.stopImmediatePropagation();
                         e.stopPropagation();
-                        if (key === "Enter") {
+                        if (enter) {
                             action(input.value);
                         }
                         break;
@@ -329,13 +330,14 @@ const dialog = {
             const target = e.target;
             const btn = target.closest('button');
             const key = e.key;
+            const enter = ((key === "Enter") && !e.isComposing);
             let id;
             let refreshId;
             let form;
             let data;
             if ( btn && btn.id ) {
                 id = btn.id; }
-            if ((btn && !key) || (key && key === 'Enter')) {
+            if ((btn && !key) || (key && enter)) {
                 switch (id) {
                     case 'saveNote':
                         e.preventDefault();
@@ -462,6 +464,7 @@ const dialog = {
             const btn = target.closest('button');
             const label = target.closest('label');
             const key = e.key;
+            const enter = ((key === "Enter") && !e.isComposing);
             let id;
             if (target.id) {
                 id = target.id;
@@ -473,7 +476,7 @@ const dialog = {
             if (e.repeat || btn && key) {
                 return
             } // Enter key fires click and keydown on buttons. This prevents duplicate processing.
-            if (!key || key === "Enter" || (btn && !key)) {
+            if (!key || enter || (btn && !key)) {
                 switch (id) {
                     case 'createNote':
                         e.preventDefault();
@@ -485,7 +488,7 @@ const dialog = {
                         e.preventDefault();
                         e.stopImmediatePropagation();
                         e.stopPropagation();
-                        if (key === "Enter") {
+                        if (enter) {
                             dialog.create.handleEvents();
                         }
                         break;
@@ -499,7 +502,7 @@ const dialog = {
                         e.preventDefault();
                         e.stopImmediatePropagation();
                         e.stopPropagation();
-                        if (key === "Enter") {
+                        if (enter) {
                             dialog.delete.handleEvents();
                         }
                         break;
@@ -629,10 +632,11 @@ const main = {
             dir = '',
             title = '',
             key = e.key,
+            enter = ((key === "Enter") && !e.isComposing),
             btn = target.closest('button'),
             code = (target.closest('code') || e.tagName === 'code' || target.classList.contains('code')),
             label = target.closest('label');
-        if (!key || key === "Enter") {
+        if (!key || enter) {
             if (btn && btn.className === 'notes__button') {
                 // Edit Node
                 e.preventDefault();
