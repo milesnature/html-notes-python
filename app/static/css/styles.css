@@ -974,7 +974,7 @@ html.dialog {
     grid-template-rows : 44px auto 72px;
     width              : calc( 100vw - 18px );
     max-width          : 1400px;
-    height             : 100vh;
+    height             : 100svh;
     background-color   : var(--background-color-body);
 }
 #dialogEdit header {
@@ -1069,7 +1069,7 @@ html.dialog {
 #dialogSetup {
     width            : calc( 100vw - 18px );
     max-width        : 400px;
-    height           : 100vh;
+    height           : 100svh;
     background-color : var(--background-color-body);
 }
 #dialogSetup header {
@@ -1203,9 +1203,7 @@ html.dialog {
     #dialogPassphrase button {
         height : 44px;
     }
-    #dialogEdit {
-        height : calc( 100vh - 80px );
-    }
+    #dialogEdit {}
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
     }
@@ -1221,9 +1219,7 @@ html.dialog {
     }
 }
 @media ( min-width: 744px ) and ( pointer: coarse ) {
-    #dialogEdit {
-        height: calc(100vh - 64px);
-    }
+    #dialogEdit {}
 }
 
 /* END DIALOG */
