@@ -1027,7 +1027,7 @@ html.dialog {
     height      : 44px;
     width       : 100%;
     padding     : 0;
-    line-height : 42px;
+    /*line-height : 42px;*/
     font-family : monospace;
 }
 #dialogEdit nav button#saveNote {
@@ -1198,16 +1198,14 @@ html.dialog {
 }
 
 
-@media ( min-width: 300px ) and ( pointer: coarse ) {
+@media ( max-width: 800px ) and ( pointer: coarse ) {
     #dialogPassphrase input,
     #dialogPassphrase button {
         height : 44px;
     }
-    #dialogEdit {}
     #dialogEdit header {
         grid-template-columns: 3fr 100px 44px;
     }
-    #dialogEdit textarea {}
     #dialogEdit nav button:not(#saveNote) {
         font-size : .85rem;
     }
@@ -1217,9 +1215,6 @@ html.dialog {
     .error {
         font-size: .75rem;
     }
-}
-@media ( min-width: 744px ) and ( pointer: coarse ) {
-    #dialogEdit {}
 }
 
 /* END DIALOG */

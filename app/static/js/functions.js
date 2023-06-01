@@ -324,6 +324,7 @@ const dialog = {
         }
     },
 
+
     edit : {
 
         handleEvents: (e) => {
