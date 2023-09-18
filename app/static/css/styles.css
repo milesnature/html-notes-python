@@ -146,6 +146,7 @@ html, body {
     font-size        : 14px;
     line-height      : 1;
     margin           : 0;
+    height: 100%;
 }
 h2, h3, h4 {
     margin         : 0;
@@ -254,6 +255,9 @@ button {
     color            : var(--color-text-base);
     border           : 1px solid var(--color-text-base);
     border-radius    : var(--border-radius-small);
+}
+.btn__secondary:active {
+    background-color: var(--color-gs-lt-68);
 }
 label {
     display       : inline-block;
@@ -406,6 +410,9 @@ progress::-moz-progress-bar {
     vertical-align   : inherit;
     word-break       : break-word;
     line-height      : 1rem;
+}
+.code:active {
+    background-color: var(--color-gs-lt-80);
 }
 .scroll-snap {
     scroll-snap-type: y proximity;
@@ -896,7 +903,7 @@ html.dialog {
 }
 .dialog body {
     display       : grid;
-    height        : 100%;
+    height        : 100svh;
     place-content : center;
     place-items   : center;
 }
@@ -910,6 +917,9 @@ html.dialog {
     display : none;
 }
 
+.close:active {
+    background-color: var(--color-gs-lt-68) !important;
+}
 
 #dialogProgressBar {
     width : var(--dialog-width-small);
