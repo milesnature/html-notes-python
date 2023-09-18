@@ -184,7 +184,7 @@ const dialog = {
     handleDocumentEvents: (e) => {
         const key = e.key;
         const btn = e.target.closest('button');
-        if (e.repeat || btn && key) {
+        if (e.repeat || btn && key && key !== 'Escape') {
             // Enter key fires click and keydown on buttons. This prevents duplicate processing.
             return;
         }
@@ -1130,15 +1130,15 @@ footer.setupEvents();
 dialog.setupDocumentEvents();
 settings.init();
 
-// if ('serviceWorker' in navigator) {
-//     // Wait for the 'load' event to not block other work
-//     window.addEventListener('load', async () => {
-//         // Try to register the service worker.
-//         try {
-//             const reg = await navigator.serviceWorker.register('/service-worker.js');
-//             // console.log('Service worker registered! 😎', reg);
-//         } catch (err) {
-//             // console.log('😥 Service worker registration failed: ', err);
-//         }
-//     });
-// }
+if ('serviceWorker' in navigator) {
+    // Wait for the 'load' event to not block other work
+    window.addEventListener('load', async () => {
+        // Try to register the service worker.
+        try {
+            const reg = await navigator.serviceWorker.register('/service-worker.js');
+            // console.log('Service worker registered! 😎', reg);
+        } catch (err) {
+            // console.log('😥 Service worker registration failed: ', err);
+        }
+    });
+}
