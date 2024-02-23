@@ -416,6 +416,7 @@ progress::-moz-progress-bar {
 }
 
 .music-notation {
+    width: 100%;
     font-family: monospace;
     line-height: 1.3rem;
     padding: 7px;
@@ -439,15 +440,6 @@ progress::-moz-progress-bar {
     padding: 7px 13px;
     white-space: nowrap;
     letter-spacing: 3px;
-}
-
-.notation-2 {
-    text-align: center;
-}
-
-.notation-2 td {
-    padding: 0;
-    height: 28px;
 }
 
 .scroll-snap {
