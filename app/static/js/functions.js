@@ -109,20 +109,18 @@ const storage = {
             console.error('Value is missing.', {value});
         }
     },
-    getScrollSnap: () => {
-        return ( localStorage.getItem('scroll-snap') !== null ) ? localStorage.getItem('scroll-snap') : '';
-    },
-    removeNote: (name) => {
-        if (name) {
-            try {
-                localStorage.removeItem('note-' + name);
-            } catch (err) {
-                console.error('There was a problem deleting this note.', {err, name});
-            }
-        } else {
-            console.log('Name was missing.', {name});
-        }
-    }
+    getScrollSnap: () => (localStorage.getItem('scroll-snap') !== null) ? localStorage.getItem('scroll-snap') : '',
+    // removeNote: (name) => {
+    //     if (name) {
+    //         try {
+    //             localStorage.removeItem('note-' + name);
+    //         } catch (err) {
+    //             console.error('There was a problem deleting this note.', {err, name});
+    //         }
+    //     } else {
+    //         console.log('Name was missing.', {name});
+    //     }
+    // }
     // setItem(key, value);
     // getItem(key);
     // removeItem(key);
@@ -507,6 +505,12 @@ const dialog = {
                             dialog.delete.handleEvents();
                         }
                         break;
+                    case 'uploadFile':
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        dialog.upload.handleEvents();
+                        break;
                     case 'scrollSnapLabel':
                         settings.enableScrollSnap();
                         break;
@@ -615,6 +619,41 @@ const dialog = {
             }
         }
     },
+    upload : {
+        handleEvents: () => {
+            const data = new FormData(document.getElementById('uploadForm')); // Use Array.from(data) to view FormData which appears empty.
+            const uploadForm = document.querySelector('#uploadForm');
+            const uploadFormInput = uploadForm.querySelector('#uploadForm input');
+            const uploadFormError = uploadForm.querySelector('#uploadForm .error');
+            if (!uploadForm.classList.contains('processing')) {
+                (async () => {
+                    let response = {};
+                    try {
+                        uploadForm.classList.add('processing');
+                        uploadFormError.innerHTML = '';
+                        uploadFormError.classList.remove('show');
+                        response = await uploadFile(data);
+                        const code = parseInt(response.code);
+                        if (code === 200) {
+                            dialog.refreshNotes();
+                            dialog.setup.remove();
+                        } else if (code > 200) {
+                            uploadForm.classList.remove('processing');
+                            uploadFormError.innerHTML = response.message;
+                            uploadFormError.classList.add('show');
+                            uploadFormInput.focus();
+                            console.error(response);
+                        }
+                    } catch (e) {
+                        uploadFormError.innerHTML = e;
+                        uploadFormError.classList.add('show');
+                        uploadFormInput.focus();
+                        console.error(response);
+                    }
+                })();
+            }
+        }
+    }
 
 };
 
@@ -825,6 +864,9 @@ async function createNote(data) {
 }
 async function deleteNote(data) {
     return (await fetch('delete-note', {method: 'POST', body: data})).json();
+}
+async function uploadFile(data) {
+    return (await fetch('upload-file', {method: 'POST', body: data})).json();
 }
 
 const encryption = {
@@ -1135,7 +1177,7 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
         // Try to register the service worker.
         try {
-            const reg = await navigator.serviceWorker.register('/service-worker.js');
+            // const reg = await navigator.serviceWorker.register('/service-worker.js');
             // console.log('Service worker registered! 😎', reg);
         } catch (err) {
             // console.log('😥 Service worker registration failed: ', err);

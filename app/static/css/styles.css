@@ -414,6 +414,42 @@ progress::-moz-progress-bar {
 .code:active {
     background-color: var(--color-gs-lt-80);
 }
+
+.music-notation {
+    font-family: monospace;
+    line-height: 1.3rem;
+    padding: 7px;
+}
+
+.music-notation td {
+    min-width: 20px;
+}
+
+.music-notation td.title {
+    text-align: center;
+}
+
+.time-signature span {
+    display: block;
+    text-align: center;
+    width: 20px;
+}
+
+.notation {
+    padding: 7px 13px;
+    white-space: nowrap;
+    letter-spacing: 3px;
+}
+
+.notation-2 {
+    text-align: center;
+}
+
+.notation-2 td {
+    padding: 0;
+    height: 28px;
+}
+
 .scroll-snap {
     scroll-snap-type: y proximity;
     scroll-padding-top: 43px;
@@ -1082,6 +1118,10 @@ html.dialog {
     height           : 100svh;
     background-color : var(--background-color-body);
 }
+#dialogSetup#dialogSetup {
+    height        : 100%;
+    margin-bottom : 3px;
+}
 #dialogSetup header {
     display               : grid;
     grid-template-columns : 3fr 44px;
@@ -1115,7 +1155,7 @@ html.dialog {
 }
 #dialogSetup fieldset {
     display               : grid;
-    grid-template-columns : min-content 1fr;
+    grid-template-columns : min-content;
     grid-gap              : 10px;
     width                 : var(--dialog-width-small);
     padding               : 40px 40px;
@@ -1144,12 +1184,38 @@ html.dialog {
 #dialogSetup input[type='url'] {
     display       : block;
     width         : 100%;
-    height        : 38px;
     padding       : 10px;
     margin        : 0 0 0 0;
     border        : 1px solid var(--color-text-base);
     border-radius : var(--border-radius-small);
     grid-column   : 1 / 3;
+}
+#dialogSetup input[type='file'],
+#dialogSetup input[type='file'] input {
+    display       : block;
+    width         : 100%;
+    height        : auto;
+    padding       : 0;
+    margin        : 0;
+    border        : none;
+    border-radius : unset;
+    font-size     : 1rem;
+    grid-column   : 1 / 3;
+}
+#dialogSetup input[type='file']::file-selector-button {
+    padding: 0 13px;
+    margin: 0 10px 0 0;
+    line-height: 38px;
+    vertical-align: center;
+    text-align: left;
+    font-size: 1rem;
+    color: var(--color-text-base);
+    background-color: transparent;
+    border: 1px solid var(--color-text-base);
+    border-radius: var(--border-radius-small);
+}
+#dialogSetup input[type='file']::file-selector-button:active {
+    background-color: var(--color-gs-lt-68);
 }
 #scrollForm label {
     display               : grid;

@@ -14,10 +14,14 @@
         <meta name="msapplication-starturl" content="/index.html">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-title" content="HTML Notes">
-        <link rel="apple-touch-icon" sizes="180x180" href="static/apple-touch-icon.png">
-        <link rel="icon" href="data:image/svg+xml,%3Csvg width='46' height='46' viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e43f5a' transform='matrix(9.5943864 0 0 9.5943864 35 35)'%3E%3Cpath d='m 4 34 8 8 -12 4 z M 38 0 46 8 14 40 6 32 Z' /%3E%3C/g%3E%3C/svg%3E">
+        <meta name="apple-mobile-web-app-title" content="🐉">
+        <!-- <link rel="icon" href="data:image/svg+xml,%3Csvg width='46' height='46' viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e43f5a' transform='matrix(9.5943864 0 0 9.5943864 35 35)'%3E%3Cpath d='m 4 34 8 8 -12 4 z M 38 0 46 8 14 40 6 32 Z' /%3E%3C/g%3E%3C/svg%3E"> -->
         <link rel="mask-icon" href="static/svg/pencil.svg">
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="icon" href="/static/svg/pencil.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" sizes="180x180" href="static/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="192x192" href="static/img/pencil-192.png">
+        <link rel="apple-touch-icon" sizes="512x512" href="static/img/pencil-512.png">
         <link rel="shortcut icon" type="image/x-icon" href="static/favicon.ico">
         <link rel="stylesheet" href="static/css/styles.css" type='text/css' media='all'>
     </head>
@@ -89,36 +93,48 @@
           </dialog>
         </template>
         <template id="templateDialogSetup">
-          <dialog id="dialogSetup">
+            <dialog id="dialogSetup">
             <header>
-              <h2>Setup</h2>
-              <button title="Close" class="close" type="button"><span>Close</span></button>
+                <h2>Setup</h2>
+                <button title="Close" class="close" type="button"><span>Close</span></button>
             </header>
-            <section class="setup-forms">
-              <form id="createForm" onsubmit="return false;">
-                <fieldset>
-                  <label for="createNoteInput">Create a file.</label>
-                  <input id="createNoteInput" type="url" name="url" value="">
-                  <button id="createNote" class="btn__primary" title="Create Note" type="button"><i></i><span>Create</span></button>
-                  <small class="error"></small>
-                </fieldset>
-              </form>
-              <form id="deleteForm" onsubmit="return false;">
-                <fieldset>
-                  <label for="deleteNoteInput">Delete a file or folder.</label>
-                  <input id="deleteNoteInput" type="url" name="url" value="">
-                  <button id="deleteNote" class="btn__primary" title="Delete Note" type="button"><i></i><span>Delete</span></button>
-                  <small class="error"></small>
-                </fieldset>
-              </form>
-            </section>
-            <form id="scrollForm" onsubmit="return false;">
-              <fieldset>
-                <h3>Scrolling</h3>
-                <label for="scrollDefault" id="scrollDefaultLabel"><input id="scrollDefault" type="radio" name="scrollBehavior" value="default"><span>Default</span></label>
-                <label for="scrollSnap" id="scrollSnapLabel"><input id="scrollSnap" type="radio" name="scrollBehavior" value="snap"><span>Snap</span></label>
-              </fieldset>
-            </form>
+                <section class="setup-forms">
+                  <form id="createForm" onsubmit="return false;">
+                    <fieldset>
+                      <label for="createNoteInput">Create a file.</label>
+                      <input id="createNoteInput" type="url" name="url" value="">
+                      <button id="createNote" class="btn__primary" title="Create Note" type="button"><i></i><span>Create</span></button>
+                      <small class="error"></small>
+                    </fieldset>
+                  </form>
+                  <form id="deleteForm" onsubmit="return false;">
+                    <fieldset>
+                      <label for="deleteNoteInput">Delete a file or folder.</label>
+                      <input id="deleteNoteInput" type="url" name="url" value="">
+                      <button id="deleteNote" class="btn__primary" title="Delete Note" type="button"><i></i><span>Delete</span></button>
+                      <small class="error"></small>
+                    </fieldset>
+                  </form>
+                  <form id="uploadForm" onsubmit="return false;">
+                    <fieldset>
+                      <label for="uploadFileInput">Upload a file.</label>
+                      <input id="uploadFileInput" type="file" name="file" value="No value selected.">
+                      <button id="uploadFile" class="btn__primary" title="Upload File" type="button"><i></i><span>Upload</span></button>
+                      <small class="error"></small>
+                    </fieldset>
+                  </form>
+                  <form id="scrollForm" onsubmit="return false;">
+                    <fieldset>
+                      <h3>Scrolling</h3>
+                      <label for="scrollDefault" id="scrollDefaultLabel">
+                        <input id="scrollDefault" type="radio" name="scrollBehavior" value="default"><span>Default</span>
+                      </label>
+                      <label for="scrollSnap" id="scrollSnapLabel">
+                        <input id="scrollSnap" type="radio" name="scrollBehavior" value="snap"><span>Snap</span>
+                      </label>
+                    </fieldset>
+                  </form>
+              </section>
           </dialog>
         </template>
 

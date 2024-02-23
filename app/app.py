@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, make_response
 import os
 import shutil
 import json
+from werkzeug.utils import secure_filename
 from app.config import config
 from app.messaging import *
 import app.utilities as utility
@@ -9,6 +10,9 @@ import app.validation as validate
 
 app = Flask(__name__)
 base_dir = utility.base_dir
+UPLOAD_FOLDER = base_dir + '/static/uploads/'
+ALLOWED_EXTENSIONS = {'txt', 'html', 'json', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route('/')
@@ -131,6 +135,31 @@ def delete_note():
                     return get_message('success', '200', SUCCESS_NOTE_DELETED), 200
             else:
                 return get_message('error', '500', ERROR_DELETE_ENTIRE_NOTES_FOLDER, str(url)), 500
+        except Exception as e:
+            return get_message('error', '500', ERROR_UNKNOWN, str(e)), 500
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/upload-file', methods=['POST'])
+def upload_file():
+    if request.method == 'POST':
+        try:
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                return get_message('error', '500', ERROR_FILE_NOT_IN_REQUEST_FILES, str(request.files)), 500
+            file = request.files['file']
+            # If the user does not select a file, the browser submits an
+            # empty file without a filename.
+            if file.filename == '':
+                return get_message('error', '500', ERROR_NO_FILE_SELECTED, str(file.filename)), 500
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return get_message('success', '200', SUCCESS_FILE_UPLOADED), 200
         except Exception as e:
             return get_message('error', '500', ERROR_UNKNOWN, str(e)), 500
 
